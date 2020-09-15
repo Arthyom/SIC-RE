@@ -9,6 +9,8 @@ TARGET_FILE_EXTEN = '.php'
 fechaExec = datetime.utcnow().strftime('%Y-%m-%d%H:%M:%S:%f')
 log = open('execlog'+fechaExec+'.log', 'w')
 
+nombreCaja = 'florencioK'
+fromCaja = 'florencio'
 
 globalConfig = {
     'oM': True,      ## realizar migracion de archivos de directorio
@@ -24,11 +26,11 @@ globalConfig = {
     'startNum' : 50,
     'stepsNum' : 10,
     'readRelations': False,
-    'fromDir': '/var/www/florencio/',
-    'toDir': '/var/www/florencioK/default/app/views/index/',
-    'ctrlFile': '/var/www/florencioK/default/app/controllers/index_controller.php',
-    'ctrlDir':'/var/www/florencioK/default/app/controllers/',
-    'urlPath': '/florencioK/default/public/'
+    'fromDir': '/var/www/'+florencio+'/',
+    'toDir': '/var/www/'+nombreCaja+'/default/app/views/index/',
+    'ctrlFile': '/var/www/'+nombreCaja+'/default/app/controllers/index_controller.php',
+    'ctrlDir':'/var/www/'+nombreCaja+'/default/app/controllers/',
+    'urlPath': '/'+nombreCaja+'/default/public/'
 
 
 }
