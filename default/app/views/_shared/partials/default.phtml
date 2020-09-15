@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- End Required meta tags --
+
+    {% include head.html %}-->
+
+    <?php View::partial('head') ?>
+
+  </head>
+
+  {% if page.hasScrollSpy == true %}
+  <body data-spy="scroll" data-target="#nav-content" data-offset="76">
+  {% else %}
+  <body>
+  {% endif %}
+    <!-- .app -->
+    <div class="app">
+      <!--[if lt IE 10]>
+      <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+      <![endif]-->
+
+       <!-- .app-header 
+      {% include header-nosearch.html %}-->
+      <?php View::partial('header') ?>
+
+      <!-- /.app-header -->
+
+      <!-- .app-aside 
+      {% include aside.html %}
+      /.app-aside -->
+      <?php View::partial('aside', '', array('data'=> $data)) ?>
+
+      <!-- .app-main -->
+      <main class="app-main">
+        <!-- .wrapper -->
+        <div class="wrapper">
+        <?php View::content() ?>
+        </div>
+
+        <!--
+        
+        {% include footer.html %}<-->
+        <?php View::partial('footer') ?>
+        <!-- /.wrapper -->
+      </main>
+      <!-- /.app-main -->
+    </div>
+        <!-- /.app --
+    {% include scripts.html %} -->
+
+    <?php View::partial('scripts') ?>
+
+
+  </body>
+</html>

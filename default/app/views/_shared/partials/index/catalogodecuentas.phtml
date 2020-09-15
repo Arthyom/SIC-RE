@@ -1,0 +1,149 @@
+<div id='contonedor'>
+
+    <div class="form-group row">
+        <!-- .input-group -->
+        <div class="input-group input-group-alt col-11">
+            <!-- .input-group-prepend -->
+            <div class="input-group-prepend ">
+                <select class="custom-select ">
+                    <option selected>Buscar Por</option>
+                    <option value="tipo">Tipo</option>
+                    <option value="fecha">Fecha</option>
+                    <option value="bene">Beneficiario</option>
+                    <option value="elab">Elaboro</option>
+                    <option value="aplic">Aplicion</option>
+                    <option value="fuente">Fuente</option>
+                    <option value="monto">Monto</option>
+                </select>
+            </div>
+            <!-- /.input-group-prepend -->
+            <!-- .input-group -->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Buscar">
+            </div>
+            <!-- /.input-group -->
+        </div>
+
+        <div class="col-1">
+            <button type="button" class="btn btn-block btn-primary" btn-lg btn-block">
+                <i class="oi oi-magnifying-glass" aria-hidden="true"></i>
+
+                Buscar
+            </button>
+        </div>
+    </div>
+
+    <?php if (isset($data->items) && (count($data->items) > 0)) : ?>
+    <!-- .page-section -->
+    <div class="page-section">
+
+
+        <?php foreach ($data->items as $key => $item) : ?>
+
+        <div id="accordion" class="card-expansion">
+            <!-- .card -->
+            <div class="card card-expansion-item expanded">
+                <div class="card-header border-0" id="heading<?php echo $item->id ?>">
+                    <button class="btn btn-reset" data-toggle="collapse" data-target="#collapse<?php echo $item->id ?>"
+                        aria-expanded="true" aria-controls="collapse<?php echo $item->id ?>">
+                        <span class="collapse-indicator mr-2">
+                            <i class="fa fa-fw fa-caret-right"></i>
+                        </span>
+                        <span>Poliza <?php echo $key + 1 ?></span>
+                    </button>
+
+
+                    <table class="dtTablePrin table dt-responsive nowrap w-100">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Beneficiario</th>
+                                <!--  <th>Concepto</th> -->
+                                <th>Elaboro</th>
+                                <th>Aplicacion</th>
+                                <th>Fuente</th>
+                                <th>Monto</th>
+                                <th style="width:100px; min-width:100px;">&nbsp;</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td><?= h($item->Tipo) ?></td>
+
+                                <td><?= h($item->Fecha) ?></td>
+                                <td><?= h($item->Beneficiario) ?></td>
+                                <td><?= h($item->Elaboro) ?></td>
+                                <td><?= h($item->Aplicacion) ?></td>
+                                <td><?= h($item->Fuente) ?></td>
+                                <td><?= h($item->Monto) ?></td>
+
+
+                                <td style="width:100px; min-width:100px;">
+                                    <?= Html::linkAction("ver/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                                    <?= Html::linkAction("editar/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                                    <?= Html::linkAction("borrar/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <div id="collapse<?php echo $item->id ?>" class="collapse"
+                    aria-labelledby="heading<?php echo $item->id ?>" data-parent="#accordion">
+                    <div class="card-body ">
+                        <?php $detallesXpoliza = (new detallepolizas)->find("IdPoliza LIKE $item->id"); ?>
+                        <table id="" class="dtTableSec  table  table-bordered dt-responsive wrap w-100">
+                            <thead class=" thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cuenta</th>
+                                    <th>Nombre de la cuenta</th>
+                                    <th>Cargo</th>
+                                    <th>Abono</th>
+                                    <th>Concepto</th>
+                                    <th>IVA</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($detallesXpoliza as $key => $val) : ?>
+                                <?php $cuenta = (new catalogodecuentas)->find("IdCuenta = $val->IdCuenta"); ?>
+                                <?php $cuenta = $cuenta[0]; ?>
+                                <tr>
+                                    <td> <?= h($key+1) ?></td>
+                                    <td> <?= h($val->IdCuenta) ?></td>
+                                    <td> <?= h($cuenta->Nombre) ?> </td>
+                                    <td> <?= h($val->Cargo) ?> </td>
+                                    <td> <?= h($val->Abono) ?> </td>
+                                    <td> <?= h($val->Concepto) ?> </td>
+                                    <td> <?= h($val->IVA) ?> </td>
+
+                                    <td style="width:100px; min-width:100px;">
+                                        <?= Html::link("detallepolizas/ver/$val->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                                        <?= Html::link("detallepolizas/editar/$val->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                                        <?= Html::link("detallepolizas/borrar/$val->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+
+                                    </td>
+                                </tr>
+
+                                <?php endforeach ?>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php endforeach ?>
+        <?php else : // Si no hay items ?>
+        <h2>No hay ningún registro</h2>
+        <?php endif ?>
+    </div>
+</div>

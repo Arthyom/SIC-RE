@@ -1,0 +1,14 @@
+<!-- .menu-header -->
+<li class="menu-header">
+ 
+  <?php if ($levelMenu->button!="") : ?>
+  <button type="button" class="btn" data-toggle="tooltip" title="<?=$levelMenu->button_title?>" data-container="body"> <span class="<?=$levelMenu->button?>"></span></button>
+  <?php endif ?>
+
+  <?php if ($levelMenu->indicator!="") : ?>
+    <span class="<?= $levelMenu->indicator_classes ?>"><?= $levelMenu->indicator ?></span>
+  <?php endif ?>
+
+  <?= $levelMenu->text ?>
+</li>
+<!-- /.menu-header -->

@@ -1,0 +1,36 @@
+<!-- {% assign actives = page.active | split: "." %} -->
+<!-- .menu-item -->
+
+
+<!-- {% if levelMenu.id == actives[0] %} --> 
+<?php if (isset($_SESSION["pageActive"]) && $levelMenu->item==$_SESSION["pageActive"]) : ?>
+<li class="menu-item has-active<?php if ($levelMenu->is_slim) : ?> menu-item-slim<?php endif ?><?php if ($levelMenu->childs) : ?> has-child<?php endif ?>">
+<?php else : ?>
+<li class="menu-item<?php if ($levelMenu->is_slim) : ?> menu-item-slim<?php endif ?><?php if ($levelMenu->childs) : ?> has-child<?php endif ?>">
+<?php endif ?>
+   
+  <a href="<?= $levelMenu->link ?>" class="menu-link">
+   
+    <?php if ($levelMenu->icon!="") : ?> 
+    <span class="menu-icon <?= $levelMenu->icon ?>"></span>
+    <?php endif ?>
+
+    <?php if ($levelMenu->text!="") : ?>
+    <span class="menu-text"><?= $levelMenu->text ?></span>
+    <?php endif ?>
+
+    <?php if ($levelMenu->indicator!="") : ?>    
+    <span class="<?= $levelMenu->indicator_classes ?>">><?= $levelMenu->indicator ?></span>
+    <?php endif ?>
+  </a>
+
+    <?php 
+        if ($levelMenu->childs){
+          $_data = (new Menus)->find("parent=$levelMenu->id AND status ORDER BY position ASC");
+          View::partial('snippets/aside/menu-item', false, array('childs' => $_data));        
+        }
+    ?>
+  
+
+</li>
+<!-- /.menu-item -->

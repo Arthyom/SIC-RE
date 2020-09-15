@@ -1,0 +1,105 @@
+<div id="scaffold">
+    
+    <!-- .page -->
+    <div class="page">
+    <!-- .page-inner -->
+    <div class="page-inner">
+        <!-- .page-title-bar -->
+        <header class="page-title-bar">
+        <!-- .breadcrumb 
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="#">
+                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Tables
+                </a>
+            </li>
+            </ol>
+        </nav>
+         /.breadcrumb -->
+        <!-- floating action -->
+        <div class="actions">
+            <?= Html::linkAction("crear/", ' <button type="button" class="btn btn-success btn-floated"><span class="fa fa-plus"></span></button>')?>
+        </div>
+        <!-- /floating action -->
+        <?php View::content()?>
+        <!-- title and toolbar -->
+        <div class="d-md-flex align-items-md-start">
+            <h1 class="page-title mr-sm-auto"><?= ucwords("$model"), ": <span>$action_name</span>" ?></h1>
+            <input id="miTitle" type="text" value="<?= ucwords("$model"), ": $action_name" ?>" hidden/>
+            <!-- .btn-toolbar -->
+            <div id="dt-buttons" class="btn-toolbar"></div>
+            <!-- /.btn-toolbar -->             
+        </div>
+        <!--<p class="text-muted">Resize your browser window to see it in action.</p>-->
+        <!-- /title and toolbar -->
+       
+        </header>
+        <!-- /.page-title-bar -->
+
+        <?php if (isset($data->items) && (count($data->items) > 0)) : ?>
+                <!-- .page-section -->
+                <div class="page-section">
+                <!-- .card -->
+                <div class="card card-fluid">
+                    <!-- .card-body -->
+                    <div class="card-body">
+                    <!-- .table -->
+                    <!--<table id="dt-responsive" class="table dt-responsive nowrap w-100">-->
+                    
+                    <table id = "miTableb"  class="table dt-responsive nowrap w-100">
+                        <thead><tr>
+                            <?php foreach (current($data->items)->fields as $field) : ?>
+                                <th><?= (current($data->items)->get_alias($field))?></th>
+                            <?php endforeach?>
+                            <th style="width:100px; min-width:100px;">&nbsp;</th>
+                        </tr></thead>
+                        
+
+                        <tbody>
+                            <?php foreach ($data->items as $item) : ?>
+                                <tr>
+                                    <?php foreach ($item->fields as $field) : ?>
+                                    <td><?= h($item->$field)?></td>
+                                    <?php endforeach?>
+                                    <td style="width:100px; min-width:100px;"><?= Html::linkAction("ver/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>')?> 
+                                    <?= Html::linkAction("editar/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>')?> 
+                                    <?= Html::linkAction("borrar/$item->id", '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                                    
+                                    </td>
+
+                                   
+                                </tr>
+                            <?php endforeach?>
+                        </tbody>
+                        
+
+                        <tfoot>
+                        <tr>
+                            <?php foreach (current($data->items)->fields as $field) : ?>
+                                <th><?= (current($data->items)->get_alias($field))?></th>
+                            <?php endforeach?>
+                            <th>Acciones</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- /.table -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                </div>
+                <!-- /.page-section -->
+                <?php View::partial('paginators/digg', false, array('page' => $data ,'url' => Router::get('controller_path').'/index')) ?>
+        <?php else : // Si no hay items?>
+        <h2>No hay ningún registro</h2>
+        <?php endif ?>
+    </div>
+    <!-- /.page-inner -->
+    </div>
+    <!-- /.page -->
+
+</div>
+
+
+

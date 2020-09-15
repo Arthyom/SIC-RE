@@ -1,0 +1,9 @@
+<?php
+    
+    class +Controller extends ScaffoldController{	
+        public $model = '-';
+        public $scaffold = '*';
+        public $configuracion = '/';
+        
+    }
+

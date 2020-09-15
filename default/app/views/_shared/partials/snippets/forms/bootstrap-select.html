@@ -1,0 +1,253 @@
+<!-- .card -->
+<div class="card card-fluid">
+  <!-- .card-body -->
+  <div class="card-body">
+    <h4 class="card-title">Bootstrap Select <span class="badge badge-warning">New</span></h4>
+    <h6 class="card-subtitle mb-4">Brings select elements with intuitive multiselection, searching, and much more.</h6>
+
+    <!-- form -->
+    <form>
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss1">Basic</label>
+        <select id="bss1" data-toggle="selectpicker" data-width="100%">
+          <optgroup label="Picnic">
+            <option>Mustard</option>
+            <option>Ketchup</option>
+            <option>Relish</option>
+          </optgroup>
+          <optgroup label="Camping">
+            <option>Tent</option>
+            <option>Flashlight</option>
+            <option>Toilet Paper</option>
+          </optgroup>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss2">Multiple select boxes</label>
+        <select id="bss2" data-toggle="selectpicker" data-width="100%" title="Choose one or more..." multiple>
+          <option>Mustard</option>
+          <option>Ketchup</option>
+          <option>Relish</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss3">Live search</label>
+        <select id="bss3" data-toggle="selectpicker" data-live-search="true" data-width="100%">
+          <option>Hot Dog, Fries and a Soda</option>
+          <option>Burger, Shake and a Smile</option>
+          <option>Sugar, Spice and all things nice</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss4">Key words</label>
+        <select id="bss4" data-toggle="selectpicker" data-live-search="true" data-width="100%">
+          <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+          <option data-tokens="mustard">Burger, Shake and a Smile</option>
+          <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss5">Limit selections</label>
+        <select id="bss5" data-toggle="selectpicker" data-max-options="2" data-width="100%" multiple>
+          <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+          <option data-tokens="mustard">Burger, Shake and a Smile</option>
+          <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss6">Selected text</label>
+        <select id="bss6" data-toggle="selectpicker" data-width="100%">
+          <option title="Combo 1">Hot Dog, Fries and a Soda</option>
+          <option title="Combo 2">Burger, Shake and a Smile</option>
+          <option title="Combo 3">Sugar, Spice and all things nice</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss7">Selected text format</label>
+        <select id="bss7" data-toggle="selectpicker" data-selected-text-format="count > 3" data-width="100%" multiple>
+          <option>Mustard</option>
+          <option>Ketchup</option>
+          <option>Relish</option>
+          <option>Onions</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss8">Icons</label>
+        <select id="bss8" data-toggle="selectpicker" data-width="100%">
+          <option data-icon="fa-glass">Mustard</option>
+          <option data-icon="fa-heart">Ketchup</option>
+          <option data-icon="fa-film">Relish</option>
+          <option data-icon="fa-home">Mayonnaise</option>
+          <option data-icon="fa-print">Barbecue Sauce</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss9">Custom content</label>
+        <select id="bss9" data-toggle="selectpicker" data-width="100%">
+          <option data-content="<span class='badge badge-warning'>Mustard</span>">Mustard</option>
+          <option data-content="<span class='badge badge-danger label-important'>Ketchup</span>">Ketchup</option>
+          <option data-content="<span class='badge badge-success'>Relish</span>">Relish</option>
+          <option data-content="<span class='badge badge-info'>Mayonnaise</span>">Mayonnaise</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss10">Subtext</label>
+        <select id="bss10" data-toggle="selectpicker" data-show-subtext="true" data-width="100%">
+          <option data-subtext="French's">Mustard</option>
+          <option data-subtext="Heinz">Ketchup</option>
+          <option data-subtext="Sweet">Relish</option>
+          <option data-subtext="Miracle Whip">Mayonnaise</option>
+          <option data-divider="true"></option>
+          <option data-subtext="Honey">Barbecue Sauce</option>
+          <option data-subtext="Ranch">Salad Dressing</option>
+          <option data-subtext="Sweet &amp; Spicy">Tabasco</option>
+          <option data-subtext="Chunky">Salsa</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss11">Menu size</label>
+        <select id="bss11" data-toggle="selectpicker" data-size="5" data-width="100%">
+          <option>Mustard</option>
+          <option>Ketchup</option>
+          <option>Relish</option>
+          <option>Mayonnaise</option>
+          <option>Barbecue Sauce</option>
+          <option>Salad Dressing</option>
+          <option>Tabasco</option>
+          <option>Salsa</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .form-group -->
+      <div class="form-group">
+        <label class="control-label" for="bss12">Select/deselect all</label>
+        <select id="bss12" data-toggle="selectpicker" data-actions-box="true" data-width="100%" multiple>
+          <option>Mustard</option>
+          <option>Ketchup</option>
+          <option>Relish</option>
+        </select>
+      </div>
+      <!-- /.form-group -->
+
+      <!-- .row -->
+      <div class="row">
+        <!-- .col -->
+        <div class="col-md-6">
+          <!-- .form-group -->
+          <div class="form-group">
+            <label class="control-label" for="bss13">Divider</label>
+            <select id="bss13" data-toggle="selectpicker" data-width="100%">
+              <option>Mustard</option>
+              <option>Ketchup</option>
+              <option>Relish</option>
+              <option>Mayonnaise</option>
+              <option data-divider="true"></option>
+              <option>Barbecue Sauce</option>
+              <option>Salad Dressing</option>
+              <option>Tabasco</option>
+              <option>Salsa</option>
+            </select>
+          </div>
+          <!-- /.form-group -->
+        </div>
+        <!-- /.col -->
+        <!-- .col -->
+        <div class="col-md-6">
+          <!-- .form-group -->
+          <div class="form-group">
+            <label class="control-label" for="bss14">Menu header</label>
+            <select id="bss14" data-toggle="selectpicker" data-header="Select a condiment" data-width="100%">
+              <option data-subtext="French's">Mustard</option>
+              <option data-subtext="Heinz">Ketchup</option>
+              <option data-subtext="Sweet">Relish</option>
+              <option data-subtext="Miracle Whip">Mayonnaise</option>
+              <option data-divider="true"></option>
+              <option data-subtext="Honey">Barbecue Sauce</option>
+              <option data-subtext="Ranch">Salad Dressing</option>
+              <option data-subtext="Sweet &amp; Spicy">Tabasco</option>
+              <option data-subtext="Chunky">Salsa</option>
+            </select>
+          </div>
+          <!-- /.form-group -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- .row -->
+      <div class="row">
+        <!-- .col -->
+        <div class="col-md-6">
+          <!-- .form-group -->
+          <div class="form-group">
+            <label class="control-label" for="bss15">Disabled</label>
+            <select id="bss15" data-toggle="selectpicker" data-width="100%" disabled>
+              <option>Mustard</option>
+              <option>Ketchup</option>
+              <option>Relish</option>
+            </select>
+          </div>
+          <!-- /.form-group -->
+        </div>
+        <!-- /.col -->
+        <!-- .col -->
+        <div class="col-md-6">
+          <!-- .form-group -->
+          <div class="form-group">
+            <label class="control-label" for="bss16">Disabled option</label>
+            <select id="bss16" data-toggle="selectpicker" data-width="100%">
+              <optgroup label="Picnic" disabled>
+                <option>Mustard</option>
+                <option>Ketchup</option>
+                <option>Relish</option>
+              </optgroup>
+              <optgroup label="Camping">
+                <option>Tent</option>
+                <option disabled>Flashlight</option>
+                <option>Toilet Paper</option>
+              </optgroup>
+            </select>
+          </div>
+          <!-- /.form-group -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </form>
+    <!-- /form -->
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->

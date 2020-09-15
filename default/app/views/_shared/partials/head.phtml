@@ -1,0 +1,51 @@
+<!--{% include seo.html %} ->
+
+<!-- FAVICONS -->
+<link rel="apple-touch-icon" sizes="144x144" href="assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<meta name="theme-color" content="#3063A0">
+<!-- End FAVICONS -->
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600" rel="stylesheet">
+<!-- End GOOGLE FONT -->
+ 
+<!-- BEGIN PLUGINS STYLES -->
+<?= Tag::css('../assets/vendor/open-iconic/font/css/open-iconic-bootstrap.min') ?>
+<?= Tag::css('../assets/vendor/@fortawesome/fontawesome-free/css/all.min') ?>
+<?= Tag::css('../assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min') ?>
+<?= Tag::css('../assets/vendor/datatables.net-responsive-bs4/css/responsive.bootstrap4.min') ?>
+
+<?= Html::includeCss() ?>
+
+
+
+<?= Tag::css('../assets/stylesheets/theme.min') ?>
+<?php //Tag::css('../assets/stylesheets/theme-dark.min') ?>
+<?= Tag::css('../assets/stylesheets/custom') ?>
+<?php //Tag::css('kumbia') ?>
+<?= Tag::css('pickadate') ?>
+
+
+<?= Html::includeCss() ?>
+
+<!--
+<script>
+  var skin = localStorage.getItem('skin') || 'default';
+  var isCompact = JSON.parse(localStorage.getItem('hasCompactMenu'));
+  var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="'+ skin +'"])');
+
+  // Disable unused skin immediately
+  disabledSkinStylesheet.setAttribute('rel', '');
+  disabledSkinStylesheet.setAttribute('disabled', true);
+
+  // add flag class to html immediately
+  if (isCompact == true) document.querySelector('html').classList.add('preparing-compact-menu');
+</script>
+
+!-- END THEME STYLES -->
+
+
+
+
+

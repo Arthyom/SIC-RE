@@ -1,0 +1,82 @@
+<!-- thead -->
+<!--{% if include.context %}-->
+<?php if (false) : ?>
+<thead class="thead-{{include.context}}">
+<?php else : ?>
+<thead>
+<?php endif ?>
+  <tr>
+    <th colspan="2" style="min-width:320px">
+      <div class="thead-dd dropdown">
+        <span class="custom-control custom-control-nolabel custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="check-handle">
+          <label class="custom-control-label" for="check-handle"></label>
+        </span>
+        <div class="thead-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="fa fa-caret-down"></span>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-arrow"></div>
+          <a class="dropdown-item" href="#">Select all</a>
+          <a class="dropdown-item" href="#">Unselect all</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Bulk remove</a>
+          <a class="dropdown-item" href="#">Bulk edit</a>
+          <a class="dropdown-item" href="#">Separate actions</a>
+        </div>
+      </div>
+    </th>
+    <th>Inventory</th>
+    <th>Variants</th>
+    <th>Prices</th>
+    <th>Sales</th>
+    <th style="width:100px; min-width:100px;">&nbsp;</th>
+  </tr>
+</thead>
+<!-- /thead -->
+<!-- tbody -->
+<tbody>
+ 
+  <?php $_data =file_get_contents("json/products.json");
+        $json = json_decode($_data, true); ?>
+
+    <?php foreach ($json["products"] as $index=>$value) : ?> 
+    
+    <!-- {% if forloop.index >= offset %} -->
+    <?php if (($index >= $offset)&& ($index<=$max)) : ?>
+    <!-- tr -->
+    <tr>
+      <td class="align-middle col-checker">
+        <div class="custom-control custom-control-nolabel custom-checkbox">
+          <input type="checkbox" class="custom-control-input" name="selectedRow[]" id="p<?= $value["id"] ?>">
+          <label class="custom-control-label" for="p<?= $value["id"] ?>"></label>
+        </div>
+      </td>
+      <td>
+        <a href="#" class="tile tile-img mr-1">
+          <img class="img-fluid" src="assets/images/dummy/img-<?= $value["img"] ?>.jpg" alt="Card image cap">
+        </a>
+        <a href="#"><?= $value["name"] ?></a>
+      </td>
+      <td class="align-middle"><?=$value["inventory"]?></td>
+      <td class="align-middle"><?=$value["variant"]?></td>
+      <td class="align-middle"><?=$value["prices"]?></td>
+      <td class="align-middle"><?=$value["sales"]?></td>
+      <td class="align-middle text-right">
+        <a href="#" class="btn btn-sm btn-icon btn-secondary">
+          <i class="fa fa-pencil-alt"></i>
+          <span class="sr-only">Edit</span>
+        </a>
+        <a href="#" class="btn btn-sm btn-icon btn-secondary">
+          <i class="far fa-trash-alt"></i>
+          <span class="sr-only">Remove</span>
+        </a>
+      </td>
+    </tr>
+    <!-- /tr -->
+    <?php endif ?>
+
+    <?php endforeach ?>
+  
+</tbody>
+<!-- /tbody -->

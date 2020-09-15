@@ -1,0 +1,16 @@
+<!--{% assign actives = page.active | split: "." %} -->
+<!-- grand child menu -->
+<ul class="menu">
+
+  <?php foreach ($childs as $grandChildItem) : ?>    
+    <!-- {% if grandChildItem.id == actives[3] %} -->
+    <?php if ($grandChildItem["id"]=="clients") : ?>
+      <li class="menu-item has-active">
+    <?php else : ?>
+      <li class="menu-item">
+    <?php endif ?>
+        <a href="<?= $grandChildItem["link"] ?>" class="menu-link"><?= $grandChildItem["text"] ?></a>
+      </li>
+    <?php endforeach ?>
+</ul>
+<!-- /grand child menu -->

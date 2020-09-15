@@ -1,0 +1,20 @@
+<!--{% assign actives = page.active | split: "." %}-->
+<!-- grand child menu -->
+<ul class="menu">
+    <?php foreach ($childs as $childItem) : ?>
+      <!-- {% if childItem.id == actives[2] %} -->
+      <?php if ($childItem["id"]=="clients") : ?>
+        <li class="menu-item has-active<?php if (isset($childItem["childs"])) : ?> has-child<?php endif ?>">
+      <?php else : ?>
+        <li class="menu-item<?php if (isset($childItem["childs"])) : ?> has-child<?php endif ?>">
+      <?php endif ?>
+      <a href="<?= $childItem["link"] ?>" class="menu-link"><?= $childItem["text"] ?></a>
+        
+          <?php 
+            if (isset($childItem["childs"])) 
+              View::partial('snippets/aside/grand-child-item', false, array('childs' => $childItem["childs"]));
+          ?>
+      </li>
+    <?php endforeach ?>
+</ul>
+<!-- /grand child menu -->

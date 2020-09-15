@@ -1,0 +1,65 @@
+<?php
+
+require_once APP_PATH . '../../vendor/autoload.php';
+use Mpdf\Mpdf;
+
+$fileName = $filename ?? "Reporte-de-$controller_name";
+
+$title = $title ?? "Reporte de $controller_name";
+
+$css = $css ?? 'css/pdf.css';
+
+$destination = isset($download) && $download ? 'D' : 'I';
+
+ob_start();
+
+?>
+    <link rel="stylesheet" type="text/css" href="<?= $css ?>">
+
+   
+
+<?= Html::includeCss() ?>
+
+
+
+<?= Tag::css('../assets/stylesheets/theme.min') ?>
+<?php //Tag::css('../assets/stylesheets/theme-dark.min') ?>
+<?= Tag::css('../assets/stylesheets/custom') ?>
+<?php //Tag::css('kumbia') ?>
+<?= Tag::css('pickadate') ?>
+
+
+<?= Html::includeCss() ?>
+
+
+ 
+
+<?php View::content() ?>
+
+<htmlpagefooter name='footer_name'>
+        <section id="page-footer">
+            <div id="page-number">{PAGENO}/{nbpg}</div>
+        </section>
+    </htmlpagefooter>
+
+<?php
+$html = ob_get_clean();
+ob_clean();
+
+// Crea una instancia de la clase y le pasa el directorio temporal
+$mpdf = new Mpdf([
+    'tempDir' => APP_PATH . 'temp',
+    'format' => 'A4',
+    'title2annots' => true,  // convert headers <hx> in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false // security 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+]);
+
+// Escribe el contenido HTML (Template + View):
+$mpdf->WriteHTML($html);
+
+// Genera el PDF, ya sea para su descarga o visualización en el navegador
+$mpdf->Output("$fileName.pdf", $destination);
+
+?>

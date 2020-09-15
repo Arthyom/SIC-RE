@@ -1,0 +1,32 @@
+<!-- {% assign actives = page.active | split: "." %} -->
+<!-- child menu -->
+<ul class="menu">
+  <?php foreach ($childs as $index =>$menuItem) : ?>
+
+  <!-- {% if menuItem.id == actives[1] %} -->
+  <?php if (isset($_SESSION["pageActive"]) && $menuItem->item==$_SESSION["pageActive"]) : ?>
+    <li class="menu-item has-active<?php if ($menuItem->childs) : ?> has-child<?php endif ?>">
+  <?php else : ?>
+    <li class="menu-item<?php if ($menuItem->childs) : ?> has-child<?php endif ?>">
+  <?php endif ?>
+    <a href="<?= $menuItem->link ?>" class="menu-link">     
+      <?= $menuItem->text ?>
+      <?php if ($menuItem->indicator!="") : ?>
+      <span class="<?= $menuItem->indicator_classes ?>"> <?= $menuItem->indicator ?></span>
+      <?php endif ?>
+    </a>
+    
+     <?php 
+      //if (isset($menuItem["childs"])) 
+        //View::partial('snippets/aside/child-item', false, array('childs' => $menuItem["childs"]));
+     ?>
+      <?php 
+        if ($menuItem->childs){
+          $_data = (new Menus)->find("parent=$menuItem->id AND status ORDER BY position ASC");
+          View::partial('snippets/aside/menu-item', false, array('childs' => $_data));        
+        }
+    ?>
+  </li>
+  <?php endforeach ?>
+</ul>
+<!-- /child menu -->
