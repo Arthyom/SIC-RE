@@ -1,0 +1,39 @@
+/* put your own styles to customize and override the theme */
+
+.app-header-light .top-bar-brand > a {
+    color: #852A6D;
+  }
+  
+  .app-header-light .top-bar-brand > a:focus {
+    color: #852A6D;
+  }
+  
+  .app-header-light .top-bar-brand > a:hover {
+    color: #852A6D;
+  }
+  
+  
+  
+
+  
+  .app-header-light .top-bar-search .input-group-search .form-control:focus {
+    color: #222230;
+  }
+  
+
+
+  
+  .app-header-light .header-nav .show > .nav-link,
+  .app-header-light .header-nav .active > .nav-link,
+  .app-header-light .header-nav .nav-link.show,
+  .app-header-light .header-nav .nav-link.active {
+    color: #852A6D;
+  }
+  
+
+  
+  .app-header-dark {
+    background-color: #852A6D;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  

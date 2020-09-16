@@ -1,0 +1,241 @@
+
+.menu {
+	display: inline-block;
+	margin: 0 auto;
+ 	padding: 0;
+	z-index: 1;
+}
+
+/*Etiqueta para los botones pricipales*/
+.menu a {
+	font-weight: bold;
+	padding: 0 8px 0 8px;
+	display: block;
+	background: linear-gradient(90deg, #CD9665, #fdf9e8, #CD9665);	
+	border-radius: 0px 10px 0px 10px;
+}
+
+/* Top level menu hover, when looking at a lower level */
+.menu a:hover {
+	font-size: 125%;
+	border: 1px solid #fff4c6;
+	color: #fff4c6 ;
+	padding: 0 7px 0 7px;
+	line-height: 25px;
+	cursor: pointer;
+	background: linear-gradient(90deg, #570101, #CD9665, #570101);
+}
+
+.menu li {
+	margin: 0 auto;
+	padding: 0 auto;
+	border: 0;
+	display: block;
+	float: left;	/* move all main list items into one row, by floating them */
+	position: relative;	/* position each LI, thus creating potential IE.win overlap problem */
+	z-index: 3;		/* thus we need to apply explicit z-index here... */
+}
+
+.menu li:hover {
+	z-index: 4;	/* ...and here. this makes sure active item is always above anything else in the menu */
+	white-space: normal;/* required to resolve IE7 :hover bug (z-index above is ignored if this is not present)
+							see http://www.tanfa.co.uk/css/articles/pure-css-popups-bug.asp for other stuff that work */
+}
+
+.menu li:hover>a {
+	font-size: 125%;
+	border: 1px solid #fff4c6;
+	color: #fff4c6 ;
+	padding: 0 7px 0 7px;
+	line-height: 25px;
+	cursor: pointer;
+	background: linear-gradient(90deg, #570101, #CD9665, #570101);
+}
+
+/* Inicia estilo de submenus*/
+.menu ul {
+	border-radius: 10px;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: block;
+	background: #DCDCDC; 
+	visibility: hidden;	
+	position: absolute;
+	z-index: 2;
+	box-shadow: 2px 2px 2px #570101;
+	min-height: 0;
+
+}
+
+
+.menu li:hover>ul {
+	visibility: visible;	/* display submenu them on hover */
+	top: 100%;	/* 1st level go below their parent item */
+}
+
+
+
+/* -- float.clear --
+	force containment of floated LIs inside of UL */
+.menu:after, .menu ul:after {
+	content: ".";
+	height: 0;
+	display: block;
+	visibility: hidden;
+	overflow: hidden;
+	clear: both;
+}
+
+
+
+.menu li li:hover>ul {	/* inset 2nd+ submenus, to show off overlapping */
+	top: 5px;
+	left: 90%;
+}
+
+
+/* All submenu links */
+
+.menu li ul a {
+
+	color: #570101; /* obscuro */
+	background: linear-gradient(90deg, #CD9665, #fdf9e8, #CD9665);	
+	border-radius: 10px 10px 10px 10px;
+	text-align: left;
+	display: block;
+	padding: 0px 15px 0px 30px;
+	line-height: 25px;
+	width: 230px;
+}
+
+.menu li ul a:hover {
+	
+	font-size: 100%;
+	text-decoration: none;
+	/*color: #fff4c6;*/
+	/*border: 1px solid #316AC5;*/
+	padding: 0px 14px 0px 29px;
+	line-height: 25px;
+/*	transform: scale(1.07); */
+	
+}
+
+/* Submenu hover, when looking at a lower level */
+.menu li ul li:hover>a {
+
+	background: linear-gradient(90deg, #570101, #CD9665, #570101);	
+	border-radius: 7px 7px 7px 7px;
+	border: 1px solid #fff4c6;
+	/*color: #fff4c6;*/
+	padding: 0px 14px 0px 29px;
+	line-height: 25px;
+	cursor: pointer;
+	
+}
+
+.menuHeader {
+  	display: none; 
+
+}
+
+/* Stop images appearing on the top level */
+.menuImg {
+	display: none;
+}
+
+
+.menu ul li .menuArrow {
+	position: absolute; /* Do not alter this line! */
+	margin-top: 4px;
+	height: 7px;
+	right: 8px;
+	width: 4px;
+}
+
+.menu ul li .menuImg {
+	position: absolute; /* Do not alter this line! */
+	margin-top: 2px;
+	height: 16px;
+	left: 4px;
+	width: 16px;
+	display: block;
+}
+
+
+/* AQUI PARA MENU  VERSION MOVIL 
+
+Ocultar outomaticamente el mensaje de la caja.
+
+header nav ul li  {
+  position: relative;
+  top:3px;
+  margin-left:10px;
+  margin-right:0px;
+}
+ 
+@media screen and (max-width: 600px) {
+  body {
+    padding-top:80px;
+  }
+ 
+  .menu {
+    display:block;
+    width:100%;
+    position: fixed;
+    top:0;
+    background:#570101;
+  }
+ 
+  .menu .bt-menu {
+    display: block;
+    padding: 20px;
+    color: #fff;
+    overflow: hidden;
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+ 
+  .menu span {
+    float: right;
+    font-size: 40px;
+  }
+ 
+  header nav {
+    width: 80%;
+    height: calc(100% - 80px);
+    position: fixed;
+    right:100%;
+    margin: 0;
+    overflow: scroll;
+  }
+ 
+  header nav ul li {
+    display: block;
+    border-bottom:1px solid rgba(255,255,255,.5);
+  }
+ 
+  header nav ul li a {
+    display: block;
+  }
+ 
+  header nav ul li:hover .children {
+    display: none;
+  }
+ 
+  header nav ul li .children {
+    width: 100%;
+    position: relative;
+  }
+ 
+  header nav ul li .children li a {
+    margin-left:20px;
+  }
+ 
+  header nav ul li .caret {
+    float: right;
+  }
+}
+
+*/

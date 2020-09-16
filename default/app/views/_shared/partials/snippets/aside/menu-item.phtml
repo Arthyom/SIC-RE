@@ -1,32 +1,49 @@
 <!-- {% assign actives = page.active | split: "." %} -->
 <!-- child menu -->
 <ul class="menu">
-  <?php foreach ($childs as $index =>$menuItem) : ?>
 
-  <!-- {% if menuItem.id == actives[1] %} -->
-  <?php if (isset($_SESSION["pageActive"]) && $menuItem->item==$_SESSION["pageActive"]) : ?>
-    <li class="menu-item has-active<?php if ($menuItem->childs) : ?> has-child<?php endif ?>">
-  <?php else : ?>
-    <li class="menu-item<?php if ($menuItem->childs) : ?> has-child<?php endif ?>">
-  <?php endif ?>
-    <a href="<?= $menuItem->link ?>" class="menu-link">     
-      <?= $menuItem->text ?>
-      <?php if ($menuItem->indicator!="") : ?>
-      <span class="<?= $menuItem->indicator_classes ?>"> <?= $menuItem->indicator ?></span>
-      <?php endif ?>
-    </a>
-    
-     <?php 
-      //if (isset($menuItem["childs"])) 
-        //View::partial('snippets/aside/child-item', false, array('childs' => $menuItem["childs"]));
-     ?>
-      <?php 
-        if ($menuItem->childs){
-          $_data = (new Menus)->find("parent=$menuItem->id AND status ORDER BY position ASC");
-          View::partial('snippets/aside/menu-item', false, array('childs' => $_data));        
-        }
+    <?php foreach ($childs as $index =>$menuItem) : ?>
+
+    <?php $hijos =$menuItem->buscarPorIdPadre( $menuItem->id ) ?>
+    <?php $external_link = str_replace('.php', '', $menuItem->external_link) ?>
+    <?php $existerelacion = mymenugenerador::esModeloOControlador($external_link) ?>
+
+    <?php if( $hijos ) : ?>
+
+    <?php View::partial('snippets/aside/level-menu', false, array('menupadre' => $menuItem)) ?>
+
+    <?php else : ?>
+
+    <li class="menu-item">
+
+    <?php 
+    $link = $external_link;
+    if( substr_count($external_link, '/florencioK/default/public/') == 0)
+        $link = '/florencioK/default/public/index/'.$link;
     ?>
-  </li>
-  <?php endforeach ?>
+
+        <a href="<?php echo $link ?>" class="menu-link">
+
+            <span class="menu-text">
+
+                <?php if( !$external_link) : ?>
+                <?php $menuItem->menu_title .= '!' ?>
+                <?php endif ?>
+
+                <?php if( !$existerelacion) : ?>
+                <?php $menuItem->menu_title .= '?' ?>
+                <?php endif ?>
+
+
+                <?= $menuItem->menu_title ?>
+            </span>
+
+        </a>
+
+    </li>
+
+    <?php endif ?>
+
+    <?php endforeach ?>
 </ul>
 <!-- /child menu -->

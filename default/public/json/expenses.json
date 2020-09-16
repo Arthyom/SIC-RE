@@ -1,0 +1,28 @@
+{
+  "expenses": [
+    {
+      "date": "04/11/2019",
+      "amount": "$360.00",
+      "vendor": "Facebook, Inc.",
+      "hasAttachment": true,
+      "category": "Campaign",
+      "state": "purple"
+    },
+    {
+      "date": "09/15/2019",
+      "amount": "$49.00",
+      "vendor": "Adobe Systems",
+      "hasAttachment": true,
+      "category": "Other",
+      "state": "orange"
+    },
+    {
+      "date": "10/11/2019",
+      "amount": "$610.00",
+      "vendor": "InVisionApp, Inc.",
+      "hasAttachment": true,
+      "category": "Design",
+      "state": "pink"
+    }
+  ]
+}

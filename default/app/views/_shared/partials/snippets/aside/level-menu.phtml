@@ -2,35 +2,43 @@
 <!-- .menu-item -->
 
 
-<!-- {% if levelMenu.id == actives[0] %} --> 
-<?php if (isset($_SESSION["pageActive"]) && $levelMenu->item==$_SESSION["pageActive"]) : ?>
-<li class="menu-item has-active<?php if ($levelMenu->is_slim) : ?> menu-item-slim<?php endif ?><?php if ($levelMenu->childs) : ?> has-child<?php endif ?>">
-<?php else : ?>
-<li class="menu-item<?php if ($levelMenu->is_slim) : ?> menu-item-slim<?php endif ?><?php if ($levelMenu->childs) : ?> has-child<?php endif ?>">
-<?php endif ?>
-   
-  <a href="<?= $levelMenu->link ?>" class="menu-link">
-   
-    <?php if ($levelMenu->icon!="") : ?> 
-    <span class="menu-icon <?= $levelMenu->icon ?>"></span>
-    <?php endif ?>
+<!-- {% if levelMenu.id == actives[0] %} -->
+<?php //if (isset($_SESSION["pageActive"]) && $levelMenu->item==$_SESSION["pageActive"]) : ?>
 
-    <?php if ($levelMenu->text!="") : ?>
-    <span class="menu-text"><?= $levelMenu->text ?></span>
-    <?php endif ?>
+<?php $external_link = str_replace('.php', '', $menupadre->external_link) ?>
+<?php $existerelacion = mymenugenerador::esModeloOControlador($external_link) ?>
 
-    <?php if ($levelMenu->indicator!="") : ?>    
-    <span class="<?= $levelMenu->indicator_classes ?>">><?= $levelMenu->indicator ?></span>
-    <?php endif ?>
-  </a>
+<li class="menu-item  has-child">
 
     <?php 
-        if ($levelMenu->childs){
-          $_data = (new Menus)->find("parent=$levelMenu->id AND status ORDER BY position ASC");
-          View::partial('snippets/aside/menu-item', false, array('childs' => $_data));        
-        }
+    $link = $external_link;
+    if( substr_count($external_link. '/florencioK/default/public/') == 0)
+        $link = '/florencioK/default/public/index/'.$link;
     ?>
-  
+
+    <a href="<?php echo 'ds'?>" class="menu-link">
+
+        <?php if( $menupadre->parent_id == 0) :?>
+        <span class="menu-icon fas fa-rocket"></span>
+        <?php endif ?>
+
+        <span class="menu-text">
+
+            <?php if( !$external_link) : ?>
+            <?php $menupadre->menu_title .= '!' ?>
+            <?php endif ?>
+
+            <?php if( !$existerelacion) : ?>
+            <?php $menupadre->menu_title .= '?' ?>
+            <?php endif ?>
+
+            <?= $menupadre->menu_title ?>
+
+        </span>
+    </a>
+
+    <?php $actions = $menupadre->buscarPorIdPadre( $menupadre->id ) //['crear', 'index', 'filtrar', 'codificar']// ?>
+    <?php View::partial('snippets/aside/menu-item', false, array('padre' => strtolower( $nc ), 'childs' => $actions));?>
 
 </li>
 <!-- /.menu-item -->

@@ -1,5 +1,4 @@
 
-
 /**
  * Default mobile-first, responsive styling for pickadate.js
  * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
@@ -43,6 +42,7 @@
 /*input*/.pickadate__input--active {
     border-color: #0089ec !important;
 }
+
 
 
 
@@ -465,3 +465,4 @@
                 border-radius: 6px;
     }
 }
+

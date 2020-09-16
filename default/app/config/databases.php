@@ -12,15 +12,15 @@ return [
         /**
          * username: usuario con permisos en la base de datos
          */
-        'username' => 'root', //no es recomendable usar el usuario root
+        'username' => 'alfredo', //no es recomendable usar el usuario root
         /**
          * password: clave del usuario de la base de datos
          */
-        'password' => '',
+        'password' => 'Alfredo2020+',
         /**
          * test: nombre de la base de datos
          */
-        'name'     => 'test',
+        'name'     => 'coroneo',
         /**
          * type: tipo de motor de base de datos (mysql, pgsql, oracle o sqlite)
          */

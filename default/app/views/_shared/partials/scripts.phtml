@@ -1,23 +1,13 @@
-<!--<script src="assets/vendor/jquery/jquery.min.js"></script>
-<script src="assets/vendor/popper.js/umd/popper.min.js"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
--- END BASE JS -->
 
-<?= Tag::js('../assets/vendor/jquery/jquery.min') ?>
+<?=  Tag::js('../assets/vendor/jquery/jquery.min') ?>
 <?= Tag::js('../assets/vendor/popper.js/umd/popper.min') ?>
 <?= Tag::js('../assets/vendor/bootstrap/js/bootstrap.min') ?>
 
 <?= Tag::js('../assets/vendor/pace-progress/pace.min') ?>
 <?= Tag::js('../assets/vendor/stacked-menu/js/stacked-menu.min') ?>
-<?= Tag::js('../assets/vendor/perfect-scrollbar/perfect-scrollbar.min') ?>
 <?= Tag::js('../assets/javascript/theme.min') ?>
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+ 
 <?= Tag::js('../assets/vendor/datatables.net/js/jquery.dataTables.min') ?>
-
-
-
-
 <?= Tag::js('../assets/vendor/datatables.net-buttons/js/dataTables.buttons.min') ?>
 <?= Tag::js('../assets/vendor/datatables.net-buttons/js/buttons.html5.min') ?>
 <?= Tag::js('../assets/vendor/datatables.net-buttons/js/buttons.print.min') ?>
@@ -26,35 +16,34 @@
 
 <?= Tag::js('../assets/vendor/datatables.net-responsive/js/dataTables.responsive.min') ?>
 <?= Tag::js('../assets/vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.min') ?>
-
-
 <?= Tag::js('../assets/javascript/pages/dataTables.bootstrap') ?>
-
-
 <?= Tag::js('table') ?>
-
 <?= Tag::js('polizas/index') ?>
+<?= Tag::js('buscador') ?>
+
+<?= Tag::js('../assets/vendor/chart.js/Chart.min') ?>
+<?= Tag::js('AutoBuildSicap/index-chart') ?>
+<?= Tag::js('AutoBuildSicap/crearfiltrarremote') ?>
+
+
+ 
+
+<?php if( $action_name == 'codificar') : ?>
+<?= Tag::js('../assets/vendor/ace-builds/src-min-noconflict/ace') ?>
+<?= Tag::js('../assets/vendor/ace-builds/src-min-noconflict/ext-statusbar') ?>
+<?= Tag::js('../assets/vendor/ace-builds/src-min-noconflict/ext-language_tools') ?>
+<?= Tag::js('../assets/vendor/ace-builds/src-min-noconflict/ext-modelist') ?>
+<?= Tag::js('../assets/javascript/pages/ace-demo') ?>
+<?= Tag::js('AutoBuildSicap/codificar') ?>
+
+<?php endif?>
+
+<?= Tag::js('../assets/vendor/toastr/build/toastr.min') ?>
+<?= Tag::js('../assets/javascript/pages/ace-demo') ?>
 
 
 
 
-<!-- BEGIN PLUGINS JS --
-<script src="assets/vendor/pace-progress/pace.min.js"></script>
-<script src="assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
-<script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
--->
+<?= Tag::js('../assets/vendor/select2/js/select2.min') ?>
 
-<!--
-{% if page.pluginsJs %}
-{% for js in page.pluginsJs %}
-<script src="assets/vendor/{{js}}"></script>
-{% endfor %}
-{% endif %}
--- END PLUGINS JS -->
-
-<!-- BEGIN THEME JS --
-<script src="assets/javascript/theme.min.js"></script>
- END THEME JS -->
-
-
-
+<?= Tag::js('../assets/vendor/bootstrap-select/js/bootstrap-select.min') ?>

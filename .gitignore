@@ -1,7 +1,23 @@
+
 vendor
 default/app/temp
 default/public/temp
 sql/
+default/app/controllers/*.php
+default/app/models/*.php
+! default/app/models/usuarios.php
+! default/app/views/_shared
+! default/app/views/tables
+! default/app/views/index
+! default/app/views/*.html
+! default/app/controllers/login_controller.php
+! default/app/controllers/index_controller.php
+
+*.log
+
+
+
+
 
 # Mac filesystem dust
 .DS_Store

@@ -1,0 +1,460 @@
+<div class="page-section">
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto">
+            <?php echo $controller_name . ' ' . $action_name ?>
+            <?php //echo var_dump($data) ?>
+        </h1>
+ 
+        <div class="btn-toolbar">
+
+            <div class="custom-control custom-control-inline ">
+                <span class="pt-1 pr-2"><b> Obscuro</b></span>
+                <div>
+                    <!-- .switcher-control -->
+                    <label class="switcher-control switcher-control-success switcher-control-lg">
+                        <input type="checkbox"
+                            onchange="tema()" id='tema'
+                            class="switcher-input" > <span class="switcher-indicator"></span> <span
+                            class="switcher-label-on"><i class="fas fa-check"></i></span> <span
+                            class="switcher-label-off"><i class="fas fa-times"></i></span></label>
+                </div>
+            </div>
+
+
+            <a href="/florencioK/default/public/<?php echo $controller_name ?>/crear " type="button"
+                class="btn btn-light">
+                <i class="oi oi-plus"></i>
+                <span class="ml-1">Nuevo Elemento</span>
+            </a>
+
+            <a href="/florencioK/default/public/<?php echo $controller_name ?>/index " type="button"
+                class="btn btn-light">
+                <i class="oi oi-zoom-in"></i>
+                <span class="ml-1">Cancelar</span>
+            </a>
+
+            <a href="/florencioK/default/public/<?php echo $controller_name ?>/filtrar " type="button"
+                class="btn btn-light">
+                <i class="oi oi-zoom-in"></i>
+                <span class="ml-1">Filtrar Elementos</span>
+            </a>
+
+            <a href="/florencioK/default/public/<?php echo $controller_name ?> " type="button" class="btn btn-light">
+                <i class="oi oi-list-rich"></i>
+                <span class="ml-1">Listar Elementos</span>
+            </a>
+        </div>
+
+        <!-- .btn-toolbar -->
+
+        <!-- /.btn-toolbar -->
+    </div>
+
+
+
+    <div class="card card-fluid">
+
+
+
+
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card-header mb-0 pb-0">
+
+                    <div class="btn-toolbar">
+
+                        <a onclick="show()" data-toggle="modal" data-target="#exampleModalScrollableDate" type="button"
+                            class="btn btn-light">
+                            <i class="oi oi-list-rich"></i>
+                            <span class="ml-1">Historico</span>
+                        </a>
+
+
+                        <a onclick='save()' type="button" class="btn btn-light">
+                            <i class="oi oi-list-rich"></i>
+                            <span class="ml-1">Guardar</span>
+                        </a>
+
+                        <a onclick="guardar()" type="button" class="btn btn-light">
+                            <i class="oi oi-list-rich"></i>
+                            <span class="ml-1">Descargar</span>
+                        </a>
+
+
+                        <form>
+
+
+                            <div class='row'>
+
+
+
+                                <div class='col-md-4'>
+
+                                    <div class='form-group'>
+
+                                        <div class='custom-file'>
+                                            <input type="file" class="custom-file-input"
+                                                onchange="openCode(this.files)">
+                                            <label class="custom-file-label" for="tf3">Cargar Archivo</label>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class='col-md-4'>
+
+                                    <div class='form-group'>
+
+                                        <select id='lenW' onchange="seleccionarLenguaje(this)" class="form-control">
+                                            <option value=""> Lenguaje </option>
+                                            <option value="php"> PHP </option>
+                                            <option value="python"> Python </option>
+                                            <option value="javascript"> Javascript </option>
+                                            <option value="html"> HTML </option>
+                                            <option value="css"> CSS </option>
+                                            <option value="sql"> SQL </option>
+                                            <option value="mysql"> MySQL </option>
+                                            <option value="json"> JSON </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4 pt-2">
+                                    <div class="form-group ">
+                                        <div class="custom-control custom-control-inline custom-radio text-right">
+                                            <input onclick='fetch("models")' type="radio" class="custom-control-input"
+                                                name="rdGroup1" id="rd1">
+                                            <label class="custom-control-label" for="rd1">M</label>
+                                        </div>
+                                        <div class="custom-control custom-control-inline custom-radio text-right">
+                                            <input onclick="viewdirs()" type="radio" class="custom-control-input"
+                                                name="rdGroup1" id="rd2" data-toggle="modal"
+                                                data-target="#exampleModalScrollable">
+                                            <label class="custom-control-label" for="rd2">V</label>
+                                        </div>
+                                        <div class="custom-control custom-control-inline custom-radio text-right">
+                                            <input onclick='fetch("controllers")' type="radio"
+                                                class="custom-control-input" name="rdGroup1" id="rd3" checked> <label
+                                                class="custom-control-label" for="rd3">C</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <h4 class=" pt-1 "> SICAP-RE <label id="codeTitle" class='text-muted'> Sin titulo 1</label>
+                        </h4>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+        <pre id="aceEditor" style="height:500px;">
+
+               <?php echo file_get_contents('hola') ?>
+
+            </pre>
+        <div id="statusBar" class="card-footer">
+            <div class="ace_statusbar"> Ace on Looper </div>
+        </div>
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+
+
+<div aria-live="polite" aria-atomic="true">
+    <!-- Position it -->
+    <div style="position: fixed; top: 4.5rem; right: 1rem; z-index: 1050">
+        <!-- .toast -->
+        <div id="toastAbrir" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
+            data-delay="5000">
+            <div class="toast-header">
+                <strong class="mr-auto">Correcto</strong> <small>Abrir Archivo</small>
+                <!-- enable button below if you want to use data-autohide="false" -->
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <p> Archivo abierto correctamente </p>
+            </div>
+        </div><!-- /.toast -->
+    </div>
+</div>
+
+
+
+<div aria-live="polite" aria-atomic="true">
+    <!-- Position it -->
+    <div style="position: fixed; top: 4.5rem; right: 1rem; z-index: 1050">
+        <!-- .toast -->
+        <div id="toastGuardar" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
+            data-delay="5000">
+            <div class="toast-header">
+                <strong class="mr-auto">Correcto</strong> <small>Guardar Archivo</small>
+                <!-- enable button below if you want to use data-autohide="false" -->
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <p> Archivo guardado correctamente </p>
+            </div>
+        </div><!-- /.toast -->
+    </div>
+</div>
+
+<div aria-live="polite" aria-atomic="true">
+    <!-- Position it -->
+    <div style="position: fixed; top: 4.5rem; right: 1rem; z-index: 1050">
+        <!-- .toast -->
+        <div id="toastEliminar" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
+            data-delay="5000">
+            <div class="toast-header">
+                <strong class="mr-auto">Correcto</strong> <small>Eliminar vista</small>
+                <!-- enable button below if you want to use data-autohide="false" -->
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <p> Archivo eliminado correctamente </p>
+            </div>
+        </div><!-- /.toast -->
+    </div>
+</div>
+
+
+
+<div aria-live="polite" aria-atomic="true">
+    <!-- Position it -->
+    <div style="position: fixed; top: 4.5rem; right: 1rem; z-index: 1050">
+        <!-- .toast -->
+        <div id="toastError" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true"
+            data-delay="5000">
+            <div class="toast-header">
+                <strong class="mr-auto">Error</strong> <small>Fallo al obtener</small>
+                <!-- enable button below if you want to use data-autohide="false" -->
+                <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <p> Error, intente mas tarde </p>
+            </div>
+        </div><!-- /.toast -->
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalScrollableLabel" class="modal-title"> Seleccionar Vista </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <!-- grid column -->
+                    <div class="col-12">
+                        <!-- .list-group -->
+                        <div class="list-group list-group-bordered " id="listviewdir">
+                        </div><!-- /.list-group -->
+                    </div><!-- /grid column -->
+
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+
+                    <button data-dismiss="modal"    type="button" class="btn btn-danger">Cerrar</button>
+                    <button onclick="newview()"     type="button" class="btn btn-primary">Nueva</button>
+                    <button data-dismiss="modal" onclick="createview()"  type="button" class="btn btn-warning">Crear</button>
+
+
+
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.card-body -->
+
+<div class="modal fade" id="exampleModalScrollableDate" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalScrollableLabelDate" class="modal-title"> Seleccionar Fecha </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <!-- grid column -->
+                    <div class="col-12">
+
+                        <form>
+
+                            <div class="form-group">
+                                <input id='sec' onchange="history(this)" type="date" class="form-control "
+                                    data-inline="true">
+                            </div><!-- /.form-group -->
+
+                        </form>
+
+
+                    </div><!-- /grid column -->
+
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+
+                    <button data-dismiss="modal" type="button" class="btn btn-danger">Cerrar</button>
+
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.card-body -->
+
+
+
+<div class="modal modal-alert" id="modalLoad" data-dismiss="modal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+
+            <div class="section-block">
+                <!-- grid row -->
+                <div class="row">
+
+                    <div class="col-lg-12 p-4">
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div><!-- /.card-body -->
+
+<div class="modal fade" id="exampleModalScrollableBack" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalScrollableLabel" class="modal-title"> Seleccionar Fecha </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <!-- grid column -->
+                    <div class="col-12">
+
+                        <ul class="list-group mb-3" id="listback">
+                            <li class="list-group-item list-group-item-action">Basic list item </li>
+                        </ul><!-- /.list-group -->
+
+                    </div><!-- /grid column -->
+
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+
+                    <button data-dismiss="modal" type="button" class="btn btn-danger">Cerrar</button>
+
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.card-body -->

@@ -21,9 +21,9 @@ abstract class AppController extends Controller
     {
         
      
-        if( $this->controller_name != 'login')
+        if( $this->controller_name != 'login' )
            return (new usuarios)->estaAutenticado();
-
+  
          
         
 

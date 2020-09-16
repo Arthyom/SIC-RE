@@ -1,3 +1,4 @@
+ 
 <?php
 /**
  * KumbiaPHP web & app Framework.
@@ -60,7 +61,7 @@ define('APP_PATH', dirname(__DIR__).'/app/');
 /*
  * Define el CORE_PATH
  *
- * CORE_PATH:
+ * CORE_PATH: 
  * - Ruta al directorio que contiene el núcleo de Kumbia (por defecto la ruta al directorio core)
  * - En producción, es recomendable ponerla manual usando const
  */
@@ -106,3 +107,4 @@ $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
  */
 //require APP_PATH . 'libs/bootstrap.php'; //bootstrap de app
 require CORE_PATH.'kumbia/bootstrap.php'; //bootstrap del core
+

@@ -8,14 +8,16 @@
 <table class="t">
     <thead><tr>
     <?php foreach (current($data->items)->fields as $field) : ?>
+        <th>#</th>
         <th><?= (current($data->items)->get_alias($field))?></th>
     <?php endforeach?>
 	<th>Acciones</th>
     </tr></thead>
 	<tbody>
-    <?php foreach ($data->items as $item) : ?>
+    <?php foreach ($data->items as $i => $item) : ?>
         <tr>
             <?php foreach ($item->fields as $field) : ?>
+            <td><?php $i + 1  ?></td>
             <td><?= h($item->$field)?></td>
             <?php endforeach?>
 			<td><?= Html::linkAction("ver/$item->id", 'Ver')?> |

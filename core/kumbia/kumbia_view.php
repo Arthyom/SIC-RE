@@ -38,6 +38,8 @@ class KumbiaView
      * @var string|null
      */
     protected static $_template = 'layouts/default';
+
+    protected static $nombre_caja = 'coroneo';
     /**
      * Indica el tipo de salida generada por el controlador.
      *
@@ -142,16 +144,16 @@ class KumbiaView
         
     
 
-        $path =  '/var/www/florencioK/default/app/views/'.self::$_path.self::$_view.'.phtml';
+        $path =  '/var/www/'. self::$nombre_caja.'/default/app/views/'.self::$_path.self::$_view.'.phtml';
 
         if( !file_exists($path) )
             $path = self::$_path.self::$_view.'.php';
         else
             $path = self::$_path.self::$_view.'.phtml';
-
+ 
         
         if (self::$_response) {
-            $path = '/var/www/florencioK/default/app/views/'.self::$_path.self::$_view.'.'.self::$_response.'.phtml';
+            $path = '/var/www/'.self::$nombre_caja.'/default/app/views/'.self::$_path.self::$_view.'.'.self::$_response.'.phtml';
             if( !file_exists( $path ) )
                 $path = self::$_path.self::$_view.'.'.self::$_response.'.php';
             else

@@ -35,44 +35,31 @@
             <!-- /.dropdown-aside -->
         </header>
         <!-- /.aside-header -->
+        <br>
+       
         <!-- .aside-menu -->
         <div class="aside-menu overflow-hidden">
             <!-- .stacked-menu -->
             <nav id="stacked-menu" class="stacked-menu">
                 <!-- .menu -->
                 <ul class="menu">
-                    <?php 
+                    
+                    <?php //$menu = (new menucompleto)->find( 'conditions: INSTR(Nombre, "WflsTest") > 0 '); ?>
 
-          $_data = (new Menus)->find("status ORDER BY position ASC ");
-          //echo $_data[0]->Text;
-          //$ad = get_object_vars($_data[0]);
-          //echo $_data[2]["text"];
-          //echo $ad["text"];
-          //var_dump($ad);
-          foreach ($_data as $index => $row) {
-            // verificar si la fila tiene el mismo grupo que el usuario actual (es informacion accesible)
-            if(  $row->grupo_usuarios == (new grupos)->find( Auth::get('grupos_id') )->id  ){
-            //$row = get_object_vars($_data[$key]);
-           if($row->parent==0){
-            if($row->type== 'header')
-              View::partial('snippets/aside/header-menu', false, array('levelMenu' => $row));
-            if($row->type== 'link')
-              View::partial('snippets/aside/level-menu', false, array('levelMenu' => $row));
-           }
-          }
-        }
+                    <?php $menu = (new mymenugenerador)->buscarPorIdPadre() ?>
 
-          /*
-          $_data =file_get_contents("json/aside-menu.json");
-          $json = json_decode($_data, true);
 
-          foreach ($json["aside-menu"] as $key => $value) {
-             if($value["type"]== 'header')
-               View::partial('snippets/aside/header-menu', false, array('levelMenu' => $value));
-             if($value["type"]== 'link')
-               View::partial('snippets/aside/level-menu', false, array('levelMenu' => $value));
-          }*/
-          ?>
+
+
+                    <?php foreach ($menu  as $key => $value): ?>
+
+                    <?php  if($value->parent_id == 0 && Auth::get('Grupo') == 'ADMINISTRADOR'): ?>
+                    <?php View::partial('snippets/aside/level-menu', false, array('menupadre' => $value)) ?>
+
+                    <?php endif ?>
+
+                    <?php endforeach ?>
+
                 </ul>
                 <!-- /.menu -->
             </nav>
