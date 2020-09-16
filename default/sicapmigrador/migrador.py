@@ -384,11 +384,11 @@ def migrate():
     print '[OK]....Directorios omitidos '+ str(k)
 
       ## copiar ficheros externos
+    i = 0; m = 0; content = '//View::template(null);' ; nombres = []
     externalFiles = listdir(config.globalConfig['fromDir'])
     reporte =  open(config.globalConfig['ctrlFile'], 'w')
     reporte.write( "<?php  \nclass IndexController extends AppController{ \n\n" )
-
-    i = 0; m = 0; content = '//View::template(null);' ; nombres = []
+    reporte.write( "public function index(){\n\t\t"+ content +"\n\t}\n\n" )
     for fileName in externalFiles:
       if( '.php'  in fileName  and '~' not in fileName and '(copia).php' not in fileName ):
 
@@ -447,7 +447,7 @@ def migrate():
 def init():
 
 
-  if( not config.globalConfig['oM'] ):
+  if( config.globalConfig['oM'] ):
 
     conexion = conectar(config.dbConfig)
     nombreTablas = conseguirTablas(conexion)
@@ -468,7 +468,6 @@ def init():
 
     if( config.globalConfig['cL'] ):
       createMenuElements(nombreTablas)
-
   else:
     migrate()
 

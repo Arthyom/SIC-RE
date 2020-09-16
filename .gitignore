@@ -1,24 +1,31 @@
 
-!default/app/models/usuarios.php
-!default/app/views/_shared/*
-!default/app/views/tables
-!default/app/views/index/index.phtml
-!default/app/views/index/ValidaUsuario.php
-!default/app/views/index/clases/*
-!default/app/views/login
 
-!default/app/views/*.html
-!default/app/controllers/login_controller.php
-!default/app/controllers/index_controller.php
+
 
 
 vendor
 default/app/temp
 default/public/temp
 sql/
+
 default/app/controllers/*
+!default/app/controllers/login_controller.php
+!default/app/controllers/index_controller.php
+
 default/app/models/*
+!default/app/models/usuarios.php
+
 default/app/views/index/*
+!default/app/views/_shared
+!default/app/views/tables
+!default/app/views/index/index.phtml
+!default/app/views/index/ValidaUsuario.php
+!default/app/views/index/clases/procedimientos.php
+
+!default/app/views/login
+
+!default/app/views/*.html
+
 
 
 *.log

@@ -108,3 +108,4 @@ $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 //require APP_PATH . 'libs/bootstrap.php'; //bootstrap de app
 require CORE_PATH.'kumbia/bootstrap.php'; //bootstrap del core
 
+

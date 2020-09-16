@@ -1,0 +1,5 @@
+[Wed, 16 Sep 20 00:01:46 -0500]El usuario [ DAVID ] CERRO sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 00:01:56 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 01:35:19 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 01:49:04 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 01:55:43 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
