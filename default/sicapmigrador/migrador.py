@@ -436,6 +436,19 @@ def migrate():
 
 
 
+def writeConst():
+
+    lines = open(config.globalConfig['const'],'r').readlines()
+    content = ''
+    for line in lines:
+        content += line
+
+    content = content.replace("'coroneo'", "'"+ config.nombreCaja+"'" )
+
+    escrior = open(config.globalConfig['const'],'w')
+    escrior.write(content)
+    escrior.close()
+    print(content)
 
 
 
@@ -446,6 +459,7 @@ def migrate():
 
 def init():
 
+  writeConst()
 
   if( config.globalConfig['oM'] ):
 

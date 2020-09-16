@@ -20,7 +20,7 @@ globalConfig = {
     'cI': False,     ## habilitar la insercion en la tabla de configuracion
     'cL': False,     ## habilitar la insercion de elementos en la tabla menucompleto
     'cK': False,     ## detectar y corregir tablas sin llave primaria
-    'cK': False,        
+    'cK': False,
     'cT': False,     ## insertar en la tabla
     'prefix' : 'WflsTest',
     'startNum' : 50,
@@ -30,7 +30,8 @@ globalConfig = {
     'toDir': '/var/www/'+nombreCaja+'/default/app/views/index/',
     'ctrlFile': '/var/www/'+nombreCaja+'/default/app/controllers/index_controller.php',
     'ctrlDir':'/var/www/'+nombreCaja+'/default/app/controllers/',
-    'urlPath': '/'+nombreCaja+'/default/public/'
+    'urlPath': '/'+nombreCaja+'/default/public/',
+    'const': '/var/www/'+nombreCaja+'/default/public/index.php',
 
 
 }
