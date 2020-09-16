@@ -58,6 +58,9 @@ const PRODUCTION = false;
 define('APP_PATH', dirname(__DIR__).'/app/');
 //const APP_PATH = '/path/to/app/';
 
+define('NOMBRE_CAJA', 'coroneo');
+
+
 /*
  * Define el CORE_PATH
  *
