@@ -1,0 +1,132 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	font-family: 'San-serif';
+	background: #E8E8E8;
+}
+
+header{
+	position: fixed;
+	width: 100%;
+	height: 11vh;
+	top: 0;
+	left: 0;
+
+	padding: 20px;
+	background: rgb(22, 28, 34);
+}
+
+header #button-menu{
+	font-size: 30px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.navegacion{
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 0%;
+	height: 89vh;
+	background: rgba(0,0,0,60%);
+}
+
+.navegacion ul{
+	width: 320px;
+	height: 89vh;
+	background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url(ciudad.jpg);
+	list-style: none;
+	position: absolute;
+	top: 0;
+	left: -320px;
+	overflow: auto;
+
+	transition: left .3s;
+}
+
+.navegacion .menu li.title-menu{
+	padding: 15px;
+	background:rgb(43, 52, 59);
+	color: #fff;
+	text-align: center;
+	font-size: 15px;
+}
+
+.navegacion .menu a{
+	display: block;
+	padding: 10px;
+	/*border-bottom: 1px solid #C6D0DA;*/
+	height: 100%;
+	font-size: 15px;
+	font-weight: 200;
+	text-decoration: none;
+	color: rgb(236, 236, 236);
+}
+
+.navegacion .menu a:hover{
+	background: rgb(22, 28, 34);
+	color: #fff;
+}
+
+.navegacion .menu .item-submenu > a::after{
+	font: normal normal normal 14px/1 FontAwesome;
+  	font-size: inherit;
+  	text-rendering: auto;
+  	-webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
+	content: '\f105';
+
+	float: right;
+	color: #C5C5C5;
+}
+
+.navegacion .submenu1 li.title-menu,
+.navegacion .submenu2 li.title-menu,
+.navegacion .submenu3 li.title-menu,
+.navegacion .submenu4 li.title-menu,
+.navegacion .submenu5 li.title-menu{
+	background: #fff;
+	color:	rgb(22, 28, 34);
+}
+
+.navegacion .submenu1 li.go-back,
+.navegacion .submenu2 li.go-back,
+.navegacion .submenu3 li.go-back,
+.navegacion .submenu4 li.go-back,
+.navegacion .submenu5 li.go-back{
+	padding: 10px 10px;
+	background: rgb(43, 52, 59);
+	color: #fff;
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.navegacion .submenu1 li.go-back::before,
+.navegacion .submenu2 li.go-back::before,
+.navegacion .submenu3 li.go-back::before,
+.navegacion .submenu4 li.go-back::before,
+.navegacion .submenu5 li.go-back::before{
+	font: normal normal normal 14px/1 FontAwesome;
+  	font-size: inherit;
+  	text-rendering: auto;
+  	-webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
+	content: '\f0d9';
+	margin-right: 10px;
+}
+
+@media screen and (max-width: 320px){
+	.navegacion ul{
+		width: 100%;
+		height: 100%;
+	}
+}

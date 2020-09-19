@@ -18,8 +18,8 @@
 
     <?php 
     $link = $external_link;
-    if( substr_count($external_link, '/florencioK/default/public/') == 0)
-        $link = '/florencioK/default/public/index/'.$link;
+    if( substr_count($external_link,  '/'.NOMBRE_CAJA.'/default/public/' ) == 0)
+        $link =   '/'.NOMBRE_CAJA.'/default/public/' . $link;
     ?>
 
         <a href="<?php echo $link ?>" class="menu-link">

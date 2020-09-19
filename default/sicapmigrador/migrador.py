@@ -384,7 +384,7 @@ def migrate():
     print '[OK]....Directorios omitidos '+ str(k)
 
       ## copiar ficheros externos
-    i = 0; m = 0; content = '//View::template(null);' ; nombres = []
+    i = 0; m = 0; content = 'View::template(null);' ; nombres = []
     externalFiles = listdir(config.globalConfig['fromDir'])
     reporte =  open(config.globalConfig['ctrlFile'], 'w')
     reporte.write( "<?php  \nclass IndexController extends AppController{ \n\n" )
@@ -448,7 +448,6 @@ def writeConst():
     escrior = open(config.globalConfig['const'],'w')
     escrior.write(content)
     escrior.close()
-    print(content)
 
 
 
@@ -461,7 +460,7 @@ def init():
 
   writeConst()
 
-  if( config.globalConfig['oM'] ):
+  if( not config.globalConfig['oM'] ):
 
     conexion = conectar(config.dbConfig)
     nombreTablas = conseguirTablas(conexion)

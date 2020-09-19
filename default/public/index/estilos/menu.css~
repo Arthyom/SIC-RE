@@ -1,0 +1,206 @@
+
+/* remove all list stylings */
+.menu, .menu ul {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+	display: block;
+	background: #00195e; /* obscuro */ linear-gradient(90deg, #a4c867, #f8fbc8);
+	color: #fff4c6;
+}
+
+.menu li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	display: block;
+	float: left;	/* move all main list items into one row, by floating them */
+	position: relative;	/* position each LI, thus creating potential IE.win overlap problem */
+	z-index: 5;		/* thus we need to apply explicit z-index here... */
+}
+
+.menu li:hover {
+	z-index: 10000;	/* ...and here. this makes sure active item is always above anything else in the menu */
+	white-space: normal;/* required to resolve IE7 :hover bug (z-index above is ignored if this is not present)
+							see http://www.tanfa.co.uk/css/articles/pure-css-popups-bug.asp for other stuff that work */
+}
+
+.menu li li {
+	float: none;/* items of the nested menus are kept on separate lines */
+
+}
+
+.menu ul {
+	visibility: hidden;	/* initially hide all submenus. */
+	position: absolute;
+	z-index: 10;
+	left: 0;	/* while hidden, always keep them at the top left corner, */
+	top: 0;		/* 		to avoid scrollbars as much as possible */
+}
+
+.menu li:hover>ul {
+	visibility: visible;	/* display submenu them on hover */
+	top: 100%;	/* 1st level go below their parent item */
+   box-shadow: 0px 0px 30px #4e0606; /* Permite poner un fondo luminoso */
+   -moz-box-shadow: 0px 0px 30px  #4e0606; /* Permite poner un fondo luminoso */ 
+
+}
+
+.menu li li:hover>ul {	/* 2nd+ levels go on the right side of the parent item */
+	top: 0;
+	left: 100%;
+   box-shadow: 0px 0px 30px #4e0606; /* Permite poner un fondo luminoso */
+   -moz-box-shadow: 0px 0px 30px  #4e0606; /* Permite poner un fondo luminoso */ 
+
+}
+
+/* -- float.clear --
+	force containment of floated LIs inside of UL */
+.menu:after, .menu ul:after {
+	content: ".";
+	height: 0;
+	display: block;
+	visibility: hidden;
+	overflow: hidden;
+	clear: both;
+}
+.menu, .menu ul {	/* IE7 float clear: */
+	min-height: 0;
+}
+
+.menu ul {
+/*	background-image: url(empty.gif);	 required for sticky to work in IE6 and IE7 - due to their (different) hover bugs */
+	background: linear-gradient(90deg, #00195e, #b2c2f1);
+	
+}
+.menu ul ul {
+   background-color: #00195e; /* obscuro */
+}
+
+
+.menu {
+	width: 100%;
+	color: #00195e; /* obscuro */
+}
+
+/* For all submenus */
+.menu ul {
+	width: 280px;
+	border: 1px outset;
+	color: #d9e9ed;
+	background: linear-gradient(90deg, #00195e, #b2c2f1);
+   border-radius: 10px 10px 10px 10px;
+   box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.4);
+   
+}
+
+/* Top level menu hover, when looking at a lower level */
+.menu a:hover, .menu li:hover>a {
+/*	-webkit-animation-delay: 0.3s; 
+   animation-delay: 0.3s; */
+	font-size: 125%;
+	border: 1px solid #fff4c6;
+	color: #fff4c6 ;
+	padding: 0 7px 0 7px;
+	line-height: 25px;
+	cursor: pointer;
+	background: linear-gradient(90deg, #00195e, #b2c2f1, #00195e);
+  /* transform: scale(1.1); */
+}
+
+/* All links */
+.menu li li:hover>ul {	/* inset 2nd+ submenus, to show off overlapping */
+	top: 5px;
+	left: 90%;
+}
+
+.menu a {
+	transition-duration: .3s;
+	font-weight: bold;
+	line-height: 25px;
+	text-decoration: none;
+	color: #00195e; /* obscuro */
+	padding: 0 8px 0 8px;
+	display: block;
+	background: linear-gradient(90deg, #b2c2f1, #fdf9e8, #b2c2f1);	
+	border-radius: 0px 10px 0px 10px;
+}
+
+/* All submenu links */
+
+.menu li ul a {
+
+	color: #00195e; /* obscuro */
+	background: linear-gradient(90deg, #b2c2f1, #fdf9e8, #b2c2f1);	
+	border-radius: 10px 10px 10px 10px;
+	text-align: left;
+	display: block;
+	padding: 0px 15px 0px 30px;
+	line-height: 25px;
+	width: 230px;
+}
+
+.menu li ul a:hover {
+	
+	font-size: 100%;
+	text-decoration: none;
+	color: #fff4c6;
+	border: 1px solid #316AC5;
+	padding: 0px 14px 0px 29px;
+	line-height: 25px;
+/*	transform: scale(1.07); */
+	
+}
+
+/* Submenu hover, when looking at a lower level */
+.menu li ul li:hover>a {
+
+	background: linear-gradient(90deg, #00195e, #b2c2f1, #00195e);	
+	border-radius: 7px 7px 7px 7px;
+	border: 1px solid #fff4c6;
+	color: #fff4c6;
+	padding: 0px 14px 0px 29px;
+	line-height: 25px;
+	cursor: pointer;
+	
+}
+
+.menuHeader {
+  	display: none; 
+
+}
+
+/* Stop images appearing on the top level */
+.menuImg {
+	display: none;
+}
+
+/* Everything below is for the benefit of submenus */
+.menu_break {
+	display: block;
+	margin: 0 2px 0 26px; 
+   background: transparent; 
+	border: 1px inset;
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDShadow;
+  -moz-border-right-colors: ThreeDLightShadow ThreeDHighlight;
+  -moz-border-bottom-colors: ThreeDLightShadow ThreeDHighlight;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDShadow;
+}
+
+.menu ul li .menuArrow {
+	position: absolute; /* Do not alter this line! */
+	margin-top: 4px;
+	height: 7px;
+	right: 8px;
+	width: 4px;
+}
+
+.menu ul li .menuImg {
+	position: absolute; /* Do not alter this line! */
+	margin-top: 2px;
+	height: 16px;
+	left: 4px;
+	width: 16px;
+	display: block;
+}

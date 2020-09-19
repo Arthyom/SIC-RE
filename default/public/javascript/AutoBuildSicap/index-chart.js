@@ -16,13 +16,13 @@ var gdata2 = {
   ]
 }
 
-var host = 'http://192.168.1.65'
+var host = 'https://vip2.sicap.mx'
 
 function bar() {
   
   $.ajax({
     dataType: "json",
-    url:  host +'/florencioK/default/sicaprest/chart_get_data',
+    url:  host +'/coroneo/default/sicaprest/chart_get_data',
     type: 'POST',
   
   })
@@ -69,7 +69,7 @@ function line() {
   
   $.ajax({
     dataType: "json",
-    url:  host +'/florencioK/default/sicaprest/chart_get_dataset',
+    url:  host +'/coroneo/default/sicaprest/chart_get_dataset',
     type: 'POST',
   
   })
@@ -120,7 +120,7 @@ function pie() {
  
   $.ajax({
     dataType: "json",
-    url:  host +'/florencioK/default/sicaprest/chart_get_information',
+    url:  host +'/coroneo/default/sicaprest/chart_get_information',
     type: 'POST',
   
   })
@@ -177,7 +177,7 @@ function pie() {
 
   $.ajax({
     dataType: "json",
-    url:  host +'/florencioK/default/sicaprest/chart_create_from',
+    url:  host +'/coroneo/default/sicaprest/chart_create_from',
     type: 'POST',
     data: JSON.stringify( d ),
   

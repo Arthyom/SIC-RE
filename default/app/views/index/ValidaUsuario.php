@@ -6,7 +6,7 @@ include("clases/procedimientos.php");
 
 $_SESSION['Focus']='Usuario';
 
-
+ 
 //echo getIP();
 if (isset($_SESSION["miSessionCaja"]) || isset($_POST['Usuario']) ) //|| isset($_POST["Token"]) 
 {

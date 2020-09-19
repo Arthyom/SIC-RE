@@ -13,15 +13,15 @@ nombreCaja = 'coroneo'
 copiaCaja = 'yuriria'
 
 globalConfig = {
-    'oM': False,     ## realizar migracion de archivos de directorio
+    'oM': True,     ## realizar migracion de archivos de directorio
     'cM': False,     ## habilitar la creacion de modelos
     'cS': False,     ## habilitar la creacion de controladores basados en scaffolds
     'cC': False,     ## habilitar la creacion controladores estandar
-    'cI': False,     ## habilitar la insercion en la tabla de configuracion
+    'cI': True,     ## habilitar la insercion en la tabla de configuracion
     'cL': False,     ## habilitar la insercion de elementos en la tabla menucompleto
     'cK': False,     ## detectar y corregir tablas sin llave primaria
     'cK': False,
-    'cT': False,     ## insertar en la tabla
+    'cT': True,      ## insertar en la tabla
     'prefix' : 'WflsTest',
     'startNum' : 50,
     'stepsNum' : 10,

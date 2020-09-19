@@ -3,3 +3,6 @@
 [Wed, 16 Sep 20 01:35:19 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
 [Wed, 16 Sep 20 01:49:04 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
 [Wed, 16 Sep 20 01:55:43 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 02:49:22 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 03:26:03 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
+[Wed, 16 Sep 20 12:51:28 -0500]El usuario [ DAVID ] inicio sesion CORRECTAMENTE con la contraseña [ d662c7dc14cce92038042a53557db61d ]
