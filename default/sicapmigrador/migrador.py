@@ -1,12 +1,15 @@
 import mysql.connector as cn
-import config
 import selects_relations
 import os.path
 from os.path import isfile, join
 from os import listdir
 import shutil
-
+import sys, getopt
 import os
+import config
+
+marcadores = ['***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
+
 
 def conectar(config):
   try:
@@ -111,7 +114,7 @@ def describirTablas(nombreTablas):
             if( 'FOREIGN' not in dato and 'KEY' not in dato  and 'UNIQUE' not in dato and'PRIMARY' not in dato != 'CONSTRAINT'):
               campos = extraerCampos(nombreTabla, dato, llavesForaneas)
               campos.append(orden)
-              if( campos != None  and config.globalConfig['cT'] ):
+              if( campos != None  ):
                 creados += crearSQL(campos, conexion, nombreTablas)
                 orden += config.globalConfig['stepsNum']
 
@@ -436,21 +439,128 @@ def migrate():
 
 
 
-def writeConst():
+def printCriticals():
+    print('jssd')
+    for file in config.globalConfig['filesToEdit']:
+        fileDir = os.path.dirname(os.path.realpath('__file__'))
+        file = os.path.join(fileDir, file)
+        file = os.path.abspath(os.path.realpath(file))
 
-    lines = open(config.globalConfig['const'],'r').readlines()
-    content = ''
+        print( file )
+        lector = open( file  ,'r')
+        lines = lector.readlines()
+        content = ''
+        for line in lines:
+            content += line
+        lector.close()
+
+        print('-.-.-.-..-----.')
+        print(config.nombreCaja)
+        print(config.dbConfig['host'])
+        print(config.dbConfig['user'])
+        print(config.dbConfig['password'])
+        print(config.dbConfig['database'])
+
+        content = content.replace("***nombre_caja***",   config.nombreCaja)
+        content = content.replace("***nombre_host***",   config.dbConfig['host'])
+        content = content.replace("***nombre_db***",     config.dbConfig['database'])
+        content = content.replace("***nombre_usuario***",config.dbConfig['user'] )
+        content = content.replace("***nombre_pass***",   config.dbConfig['password'])
+
+        escrior = open(file,'w')
+        escrior.write(content)
+        escrior.close()
+
+
+
+def readParams():
+     parametros = sys.argv[1:]
+     nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
+     crearModelos = True; crearControladores = True;
+     insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
+     corregirKeys = False; readRelations = False
+     escritor = open( 'config.py'  ,'r');
+     lines = escritor.readlines(); content = ''
+
+     for line in lines:
+         content += line
+     escritor.close()
+
+     for param in sys.argv[1:]:
+          pi = param.split('=')
+          if '--nombre_caja' in pi:
+               nombreCaja = pi[1]
+          if '--plantilla_caja' in pi:
+                plantillaCaja = pi[1]
+          if '--orden_iniciar_en' in pi:
+               startNum  = pi[1]
+          if '--orden_saltos_de' in pi:
+               stepNum = pi[1]
+          if '--no_crear_modelos' in parametros:
+               crearModelos = False
+          if '--no_crear_controls' in parametros:
+               crearControladores = False
+          if '--no_crear_tabla_conf' in parametros:
+               insertarTablaConf = False
+          if '--no_crear_tabla_menu' in parametros:
+               insertarTablaMenu = False
+          if '--nombre_host' in pi:
+               nombreHost = pi[1]
+          if '--nombre_db' in pi:
+               nombreDb = pi[1]
+          if '--nombre_user' in pi:
+               nombreUser = pi[1]
+          if '--nombre_pass' in pi:
+               nombrePass = pi[1]
+
+
+     if nombreCaja != '' and plantillaCaja != '':
+       content = content.replace('***nombre_caja***', nombreCaja)
+       content = content.replace("***plantilla_caja***", plantillaCaja)
+       content = content.replace("'***srtN***'", str(startNum) )
+       content = content.replace("'***stpN***'", str(stepNum) )
+       content = content.replace("'***oM***'", str(soloCopiar) )
+       content = content.replace("'***cM***'", str(crearModelos))
+       content = content.replace("'***cS***'", str(crearControladores))
+       content = content.replace("'***cI***'", str(insertarTablaConf))
+       content = content.replace("'***cL***'", str(insertarTablaMenu))
+       content = content.replace("'***cK***'", str(corregirKeys))
+       content = content.replace("'***rL***'", str(readRelations))
+       content = content.replace("***nombre_host***", str(nombreHost))
+       content = content.replace("***nombre_db***", str(nombreDb))
+       content = content.replace("***nombre_usuario***", str(nombreUser))
+       content = content.replace("***nombre_pass***", str(nombrePass))
+
+       escrior = open( 'config.py'  ,'w')
+       escrior.write(content)
+       escrior.close()
+       reload(config)
+       printCriticals()
+
+     if nombreCaja == '':
+         print("Por favor indique el nombre de la caja a migrar con el parametro --nombre_caja=caja ")
+     if plantillaCaja == '':
+         print("Por favor indique el path de la caja a usar como plantilla con el parametro --plantilla_caja=path  ")
+     if nombreHost == '':
+         print("Por favor indique el host que almacena la base de datos con el parametro --nombre_Host=host  ")
+     if nombreUser == '':
+         print("Por favor indique el usuario para acceder a la base de datos con el parametro --nombre_user=user  ")
+     if nombreDb == '':
+         print("Por favor indique el nombre de la base de datos a usar con el parametro --nombre_Db=db  ")
+     if nombrePass == '':
+         print("Por favor indique el pass para acceder a la base de datos con el parametro --nombre_pass=pass  ")
+
+
+
+
+def checkCriticalConf():
+    lector = open( 'config.py'  ,'r')
+    lines = lector.readlines(); content = ''
     for line in lines:
         content += line
-
-    content = content.replace("'coroneo'", "'"+ config.nombreCaja+"'" )
-
-    escrior = open(config.globalConfig['const'],'w')
-    escrior.write(content)
-    escrior.close()
-
-
-
+    lector.close()
+    for marcador in marcadores:
+        return marcador in content
 
 
 
@@ -458,31 +568,32 @@ def writeConst():
 
 def init():
 
-  writeConst()
+    if checkCriticalConf():
+        readParams()
+    else:
+        if( not config.globalConfig['oM'] ):
+          conexion = conectar(config.dbConfig)
+          nombreTablas = conseguirTablas(conexion)
+          plantillamodelos = platillaModelos()
+          plantillascaffolds = plantillaScaffolds()
 
-  if( not config.globalConfig['oM'] ):
+          if( config.globalConfig['cK'] ):
+            corregirTablaSinPrimaria( nombreTablas )
 
-    conexion = conectar(config.dbConfig)
-    nombreTablas = conseguirTablas(conexion)
-    plantillamodelos = platillaModelos()
-    plantillascaffolds = plantillaScaffolds()
+          if( config.globalConfig['cS'] ):
+            crearControladores(plantillascaffolds, nombreTablas)
 
-    if( config.globalConfig['cK'] ):
-      corregirTablaSinPrimaria( nombreTablas )
+          if( config.globalConfig['cM'] ):
+            crearModelos(plantillamodelos, nombreTablas)
 
-    if( config.globalConfig['cS'] ):
-      crearControladores(plantillascaffolds, nombreTablas)
+          if( config.globalConfig['cI'] ):
+            describirTablas(nombreTablas)
 
-    if( config.globalConfig['cM'] ):
-      crearModelos(plantillamodelos, nombreTablas)
+          if( config.globalConfig['cL'] ):
+            createMenuElements(nombreTablas)
+        else:
+          migrate()
 
-    if( config.globalConfig['cI'] ):
-      describirTablas(nombreTablas)
-
-    if( config.globalConfig['cL'] ):
-      createMenuElements(nombreTablas)
-  else:
-    migrate()
 
 
 

@@ -9,38 +9,45 @@ TARGET_FILE_EXTEN = '.php'
 fechaExec = datetime.utcnow().strftime('%Y-%m-%d%H:%M:%S:%f')
 log = open('execlog'+fechaExec+'.log', 'w')
 
-nombreCaja = 'coroneo'
-copiaCaja = 'yuriria'
-
-globalConfig = {
-    'oM': True,     ## realizar migracion de archivos de directorio
-    'cM': False,     ## habilitar la creacion de modelos
-    'cS': False,     ## habilitar la creacion de controladores basados en scaffolds
-    'cC': False,     ## habilitar la creacion controladores estandar
-    'cI': True,     ## habilitar la insercion en la tabla de configuracion
-    'cL': False,     ## habilitar la insercion de elementos en la tabla menucompleto
-    'cK': False,     ## detectar y corregir tablas sin llave primaria
-    'cK': False,
-    'cT': True,      ## insertar en la tabla
-    'prefix' : 'WflsTest',
-    'startNum' : 50,
-    'stepsNum' : 10,
-    'readRelations': False,
-    'fromDir': '/var/www/'+copiaCaja+'/',
-    'toDir': '/var/www/'+nombreCaja+'/default/app/views/index/',
-    'ctrlFile': '/var/www/'+nombreCaja+'/default/app/controllers/index_controller.php',
-    'ctrlDir':'/var/www/'+nombreCaja+'/default/app/controllers/',
-    'urlPath': '/'+nombreCaja+'/default/public/',
-    'const': '/var/www/'+nombreCaja+'/default/public/index.php',
-
-
-}
-
+################################################################################
+########################### INICIO DE SECCION EDITABLE #########################
+nombreCaja = '***nombre_caja***'
+copiaCaja = '***plantilla_caja***'
 dbConfig = {
-    'host' : 'localhost',
-    'database': 'coroneo',
-    'user' : 'alfredo',
-    'password': 'Alfredo2020+'
+    'host' : '***nombre_host***',
+    'database': '***nombre_db***',
+    'user' : '***nombre_usuario***',
+    'password': '***nombre_pass***'
+}
+globalConfig = {
+    'oM': '***oM***',     ## realizar migracion de archivos y directorios SICAP
+    'cM': '***cM***',     ## habilitar la creacion de modelos
+    'cS': '***cS***',     ## habilitar la creacion de controladores SCAFFOLD
+    'cC': '***cS***',     ## habilitar la creacion controladores APPCONTROLLER
+    'cI': '***cI***',     ## habilitar la insercion en la tabla de configuracion
+    'cL': '***cL***',     ## habilitar la insercion en la tabla mymenugenerador
+    'cK': '***cK***',     ## detectar y corregir tablas sin llave primaria ************
+    'startNum' : '***srtN***', ## inicio del indice para ordenar campos de la tabla de configuracion
+    'stepsNum' : '***stpN***', ## incremento del indice para ordenar campos de la tabla de configuracion
+    'readRelations': '***rL***',    ## habilitar la lectura de relaciones
+########################### FIN DE SECCION EDITABLE ############################
+#########################################################################33#####
+
+
+################################################################################
+##################### NO EDITAR A PARTIR DE ESTE COMENTARIO ####################
+    'prefix' : 'WflsTest',
+    'fromDir': '/'+copiaCaja+'/',
+    'toDir': '/'+nombreCaja+'/default/app/views/index/',
+    'ctrlFile': '/'+nombreCaja+'/default/app/controllers/index_controller.php',
+    'ctrlDir':'/'+nombreCaja+'/default/app/controllers/',
+    'urlPath': '/'+nombreCaja+'/default/public/',
+    'filesToEdit' : [
+        '../../default/public/index.php',
+        '../../default/public/javascript/AutoBuildSicap/index-chart.js',
+        '../../default/app/views/index/ValidaUsuario.php',
+        '../../default/app/views/index/clases/procedimientos.php',
+    ]
 }
 
 scaffoldConfig = {

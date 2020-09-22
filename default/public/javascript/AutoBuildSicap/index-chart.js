@@ -1,11 +1,13 @@
+var host = 'coroneo'
+
 var gdata1 = {
-  labels: ['gmc', 'volsvaguen','honda', 'mazda', 'ford', 'nissan', 
+  labels: ['gmc', 'volsvaguen','honda', 'mazda', 'ford', 'nissan',
   'dodge', 'tesla', 'kia', 'akura', 'chevrolet', 'catera'],
   datasets: []
 }
-
+ 
 var gdata2 = {
-  labels: ['PRI', 'PAN','PRD', 'MORENA', 'PT', 'PES', 
+  labels: ['PRI', 'PAN','PRD', 'MORENA', 'PT', 'PES',
   'VERDE', 'PRIAN', 'EL BRONCO', 'PSD', 'CONVERGENCIA', 'NO VOTO'],
   datasets: [
     {
@@ -16,22 +18,21 @@ var gdata2 = {
   ]
 }
 
-var host = 'https://vip2.sicap.mx'
 
 function bar() {
-  
+
   $.ajax({
     dataType: "json",
-    url:  host +'/coroneo/default/sicaprest/chart_get_data',
+    url: "/"+host +'/default/sicaprest/chart_get_data',
     type: 'POST',
-  
+
   })
-  .done( function (datas) { 
+  .done( function (datas) {
     console.log('elementos ', datas);
-  
-  
+
+
   try{
-  
+
     var canvas = $('#canvas-bar-wfls')[0].getContext('2d');
     var chart = new Chart(canvas, {
       type: 'bar',
@@ -51,12 +52,12 @@ function bar() {
         }
       }
     }); // randomize data
-  
+
   }
   catch( exs) {
       console.log('error de busqueda');
   }
-   
+
    })
   .fail( function(params) {
     console.log(' fallo al obtener datos ', );
@@ -66,20 +67,20 @@ function bar() {
 
 
 function line() {
-  
+
   $.ajax({
     dataType: "json",
-    url:  host +'/coroneo/default/sicaprest/chart_get_dataset',
+    url:  "/"+ host +'/default/sicaprest/chart_get_dataset',
     type: 'POST',
-  
+
   })
-  .done( function (datas) { 
+  .done( function (datas) {
     console.log('elementos line ', datas);
-   
-  
+
+
   try{
     gdata1.datasets.push(datas.dataset);
-  
+
     var canvas = $('#canvas-line-wfls')[0].getContext('2d');
     var chart = new Chart(canvas, {
       type: 'line',
@@ -99,37 +100,37 @@ function line() {
         }
       }
     }); // randomize data
-  
+
   }
   catch( exs) {
       console.log('error de busqueda');
   }
-   
-  
-  
+
+
+
    })
   .fail( function(params) {
     console.log(' fallo al obtener datos ', );
   })
 
-}  
+}
 
 
 
-function pie() { 
- 
+function pie() {
+
   $.ajax({
     dataType: "json",
-    url:  host +'/coroneo/default/sicaprest/chart_get_information',
+    url: "/"+ host +'/default/sicaprest/chart_get_information',
     type: 'POST',
-  
+
   })
-  .done( function (datas) { 
+  .done( function (datas) {
     console.log('elementos pie', datas);
-    
-  
+
+
   try{
-  
+
     gdata2.datasets[0].data = datas.data;
     var canvas = $('#canvas-pie-wfls')[0].getContext('2d');
     var chart = new Chart(canvas, {
@@ -145,44 +146,44 @@ function pie() {
         }
       }
     }); // randomize data
-  
+
   }
   catch( exs) {
       console.log('error de busqueda');
   }
-   
-  
-  
+
+
+
    })
   .fail( function(params) {
     console.log(' fallo al obtener datos ', );
   })
-  
 
 
- }  
+
+ }
 
 
  function per() {
 
-  var d = { 
-    query: "SELECT COUNT(IdPersona) FROM abogados Where IdPersona LIKE ",	
-    resource: "abogados",	
+  var d = {
+    query: "SELECT COUNT(IdPersona) FROM abogados Where IdPersona LIKE ",
+    resource: "abogados",
     title: "Ventas por empleado",
-    colors : ["red", "green", "yellow"], 
-    labels: ["0", "11", "1"], 
-    label: "ID Empleados", 
+    colors : ["red", "green", "yellow"],
+    labels: ["0", "11", "1"],
+    label: "ID Empleados",
     type: "line"
   }
 
   $.ajax({
     dataType: "json",
-    url:  host +'/coroneo/default/sicaprest/chart_create_from',
+    url: "/"+ host +'/default/sicaprest/chart_create_from',
     type: 'POST',
     data: JSON.stringify( d ),
-  
+
   })
-  .done( function (params) { 
+  .done( function (params) {
 
     console.log('parametros ', params );
 
@@ -201,10 +202,10 @@ function pie() {
         }
     }
   }); // randomize data
-  
 
 
-  });   
+
+  });
  }
 
 
