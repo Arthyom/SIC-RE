@@ -1,8 +1,3 @@
-
-
-
-
-
 vendor
 default/app/temp
 default/public/temp
@@ -24,11 +19,6 @@ default/app/views/index/clases/
 
 !default/app/views/_shared
 !default/app/views/tables
-
-
-
-
-
 
 !default/app/views/login
 
