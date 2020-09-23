@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `configuraciontabla` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'llave princiapal debe llamarse solo id',
+  `DependeDe` varchar(50) DEFAULT NULL,
+  `BusquedaSelect` varchar(50) DEFAULT NULL,
+  `Orden` bigint(20) NOT NULL,
+  `CampoForaneoValor` varchar(200) DEFAULT NULL,
+  `Name` varchar(50) NOT NULL COMMENT 'propiedad nombre del formulario',
+  `Label` varchar(200) DEFAULT NULL COMMENT 'etiqueta para el campo',
+  `TablaPropietaria` varchar(50) DEFAULT NULL COMMENT 'nombre de la tabla a la que pertenece el campo',
+  `Sentencias` varchar(100) NOT NULL COMMENT 'sql a ejecutar de ser necesario',
+  `Type` varchar(50) NOT NULL COMMENT 'tipo de control a desplegar',
+  `CampoForaneo` varchar(50) DEFAULT NULL COMMENT 'nombre del campo de la tabla foranea al cual hace referencia el campo',
+  `Extras` varchar(50) DEFAULT NULL COMMENT 'especifica las propiedades de un campo de formulario. Por ejemplo el atributo class o el atributo max',
+  `TablaForanea` varchar(50) DEFAULT NULL COMMENT 'nombre de la tabla foranea',
+  `VisibleEnBusqueda` tinyint(1) DEFAULT NULL,
+  `VisibleEnForm` tinyint(1) NOT NULL DEFAULT '1',
+  `VisibleEnTabla` tinyint(1) NOT NULL DEFAULT '1',
+  `IdentificadorEjecucion` varchar(36) DEFAULT NULL COMMENT 'indentificador de ejecucion',
+  `Esclavos` varchar(40) DEFAULT NULL,
+  `MaestroCampoId` varchar(40) DEFAULT NULL,
+  `EsclavoCampoId` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6733 DEFAULT CHARSET=latin1;

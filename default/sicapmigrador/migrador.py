@@ -10,6 +10,19 @@ import config
 
 marcadores = ['***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
 
+def createConfigTable():
+    lines = open('configuraciontabla.sql', 'r').readlines(); sql = ''
+    for line in lines:
+        sql += line
+    conexion = conectar(config.dbConfig)
+    cursor = conexion.cursor()
+    cursor.execute(sql)
+    conexion.close()
+
+
+
+
+
 
 def conectar(config):
   try:
@@ -148,8 +161,8 @@ def extraerCampos( nombreTabla, campo, llaves ):
   else:
     return None
 
-def buscarForaneos( tablaFiltrada ):
 
+def buscarForaneos( tablaFiltrada ):
   llaves = []
   for linea in tablaFiltrada:
     lineaSegmentada = linea.split(' ')
@@ -159,10 +172,6 @@ def buscarForaneos( tablaFiltrada ):
       tabla = lineaSegmentada[8].replace('`', '')
       campo = lineaSegmentada[9].replace('(`', '').replace( '`)', '')
       llaves.append( (campoOrigen, tabla, campo) )
-
-
-
-
   return (llaves)
 
 def pluralizar (singular):
@@ -203,7 +212,6 @@ def buscarRelaciones( tablaPropietaria, campoPropietario  ):
         return values
     else:
         return None
-
 
 def crearSQL( parametros, conexion, nombreTablas ):
   cursor = conexion.cursor()
@@ -315,8 +323,6 @@ def alterMenuLink( menuTitle ):
     sql = "UPDATE mymenugenerador SET external_link = '" + link + "' WHERE menu_title ='"+ menuTitle.capitalize() +"'"
     cursor.execute(sql)
     conexion.commit()
-
-
 
 def createMenuElements(elementosTabla):
   try:
@@ -436,9 +442,6 @@ def migrate():
     print "[OK]....Archivos copiados " + str(i)
     print "[OK]....Archivos omitidos " + str(m)
 
-
-
-
 def printCriticals():
     print('jssd')
     for file in config.globalConfig['filesToEdit']:
@@ -471,13 +474,42 @@ def printCriticals():
         escrior.write(content)
         escrior.close()
 
-
+def readConfParams():
+    for param in sys.argv[1:]:
+         pi = param.split('=')
+         if '--nombre_caja' in pi:
+             config.nombreCaja = pi[1]
+         if '--plantilla_caja' in pi:
+             config.plantillaCaja = pi[1]
+         if '--orden_iniciar_en' in pi:
+             config.globalConfig['startNum']  = pi[1]
+         if '--orden_saltos_de' in pi:
+             config.globalConfig['stepNum']  = pi[1]
+         if '--crear_modelos' in pi:
+             config.globalConfig['cM']  = pi[1]
+         if '--crear_controls' in pi:
+             config.globalConfig['cS']  = pi[1]
+         if '--crear_tabla_conf' in pi:
+             config.globalConfig['cI']  = pi[1]
+         if '--solo_migrar' in pi:
+              config.globalConfig['oM']  = pi[1]
+         if '--crear_tabla_menu' in pi:
+             config.globalConfig['cL']  = pi[1]
+         if '--nombre_host' in pi:
+             config.dbConfig['host']  = pi[1]
+         if '--nombre_user' in pi:
+             config.dbConfig['usuario']  = pi[1]
+         if '--nombre_db' in pi:
+             config.dbConfig['database']  = pi[1]
+         if '--nombre_pass' in pi:
+             config.dbConfig['password']  = pi[1]
 
 def readParams():
      parametros = sys.argv[1:]
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
      crearModelos = True; crearControladores = True;
      insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
+     solorMigrar = False
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
      lines = escritor.readlines(); content = ''
@@ -496,14 +528,16 @@ def readParams():
                startNum  = pi[1]
           if '--orden_saltos_de' in pi:
                stepNum = pi[1]
-          if '--no_crear_modelos' in parametros:
-               crearModelos = False
-          if '--no_crear_controls' in parametros:
+          if '--crear_modelos' in pi:
+               crearModelos = pi[1]
+          if '--crear_controls' in pi:
                crearControladores = False
-          if '--no_crear_tabla_conf' in parametros:
-               insertarTablaConf = False
-          if '--no_crear_tabla_menu' in parametros:
-               insertarTablaMenu = False
+          if '--crear_tabla_conf' in pi:
+               insertarTablaConf = pi[1]
+          if '--crear_tabla_menu' in pi:
+               insertarTablaMenu = pi[1]
+          if '--solo_migrar' in pi:
+               solorMigrar  = pi[1]
           if '--nombre_host' in pi:
                nombreHost = pi[1]
           if '--nombre_db' in pi:
@@ -550,9 +584,6 @@ def readParams():
      if nombrePass == '':
          print("Por favor indique el pass para acceder a la base de datos con el parametro --nombre_pass=pass  ")
 
-
-
-
 def checkCriticalConf():
     lector = open( 'config.py'  ,'r')
     lines = lector.readlines(); content = ''
@@ -562,7 +593,29 @@ def checkCriticalConf():
     for marcador in marcadores:
         return marcador in content
 
+def executeMigrator():
+    if( not config.globalConfig['oM'] ):
+      conexion = conectar(config.dbConfig)
+      nombreTablas = conseguirTablas(conexion)
+      plantillamodelos = platillaModelos()
+      plantillascaffolds = plantillaScaffolds()
 
+      if( config.globalConfig['cK'] ):
+        corregirTablaSinPrimaria( nombreTablas )
+
+      if( config.globalConfig['cS'] ):
+        crearControladores(plantillascaffolds, nombreTablas)
+
+      if( config.globalConfig['cM'] ):
+        crearModelos(plantillamodelos, nombreTablas)
+
+      if( config.globalConfig['cI'] ):
+        describirTablas(nombreTablas)
+
+      if( config.globalConfig['cL'] ):
+        createMenuElements(nombreTablas)
+    else:
+      migrate()
 
 
 
@@ -571,28 +624,15 @@ def init():
     if checkCriticalConf():
         readParams()
     else:
-        if( not config.globalConfig['oM'] ):
-          conexion = conectar(config.dbConfig)
-          nombreTablas = conseguirTablas(conexion)
-          plantillamodelos = platillaModelos()
-          plantillascaffolds = plantillaScaffolds()
+        ### no se indican para metros
+        if 1 < len( sys.argv )    :
+            readConfParams()
+        createConfigTable()
+        executeMigrator()
 
-          if( config.globalConfig['cK'] ):
-            corregirTablaSinPrimaria( nombreTablas )
 
-          if( config.globalConfig['cS'] ):
-            crearControladores(plantillascaffolds, nombreTablas)
 
-          if( config.globalConfig['cM'] ):
-            crearModelos(plantillamodelos, nombreTablas)
 
-          if( config.globalConfig['cI'] ):
-            describirTablas(nombreTablas)
-
-          if( config.globalConfig['cL'] ):
-            createMenuElements(nombreTablas)
-        else:
-          migrate()
 
 
 
