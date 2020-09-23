@@ -11,18 +11,19 @@ import config
 marcadores = ['***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
 
 def createConfigTable():
-    lines = open('configuraciontabla.sql', 'r').readlines(); sql = ''
-    for line in lines:
-        sql += line
-    conexion = conectar(config.dbConfig)
-    cursor = conexion.cursor()
-    cursor.execute(sql)
-    conexion.close()
-
-
-
-
-
+    try:
+        lines = open('configuraciontabla.sql', 'r').readlines(); sql = ''
+        for line in lines:
+            sql += line
+        conexion = conectar(config.dbConfig)
+        cursor = conexion.cursor()
+        cursor.execute(sql)
+        conexion.close()
+        config.log.write('[OK]....Se ha creado la tabla de configuracion \n')
+        print( '[OK]....Se ha creado la tabla de configuracion \n' )
+    except Exception as e:
+        config.log.write('[X]....Error al crear la tabla de configuracion \n')
+        print( '[X]....Error al crear la tabla de configuracion \n' )
 
 def conectar(config):
   try:
@@ -160,7 +161,6 @@ def extraerCampos( nombreTabla, campo, llaves ):
     return [nombreTabla, nombreCampo, tipoDato, nulo, tablaForanea, campoForaneo]
   else:
     return None
-
 
 def buscarForaneos( tablaFiltrada ):
   llaves = []
@@ -509,7 +509,8 @@ def readParams():
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
      crearModelos = True; crearControladores = True;
      insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
-     solorMigrar = False
+     solorMigrar = False; nombreHost = '';  nombreDb = ''; nombreUser = '';
+     nombrePass = ''
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
      lines = escritor.readlines(); content = ''
