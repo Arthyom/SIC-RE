@@ -37,7 +37,7 @@ globalConfig = {
 ################################################################################
 ##################### NO EDITAR A PARTIR DE ESTE COMENTARIO ####################
     'prefix' : 'WflsTest',
-    'fromDir': '/'+copiaCaja+'/',
+    'fromDir': copiaCaja,
     'toDir': '/'+nombreCaja+'/default/app/views/index/',
     'ctrlFile': '/'+nombreCaja+'/default/app/controllers/index_controller.php',
     'ctrlDir':'/'+nombreCaja+'/default/app/controllers/',

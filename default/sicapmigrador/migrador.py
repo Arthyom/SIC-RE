@@ -411,7 +411,7 @@ def migrate():
             nombres.append(methodName)
 
 
-          if( not os.path.isfile( ctrlName ) ):
+          if( not os.path.isfile( ctrlName ) and fileName != 'ValidaUsuario' and fileName != 'procedimientos'):
               if( not os.path.isfile(detstiName) ):
                   originName = config.globalConfig['fromDir'] + fileName+'.php'
                   ## print fileName
