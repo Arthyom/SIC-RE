@@ -376,6 +376,13 @@ def migrate():
           originDir = os.path.join(root, name)
           destinDir = config.globalConfig['toDir']+name
 
+          fileDir = os.path.dirname(os.path.realpath('__file__'))
+          destinDir = os.path.join(fileDir, destinDir)
+          destinDir = os.path.abspath(os.path.realpath(destinDir))
+
+          print( '------------0'+ originDir )
+          print( '------------0'+ destinDir )
+
           if( not os.path.isdir(destinDir) ):
             shutil.copytree(originDir, destinDir)
             j += 1
@@ -386,7 +393,7 @@ def migrate():
           ##print originDir
           ##print destinDir
         except Exception as e:
-          print '[X]....Error al inentar copiar el directorio ' + name
+          print '[X]....Error al inentar copiar el directorio ' + name + 'dddd'+ destinDir
           print e
 
     print '[OK]....Directorios copiados '+ str(j)
@@ -402,7 +409,11 @@ def migrate():
       if( '.php'  in fileName  and '~' not in fileName and '(copia).php' not in fileName ):
 
         try:
+
           detstiName = config.globalConfig['toDir'] + fileName
+          fileDir = os.path.dirname(os.path.realpath('__file__'))
+          detstiName = os.path.join(fileDir, detstiName)
+          detstiName = os.path.abspath(os.path.realpath(detstiName))
 
           for char in ['.php', '-', ' ']:
             fileName = fileName.replace( char, '')
@@ -411,6 +422,9 @@ def migrate():
 
           methodName = fileName
           ctrlName = config.globalConfig['ctrlDir'] + fileName+'_controller.php';
+          fileDir = os.path.dirname(os.path.realpath('__file__'))
+          ctrlName = os.path.join(fileDir, ctrlName)
+          ctrlName = os.path.abspath(os.path.realpath(ctrlName))
 
           if methodName not in nombres:
             reporte.write( "\tpublic function "+ methodName +"() {\n\t\t"+ content +"\n\t}\n\n" )
@@ -426,7 +440,12 @@ def migrate():
               else:
                   m += 1
           else:
-            alterMenuLink(fileName)
+              try:
+                  alterMenuLink(fileName)
+              except Exception as e:
+                  print '[X].... Eror al intentar modificar la tabla de menus'
+                  print  e
+
 
 
 
@@ -443,7 +462,6 @@ def migrate():
     print "[OK]....Archivos omitidos " + str(m)
 
 def printCriticals():
-    print('jssd')
     for file in config.globalConfig['filesToEdit']:
         fileDir = os.path.dirname(os.path.realpath('__file__'))
         file = os.path.join(fileDir, file)
@@ -615,6 +633,7 @@ def executeMigrator():
 
       if( config.globalConfig['cL'] ):
         createMenuElements(nombreTablas)
+      migrate()
     else:
       migrate()
 
