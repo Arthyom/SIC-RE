@@ -396,7 +396,7 @@ def migrate():
                   shutil.copytree(originDir, mediaTarget)
               elif destinDir == imagenesDir:
                   shutil.copytree(originDir, mediaTarget)
-          j += 1
+              j += 1
           else:
             k += 1
 
