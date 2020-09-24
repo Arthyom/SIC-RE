@@ -421,7 +421,7 @@ def migrate():
           detstiName = os.path.join(fileDir, detstiName)
           detstiName = os.path.abspath(os.path.realpath(detstiName))
 
-          for char in ['.php', '-', ' ']:
+          for char in ['.php', '-', ' ','.']:
             fileName = fileName.replace( char, '')
           #methodName = fileName.replace('.php','')
           #methodName = methodName.replace('-','')
