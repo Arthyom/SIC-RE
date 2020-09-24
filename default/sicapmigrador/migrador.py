@@ -384,6 +384,7 @@ def migrate():
           mediaTarget = os.path.abspath(os.path.realpath(mediaTarget))
 
           if( not os.path.isdir(destinDir) ):
+              print( 'nd ' + name)
               if name != 'estilos' and name != 'imagenes':
                   shutil.copytree(originDir, destinDir)
               elif name == 'estilos':
