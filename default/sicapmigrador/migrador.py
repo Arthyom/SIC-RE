@@ -380,21 +380,15 @@ def migrate():
           destinDir = os.path.join(fileDir, destinDir)
           destinDir = os.path.abspath(os.path.realpath(destinDir))
 
-          imagenesDir = os.path.join(fileDir, config.globalConfig['filesMedia'][0] )
-          destinDir = os.path.abspath(os.path.realpath(imagenesDir))
-
-          estilosDir = os.path.join(fileDir, config.globalConfig['filesMedia'][1] )
-          estilosDir = os.path.abspath(os.path.realpath(estilosDir))
-
           mediaTarget = os.path.join(fileDir, config.globalConfig['filesMedia'][2] )
           mediaTarget = os.path.abspath(os.path.realpath(mediaTarget))
 
           if( not os.path.isdir(destinDir) ):
-              if destinDir != estilosDir and destinDir != imagenesDir:
+              if name != 'estilos' and name != 'imagenes':
                   shutil.copytree(originDir, destinDir)
-              elif destinDir == estilos:
+              elif name == 'estilos':
                   shutil.copytree(originDir, mediaTarget)
-              elif destinDir == imagenesDir:
+              elif name == 'imagenes':
                   shutil.copytree(originDir, mediaTarget)
               j += 1
           else:
