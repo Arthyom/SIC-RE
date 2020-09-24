@@ -337,7 +337,7 @@ def createMenuElements(elementosTabla):
       conexion.commit()
 
       log.write('[OK].....Ejecutando SQL ' + sql +' \n')
-      print( '[OK].....Insertando Elemento ' + nombreElemento )
+    ##  print( '[OK].....Insertando Elemento ' + nombreElemento )
 
   except:
     print('[X].....Error al ejecutar ' + sql)
@@ -380,11 +380,24 @@ def migrate():
           destinDir = os.path.join(fileDir, destinDir)
           destinDir = os.path.abspath(os.path.realpath(destinDir))
 
-          print( '------------0'+ originDir )
-          print( '------------0'+ destinDir )
+          imagenesDir = os.path.join(fileDir, config.globalConfig['filesMedia'][0] )
+          destinDir = os.path.abspath(os.path.realpath(imagenesDir))
+
+          estilosDir = os.path.join(fileDir, config.globalConfig['filesMedia'][1] )
+          estilosDir = os.path.abspath(os.path.realpath(estilosDir))
+
+          mediaTarget = os.path.join(fileDir, config.globalConfig['filesMedia'][2] )
+          mediaTarget = os.path.abspath(os.path.realpath(mediaTarget))
 
           if( not os.path.isdir(destinDir) ):
-            shutil.copytree(originDir, destinDir)
+              if destinDir != estilosDir and destinDir != imagenesDir:
+                  shutil.copytree(originDir, destinDir)
+              elif destinDir == estilos:
+                  shutil.copytree(originDir, mediaTarget)
+              elif destinDir == imagenesDir:
+                  shutil.copytree(originDir, mediaTarget)
+
+
             j += 1
           else:
             k += 1

@@ -25,6 +25,10 @@ default/app/views/index/clases/
 !default/app/views/*.html
 
 
+default/public/imagenes/*
+default/public/estilos/*
+
+
 
 *.log
 

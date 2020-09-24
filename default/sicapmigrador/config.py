@@ -46,6 +46,11 @@ globalConfig = {
         '../../default/app/views/index/ValidaUsuario.php',
         '../../default/app/views/index/clases/procedimientos.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
+    ],
+    'filesMedia':[
+        '../../default/public/imagenes/',
+        '../../default/public/estilos/',
+        '../../default/public/'
     ]
 }
 
