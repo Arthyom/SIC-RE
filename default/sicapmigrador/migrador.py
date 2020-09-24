@@ -63,9 +63,10 @@ def crearModelos( plantilla, nombreTablas ):
       tabla = tabla.replace(char, '')
     rutaNuevoModelo = config.PATH_MODELS + tabla + config.TARGET_FILE_EXTEN
     if( config.modelConfig['ow']):
-      contenidonuevoModelo = plantilla.replace('+', tabla)
-      contenidonuevoModelo = contenidonuevoModelo.replace('-', clase)
-      open(rutaNuevoModelo, 'w').write(contenidonuevoModelo)
+      if not os.path.isfile(rutaNuevoControlador):
+          contenidonuevoModelo = plantilla.replace('+', tabla)
+          contenidonuevoModelo = contenidonuevoModelo.replace('-', clase)
+          open(rutaNuevoModelo, 'w').write(contenidonuevoModelo)
       creados += 1
     else:
       omitidos += 1
