@@ -50,7 +50,7 @@ globalConfig = {
     'filesMedia':[
         '../../default/public/imagenes/',
         '../../default/public/estilos/',
-        '../../default/public/'
+        '../../default/public/index/'
     ]
 }
 
