@@ -388,9 +388,9 @@ def migrate():
               if name != 'estilos' and name != 'imagenes':
                   shutil.copytree(originDir, destinDir)
               elif name == 'estilos':
-                  shutil.copytree(originDir, mediaTarget+'estilos')
+                  shutil.copytree(originDir, mediaTarget+'/estilos')
               elif name == 'imagenes':
-                  shutil.copytree(originDir, mediaTarget+'imagenes')
+                  shutil.copytree(originDir, mediaTarget+'/imagenes')
               j += 1
           else:
             k += 1
