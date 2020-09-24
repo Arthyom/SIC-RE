@@ -7,6 +7,9 @@ import shutil
 import sys, getopt
 import os
 import config
+from datetime import datetime
+fechaExec = datetime.utcnow().strftime('%Y-%m-%d%H:%M:%S:%f')
+log = open('execlog'+fechaExec+'.log', 'w')
 
 marcadores = ['***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
 
@@ -19,17 +22,14 @@ def createConfigTable():
         cursor = conexion.cursor()
         cursor.execute(sql)
         conexion.close()
-        config.log.write('[OK]....Se ha creado la tabla de configuracion \n')
-        print( '[OK]....Se ha creado la tabla de configuracion \n' )
     except Exception as e:
-        config.log.write('[X]....Error al crear la tabla de configuracion \n')
-        print( '[X]....Error al crear la tabla de configuracion \n' )
+        print( '[X]....Error al crear la tabla de configuracion o ya ha sido creada\n' )
 
 def conectar(config):
   try:
     return cn.connect( **config  )
   except :
-    config.log.write('[X]....Error al conectar revice config.py \n')
+    log.write('[X]....Error al conectar revice config.py \n')
     print( '[X]....Error al conectar revice config.py' )
     exit()
 
@@ -70,8 +70,8 @@ def crearModelos( plantilla, nombreTablas ):
     else:
       omitidos += 1
 
-  config.log.write('[OK].....Se han escrito '+ str( creados )+ ' modelos \n')
-  config.log.write('[OK].....Se han omitido '+ str( omitidos )+ ' modelos \n')
+  log.write('[OK].....Se han escrito '+ str( creados )+ ' modelos \n')
+  log.write('[OK].....Se han omitido '+ str( omitidos )+ ' modelos \n')
 
 
   print('[OK].....Se han escrito '+ str( creados )+ ' modelos' )
@@ -97,8 +97,8 @@ def crearControladores( plantilla, nombreTablas ):
     else:
       omitidos += 1
 
-  config.log.write('[OK].....Se han escrito '+ str( creados )+ ' controladores \n')
-  config.log.write('[OK].....Se han omitido '+ str( omitidos )+ ' controladores \n')
+  log.write('[OK].....Se han escrito '+ str( creados )+ ' controladores \n')
+  log.write('[OK].....Se han omitido '+ str( omitidos )+ ' controladores \n')
   print('[OK].....Se han escrito '+ str( creados ) + ' controladores' )
   print('[OK].....Se han omitido '+ str( omitidos) + ' controladores' )
 
@@ -116,7 +116,7 @@ def describirTablas(nombreTablas):
 
 
         print('[OK]....Trabjando la tabla '+ nombreTabla)
-        config.log.write('[OK]....Trabjando la tabla '+ nombreTabla +'\n')
+        log.write('[OK]....Trabjando la tabla '+ nombreTabla +'\n')
 
 
         datosFiltrados = str( datosCrudos[0] ).split('\\n')
@@ -135,9 +135,9 @@ def describirTablas(nombreTablas):
     except Exception as e:
       print(e)
       print('[X].....Error al leer la tabla '+ nombreTabla)
-      config.log.write('[X].....Error al leer la tabla '+ nombreTabla +'\n')
+      log.write('[X].....Error al leer la tabla '+ nombreTabla +'\n')
 
-  config.log.write('[OK].....' + str( creados ) + ' Registros Creados' +'\n')
+  log.write('[OK].....' + str( creados ) + ' Registros Creados' +'\n')
   print('[OK].....' + str( creados ) + ' Registros Creados')
 
   conexion.close()
@@ -307,11 +307,11 @@ def crearSQL( parametros, conexion, nombreTablas ):
     sql = "INSERT INTO "+ tablaConf + " (`id`, `Name`, `TablaPropietaria`,  `Type`,  `VisibleEnForm`,  `VisibleEnTabla`, `Extras`,   `TablaForanea`, `CampoForaneo`, `Sentencias`, `IdentificadorEjecucion`, `Label`, `VisibleEnBusqueda`,`Orden`, `CampoForaneoValor`, `BusquedaSelect`, `DependeDe`  ) VALUES (NULL,'" + campo + "','" + tabla +"','"+ tipo +"',"+ "'1', '1','" + extras + "','" + tf +"','" + cf +"','" + sent + "','"+ config.identificadorEjecucion +  "','" +  label    +  "', '1',  "+ str(orden) +" , '" + campoObjetivo  +"','"+ cs+"', '"+ cd +"' ) "
 
     cursor.execute(sql)
-    config.log.write('[OK].....Ejecutando '+sql+ '\n')
+    log.write('[OK].....Ejecutando '+sql+ '\n')
     conexion.commit()
     return 1
   except:
-    config.log.write('[X].....Error al ejecutar ' + sql +' \n')
+    log.write('[X].....Error al ejecutar ' + sql +' \n')
     print('[X].....Error al ejecutar**** ' + sql)
 
 def alterMenuLink( menuTitle ):
@@ -336,12 +336,12 @@ def createMenuElements(elementosTabla):
       cursor.execute( sql )
       conexion.commit()
 
-      config.log.write('[OK].....Ejecutando SQL ' + sql +' \n')
+      log.write('[OK].....Ejecutando SQL ' + sql +' \n')
       print( '[OK].....Insertando Elemento ' + nombreElemento )
 
   except:
     print('[X].....Error al ejecutar ' + sql)
-    config.log.write('[X].....Error al ejecutar ' + sql +' \n')
+    log.write('[X].....Error al ejecutar ' + sql +' \n')
 
 def corregirTablaSinPrimaria(tablas):
     conexion = conectar(config.dbConfig)
@@ -357,15 +357,15 @@ def corregirTablaSinPrimaria(tablas):
             datosFiltrados = str( datosCrudos[0] ).join('\\n')
             if 'PRIMARY KEY' not in datosFiltrados :
                 print('[NOT PK]....'+ tabla)
-                config.log.write('[NOT PK]....'+ tabla +'\n')
+                log.write('[NOT PK]....'+ tabla +'\n')
                 i = i + 1
 
         except Exception as e:
               print('[X NOT PK].....Error al leer la tabla '+ tabla)
-              config.log.write('[X NOT PK].....Error al leer la tabla '+ tabla +'\n')
+              log.write('[X NOT PK].....Error al leer la tabla '+ tabla +'\n')
 
     print('[OK]....Total sin llave '+ str(i) )
-    config.log.write('[OK]....Total sin llave '+ str(i) +'\n')
+    log.write('[OK]....Total sin llave '+ str(i) +'\n')
 
 def migrate():
     #copiar directorios
@@ -467,7 +467,6 @@ def printCriticals():
         file = os.path.join(fileDir, file)
         file = os.path.abspath(os.path.realpath(file))
 
-        print( file )
         lector = open( file  ,'r')
         lines = lector.readlines()
         content = ''
@@ -475,12 +474,6 @@ def printCriticals():
             content += line
         lector.close()
 
-        print('-.-.-.-..-----.')
-        print(config.nombreCaja)
-        print(config.dbConfig['host'])
-        print(config.dbConfig['user'])
-        print(config.dbConfig['password'])
-        print(config.dbConfig['database'])
 
         content = content.replace("***nombre_caja***",   config.nombreCaja)
         content = content.replace("***nombre_host***",   config.dbConfig['host'])
@@ -584,11 +577,19 @@ def readParams():
        content = content.replace("***nombre_usuario***", str(nombreUser))
        content = content.replace("***nombre_pass***", str(nombrePass))
 
-       escrior = open( 'config.py'  ,'w')
-       escrior.write(content)
-       escrior.close()
-       reload(config)
-       printCriticals()
+
+
+       vacio = False
+       for par in [ nombreCaja, plantillaCaja, nombreHost, nombreDb, nombreUser, nombrePass]:
+           if par == '':
+               vacio = True
+
+       if not vacio :
+            escrior = open( 'config.py'  ,'w')
+            escrior.write(content)
+            escrior.close()
+            reload(config)
+            printCriticals()
 
      if nombreCaja == '':
          print("Por favor indique el nombre de la caja a migrar con el parametro --nombre_caja=caja ")
@@ -647,8 +648,10 @@ def init():
         ### no se indican para metros
         if 1 < len( sys.argv )    :
             readConfParams()
-        createConfigTable()
-        executeMigrator()
+
+    ### comenzar la migracion
+    createConfigTable()
+    executeMigrator()
 
 
 

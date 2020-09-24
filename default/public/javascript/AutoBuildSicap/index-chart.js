@@ -1,11 +1,11 @@
-var host = 'coroneo'
+var host = '***nombre_caja***'
 
 var gdata1 = {
   labels: ['gmc', 'volsvaguen','honda', 'mazda', 'ford', 'nissan',
   'dodge', 'tesla', 'kia', 'akura', 'chevrolet', 'catera'],
   datasets: []
 }
- 
+
 var gdata2 = {
   labels: ['PRI', 'PAN','PRD', 'MORENA', 'PT', 'PES',
   'VERDE', 'PRIAN', 'EL BRONCO', 'PSD', 'CONVERGENCIA', 'NO VOTO'],

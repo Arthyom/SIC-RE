@@ -1,13 +1,11 @@
 import uuid
-from datetime import datetime
+
 
 
 PATH_MODELS = '../app/models/'
 PATH_CONTROLLERS = '../app/controllers/'
 TARGET_FILE_EXTEN = '.php'
 
-fechaExec = datetime.utcnow().strftime('%Y-%m-%d%H:%M:%S:%f')
-log = open('execlog'+fechaExec+'.log', 'w')
 
 ################################################################################
 ########################### INICIO DE SECCION EDITABLE #########################
@@ -36,17 +34,18 @@ globalConfig = {
 
 ################################################################################
 ##################### NO EDITAR A PARTIR DE ESTE COMENTARIO ####################
-    'prefix' : 'WflsTest',
-    'fromDir': copiaCaja,
-    'toDir': '/'+nombreCaja+'/default/app/views/index/',
-    'ctrlFile': '/'+nombreCaja+'/default/app/controllers/index_controller.php',
-    'ctrlDir':'/'+nombreCaja+'/default/app/controllers/',
-    'urlPath': '/'+nombreCaja+'/default/public/',
+    'prefix'  : 'WflsTest',
+    'fromDir' : copiaCaja+'/',
+    'toDir'   : '../../default/app/views/index/',
+    'ctrlFile': '../../default/app/controllers/index_controller.php',
+    'ctrlDir' : '../../default/app/controllers/',
+    'urlPath' : '/'+nombreCaja+'/default/public/',
     'filesToEdit' : [
         '../../default/public/index.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
         '../../default/app/views/index/ValidaUsuario.php',
         '../../default/app/views/index/clases/procedimientos.php',
+        '../../default/public/javascript/AutoBuildSicap/index-chart.js',
     ]
 }
 
