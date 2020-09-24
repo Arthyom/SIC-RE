@@ -9,6 +9,10 @@ default/app/controllers/*
 
 default/app/models/*
 !default/app/models/usuarios.php
+!default/app/models/mymenugenerador.php
+!default/app/models/sicaputils/sicaputils.php
+!default/app/controllers/sicaprest_controller.php
+!default/app/controllers/sicaputils/sicaprest_controller.php
 
 default/app/views/index/*
 !default/app/views/index/ValidaUsuario.php
