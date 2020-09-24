@@ -411,7 +411,7 @@ def migrate():
     externalFiles = listdir(config.globalConfig['fromDir'])
     reporte =  open(config.globalConfig['ctrlFile'], 'w')
     reporte.write( "<?php  \nclass IndexController extends AppController{ \n\n" )
-    reporte.write( "public function index(){\n\t\t"+ content +"\n\t}\n\n" )
+    reporte.write( "public function index(){\n\t\t"+ '///'+content +"\n\t}\n\n" )
     for fileName in externalFiles:
       if( '.php'  in fileName  and '~' not in fileName and '(copia).php' not in fileName ):
 
