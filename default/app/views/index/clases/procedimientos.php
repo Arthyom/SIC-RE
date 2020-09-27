@@ -1209,11 +1209,11 @@ if($rowU<>1 || $ArchivoPHP[2]=='caja.php')
    if($row3['Diferencia']!=0 || $_SESSION["miSessionActual"]!=$row3['Session'])
     {
 		 $link=Conectarse();
-	     mysqli_query($link,"call CierraSesion('".$_SESSION["miSessionCaja"]."')");
-	     mysqli_close($link);
+	 //    mysqli_query($link,"call CierraSesion('".$_SESSION["miSessionCaja"]."')");
+	 //    mysqli_close($link);
 	     //si pasaron 15 minutos o m?s
-	     header("Location: Logout.php"); //env?o al usuario a la pag. de autenticaci?n
-	     exit();
+	   //  header("Location: Logout.php"); //env?o al usuario a la pag. de autenticaci?n
+	     //exit();
     }
     else //sino, actualizo la fecha de la sesion
     {

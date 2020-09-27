@@ -18,7 +18,7 @@ default/app/views/index/*
 !default/app/views/index/ValidaUsuario.php
 
 
-default/app/views/index/clases/
+!default/app/views/index/clases/*
 !default/app/views/index/clases/procedimientos.php
 
 !default/app/views/_shared
