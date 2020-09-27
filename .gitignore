@@ -13,7 +13,7 @@ default/app/models/*
 !default/app/models/sicaputils/sicaputils.php
 !default/app/controllers/sicaprest_controller.php
 !default/app/controllers/sicaputils/sicaprest_controller.php
-
+!default/public/vendor/*
 default/app/views/index/*
 !default/app/views/index/ValidaUsuario.php
 
