@@ -575,7 +575,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" >
         <head>
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0">
-        <title>SICAP - Caja Popular Yuriria</title>
+        <title>SICAP - Caja Popular ***nombre_caja***</title>
           <link rel="shortcut icon" href="estilos/imagenes/sicap_logo_pila.png" />
           <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
           <meta http-equiv="refresh" content="'.($rowMeta['Tiempo']*60).'"/>
