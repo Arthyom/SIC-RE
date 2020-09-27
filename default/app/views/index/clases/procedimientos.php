@@ -1,24 +1,27 @@
 <?php
-if(!isset($_SESSION["NumeroTotalPaginas"]))
-$_SESSION["NumeroTotalPaginas"]=0;
 function conectarWebService()
 {
-
-  /*
-$dbserver='localhost';
-$dbuser='UsYuririayZXs';
-$dbpwd='uSyURIa2020Gto';
-$dbase='yuriria';
-*/
 
 $dbserver='***nombre_host***';
 $dbuser='***nombre_usuario***';
 $dbpwd='***nombre_pass***';
 $dbase='***nombre_db***';
 
-$link = mysqli_connect ($dbserver, $dbuser, $dbpwd, $dbase) or die ("No me puedo conectar");
+//$link = mysqli_connect ($dbserver, $dbuser, $dbpwd) or die ("No me puedo conectar");
+//mysqli_select_db($dbase,$link) or die("Error al seleccionar la base de datos $dbase".mysqli_error());
+
+  $link = mysqli_connect($dbserver, $dbuser, $dbpwd, $dbase);
+  if (!$link)
+  {
+    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+    exit;
+  }
+ // return $enlace;
+
 }
-/*
+
 function conectarWebServiceSiscoop()
 {
 	try {
@@ -40,14 +43,15 @@ function ObtenerClabeInterbancaria($IdPersona)
 {
 	$Socio=null;
 	$link=Conectarse();
-	$rowSocio=mysqli_fetch_array(mysqli_query($link,"SELECT LPAD(IdSocio,5,'0') AS IdSocio FROM socios WHERE IdPersona='$IdPersona'"));
-	$Socio=$rowSocio['IdSocio'];
+	$rowSocio=mysqli_fetch_array(mysqli_query($link,"SELECT CONCAT('6461802159',LPAD(1+MAX(SUBSTR(ClabeInterbancaria,11,7)),7,'0'),computeVerificationDigit(CONCAT('6461802159',LPAD(1+MAX(SUBSTR(ClabeInterbancaria,11,7)),7,'0')))) AS ClabeGenerada FROM captacion "));
+  $ClabeInterbancaria=$rowSocio['ClabeGenerada'];
+  /*
 	$ClabeInterbancaria=null;
 
 	$Array17Digitos=array(6,4,6,			//Banco
 												1,8,0,			//Plaza
-												1,3,5,7,		//Empresa
-												3,7);				//Entidad
+												2,1,5,9,		//Empresa
+												0,0);				//Entidad
 	$ArrayFactores=array(3,7,1,			//Factor de Peso Banco
 											 3,7,1,			//Factor de Peso Plaza
 											 3,7,1,3,		//Factor de Peso Empresa
@@ -92,11 +96,12 @@ function ObtenerClabeInterbancaria($IdPersona)
 	}
 	else
 	{
-		return 'ERROR DE CUENTA';
-	}
+		return 'ERROR DE CUENTA '.$Array17Digitos;
+  }
+  */
 	return $ClabeInterbancaria;
 }
-*/
+
 function getBrowser()
 {
 	$user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -456,7 +461,7 @@ function OperacionATM($IdATMTarjeta,$Comando,$Dato=0)
 		return $codigo;
   }
 }
-
+//jesus
 function DispersionATM()
 {
 	$link=Conectarse();
@@ -482,8 +487,6 @@ function DispersionATM()
 	}
 	echo " <script> swal('Dispersión ATM', 'Se ha aplicado la dispersión de cuentas ATM', 'success'); </script>";
 }
-
-
 function objectToArray( $object )
 {
 				if( !is_object( $object ) && !is_array( $object ) )
@@ -497,100 +500,85 @@ function objectToArray( $object )
 				return array_map( 'objectToArray', $object );
 }
 
-    function recursiva($idPadre, $conection, $level, $titulo) {
-	   $sql = "SELECT my.* FROM mymenugenerador as my INNER JOIN grupomenu as gm ON my.id=gm.id WHERE gm.IdGrupoUsuarios='".$_SESSION["mibgIdGrupo2"]."' AND my.parent_id = $idPadre ORDER BY my.position";
-
-    //    $sql = "SELECT my.* FROM mymenugenerador as my INNER JOIN grupomenu as gm ON my.id=gm.id WHERE gm.Grupo='".$_SESSION["mibgIdGrupo"]."' AND my.parent_id = $idPadre ORDER BY my.position";
-
-     //   $sql = "select * from mymenugenerador where parent_id=".$idPadre." order by id";
-        $result = $conection->query($sql);
-        if ($result->num_rows > 0) {
-            echo '<ul class="submenu'.$level.'">
-                    <li class="title-menu">'.$titulo.'</li>
-                    <li class="go-back">Atras</li>';
-            while($row=mysqli_fetch_assoc($result)) {
-                if($row["external_link"]=="")
-                {
-                    echo '<li class="item-submenu" menu="'.$row["id"].'" level="'.($level+1).'"><a href="#">' . $row["menu_title"].'</a>';
-                }
-                else
-                {
-                    echo '<li><a href="'.$row["external_link"].'">' . $row["menu_title"].'</a>';
-                }
-                recursiva($row["id"], $conection, $level+1, $row["menu_title"]);
-                echo '</li>';
-            }
-            echo '</ul>';
-        }
-    }
-
-	function imprimir($idPadre, $conection) {
- 	   $sql = "SELECT my.* FROM mymenugenerador as my INNER JOIN grupomenu as gm ON my.id=gm.id WHERE gm.IdGrupoUsuarios='".$_SESSION["mibgIdGrupo2"]."' AND my.parent_id = $idPadre ORDER BY my.position";
-
-    //     $sql = "select * from mymenugenerador where parent_id=".$idPadre." order by id";
-
-        $result = $conection->query($sql);
-        if ($result->num_rows > 0) {
-            echo '<ul class="menu">
-            <li class="title-menu"><a title="Principal" href="caja.php">Principal</a></li>';
-       //     <li class="title-menu">Todas las categorias</li>';
-            while($row=mysqli_fetch_assoc($result)) {
-                echo '<li class="item-submenu" menu="'.$row["id"].'" level="1"><a href="#">'. $row["menu_title"].'</a>';
-                recursiva($row["id"], $conection, 1, $row["menu_title"]);
-                echo '</li>';
-            }
-            echo '<li class="title-menu"><a title="Salir" href="Logout.php">Salir</a></li><font color=#454c53>'.$row["Nivel"]."</li>";
-            echo '</ul>';
-        }
-    }
-
 function ardisoencabezado($mimenuactivo='1',$miencabezadofactura='0')
 {
-  /*
-$dbserver='localhost';
-$dbuser='UsYuririayZXs';
-$dbpwd='uSyURIa2020Gto';
-$dbase='yuriria';
-*/
+
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
+
 
 $dbserver='***nombre_host***';
-$dbuser='***nombre_user***';
+$dbuser='***nombre_usuario***';
 $dbpwd='***nombre_pass***';
 $dbase='***nombre_db***';
 
+//$link = mysqli_connect ($dbserver, $dbuser, $dbpwd) or die ("No me puedo conectar");
+//mysqli_select_db($dbase,$link) or die("Error al seleccionar la base de datos $dbase".mysqli_error());
+
+
+  $link = mysqli_connect($dbserver, $dbuser, $dbpwd, $dbase);
+  if (!$link)
+  {
+    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+    exit;
+  }
+
+
+include("clases/mymenugen_class.php"); // incluir la clase de menus
+$myMenu = new myMenuObject;
 
     $miVariableArchivo=substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],'/')+1);
 
-$link=Conectarse();
+    $link=Conectarse();
     $miConsultaSQL="SELECT Tiempo FROM mymenugenerador WHERE external_link='".$miVariableArchivo."' ";
     $result2=mysqli_query($link,$miConsultaSQL);
     $rowMeta=mysqli_fetch_array($result2);
 
     if ( mysqli_num_rows($result2)<1 || $rowMeta['Tiempo']<5)
       $rowMeta['Tiempo']=5;
-
+// ISO-8859-1
 
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" >
         <head>
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0">
-        <title>SICAP - Caja Popular ***nombre_caja***</title>
+        <title>SICAP - Caja Popular ***nombre_caja*** </title>
           <link rel="shortcut icon" href="estilos/imagenes/sicap_logo_pila.png" />
-          <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           <meta http-equiv="refresh" content="'.($rowMeta['Tiempo']*60).'"/>
 
+
+          <style type="text/css" title="currentStyle" media="screen">
+            @import url(estilos/style.css);
+            @import url(estilos/menu.css);
+          </style>
+          <!--[if IE 7]>
+          <style type="text/css" media="screen, tv, projection">
+          /*<![CDATA[*/
+          .menu li { height: 1%; }
+          /*]]>*/
+          </style>
+          <![endif]-->
+
+          <!--[if lte IE 6]>
+          <style type="text/css" media="screen, tv, projection">
+            @import url(estilos/menu4ie.css);
+          </style>
+          <script src="clases/adxmenu.js" type="text/javascript"></script>
+          <![endif]-->
           <script src="clases/validaciones.js" type="text/javascript"></script>
           <script src="clases/shortcut.js" type="text/javascript"></script>
           <script src="clases/calendario.js" type="text/javascript"></script>
-          <script src="../../../../sweetalert/dist/sweetalert.min.js"></script>
-          <link href="../../../../sweetalert/dist/sweetalert.css" rel="stylesheet">
+          <script src="../sweetalert/dist/sweetalert.min.js"></script>
+          <link href="../sweetalert/dist/sweetalert.css" rel="stylesheet">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-          <script src="estilos/js/jquery-3.4.1.js"></script>
-
+          <script src="clases/jquery-3.2.1.min.js" language="javascript"/></script>
           <script src="clases/cfdinomina.js" language="javascript"/></script>
 					<script src="clases/jquery.maskedinput.js" type="text/javascript"></script>
-          <link rel="stylesheet" type="text/css" href="../../../../sweetalert/dist/sweetalert.css">';
+          <link rel="stylesheet" type="text/css" href="../sweetalert/dist/sweetalert.css">';
 
 //             @import url(estilos/menus.css);
 
@@ -634,109 +622,9 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      //if(isset($_SESSION['Focus']) && $_SESSION['Focus']!="")
      //echo ' </head> <body id="contenedor" onload="document.getElementById("'.$_SESSION['Focus'].'").focus(); document.getElementById("'.$_SESSION['Focus'].'").value="";>';
      //else
-     echo "</head><body id=\"contenedor\" onload=\"document.getElementById('".$_SESSION['Focus']."').focus();\">";
+     echo "<head><body id=\"contenedor\" onload=\"document.getElementById('".$_SESSION['Focus']."').focus();\">";
 
-  if ($mimenuactivo=='1'){
-
-    $micadenasqlx1="SELECT ConfiguracionMenu FROM configuracion  ";
-    $resultx1=mysqli_query($link,$micadenasqlx1);
-    $rowx1=mysqli_fetch_array($resultx1);
-
-    if ($rowx1["ConfiguracionMenu"]==1)
-    {
-    	 echo ' <link rel="stylesheet" href="estilos/css/style5Azul.css"> ';
-    	 echo ' <link rel="stylesheet" href="estilos/css/font-awesome1.css"> ';
-    	 echo '<script src="estilos/js/main1.js"></script>';
-       echo '<header>';
-       echo '<span id="button-menu" class="fa fa-caret-down"></span>';
-       echo '<nav class="navegacion">';
-       imprimir(0, $link);
-       echo '</nav></header>';
-    }
-    elseif ($rowx1["ConfiguracionMenu"]==2)
-    {
-    	 echo ' <link rel="stylesheet" href="estilos/css/style2.css"> ';
-    	 echo ' <link rel="stylesheet" href="estilos/css/font-awesome2.css"> ';
-       echo '<script src="estilos/js/main2.js"></script>';
-       echo '<header>';
-       echo '<span id="button-menu" class="fa fa-caret-down"></span>';
-       echo '<nav class="navegacion">';
-       imprimir(0, $link);
-       echo '</nav></header>';
-    }
-    else
-    {
-    	echo ' <link rel="stylesheet" href="estilos/css/style0.css"> ';
-    	echo '  <style type="text/css" title="currentStyle" media="screen">
-            @import url(estilos/css/style0.css);
-            @import url(estilos/css/menu0.css);
-          </style>';
-    	echo ' <script src="clases/adxmenu.js" type="text/javascript"></script>' ;
-  //  	echo ' <link rel="stylesheet" href="estilos/css/menus0.css">   ';
-     include("mymenugen_class.php"); // incluir la clase de menus
-
-     $myMenu = new myMenuObject;
-
-     echo '<div id="cuerpoencabezado"><div id="cuerpoencabezadoizquierda"><img src="estilos/imagenes/sicap_logo.png" height="35"  alt="SICAP" title="Sistema Integral para Cajas de Ahorro y Prestamo"  border="0"/></div>';
-
-  //  echo '<img src="estilos/imagenes/fondoencabezado.png" height="35" width="70%" alt="SIPCAP" title="Sistema Integral para Cajas de Ahorro y Prestamo"  border="0"/>';
-     echo '<div id="cuerpoencabezadoderecha"><img id="milogoempresa" src="estilos/imagenes/logoempresa.png" height="35"  alt="CAJA" title="CAJA"  border="0"/></div> ';
-
-     echo '<div id="cuerpoencabezadocentrado" align=center><h1>';
-        if ($mimenuactivo<>'3')
-   {
-      $micadenasql="SELECT Mensaje FROM mensajesmotivacion WHERE Activo=1";
-      $result=mysqli_query($link,$micadenasql);
-      $row=mysqli_fetch_array($result);
-
-      $Mensaje=$row['Mensaje'];
-
-      $Mensaje=str_replace('Ñ', '&Ntilde;', $Mensaje);
-	  $Mensaje=str_replace('ñ', '&ntilde;', $Mensaje);
-	  $Mensaje=str_replace('Á', '&Aacute;', $Mensaje);
-	  $Mensaje=str_replace('á', '&aacute;', $Mensaje);
-	  $Mensaje=str_replace('É', '&Eacute;', $Mensaje);
-	  $Mensaje=str_replace('é', '&eacute;', $Mensaje);
-	  $Mensaje=str_replace('Í', '&Iacute;', $Mensaje);
-	  $Mensaje=str_replace('í', '&iacute;', $Mensaje);
-	  $Mensaje=str_replace('Ó', '&Oacute;', $Mensaje);
-	  $Mensaje=str_replace('ó', '&oacute;', $Mensaje);
-	  $Mensaje=str_replace('Ú', '&Uacute;', $Mensaje);
-	  $Mensaje=str_replace('ú', '&uacute;', $Mensaje);
-
-      echo $Mensaje;
-    }
-
-     echo '</h1></div></div>';
-     echo '<div id="Menu" align=center>';
-     echo '<ul class="menu">';
-     echo '<li><span class="menuImg"></span>';
-     echo '<a title="Principal" href="caja.php">Principal</a></li>';
-     echo $myMenu->generateMenuStructure();
-     echo '<li><span class="menuImg"><img src="imagenes/salir.gif" /></span>';
-     echo '<a title="Salir" href="Logout.php">Salir</a></li><font color=#454c53>'.$row["Nivel"]."";
-     echo '</font></ul>';
-     echo "</div>\r";
-   }
-
-   $micadenasql="SELECT COUNT(*) AS Cuantos FROM chat AS ch, usuarios AS us WHERE ch.Destino IN ('".$_SESSION["miSessionNombre"]."','Todos') AND us.Usuario='".$_SESSION["miSessionNombre"]."' AND ch.IdChat>us.IdChat ";
-
- //  echo $micadenasql;
-
-   $result=mysqli_query($link,$micadenasql);
-   $row=mysqli_fetch_array($result);
-   if ($row["Cuantos"]>0)
-   {
-
-    echo " <script> swal('Atencion!!', 'Tiene mensajes pendientes por leer Ayuda -> Chat para leerlos..!', 'info'); </script>";
-      //echo "<script>alert('Tiene mensajes pendientes de leer Ayuda -> Chat para leerlos ...');</script>"  ;
-   }
- //  mysqli_free_result($result);
-  // mysqli_close($link);
-
-  }
-
-  if ($_SESSION["miDispositivo"]==0 && ($rowx1["ConfiguracionMenu"]==1 || $rowx1["ConfiguracionMenu"]==2))
+  if ($_SESSION["miDispositivo"]==0 )
   {
     echo '<div id="cuerpoencabezado"><div id="cuerpoencabezadoizquierda"><img src="estilos/imagenes/sicap_logo.png" height="35"  alt="SICAP" title="Sistema Integral para Cajas de Ahorro y Prestamo"  border="0"/></div>';
 
@@ -767,7 +655,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
       echo $Mensaje;
     }
-    echo '</h1></div></div>';
+    echo '</div></div>';
   }
 
    $link=Conectarse();
@@ -776,12 +664,39 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
    $result=mysqli_query($link,$micadenasql);
    $row=mysqli_fetch_array($result);
 
+  if ($mimenuactivo=='1'){
+     echo '<div id="Menu" align=center>';
+     echo '<ul class="menu">';
+     echo '<li><span class="menuImg"></span>';
+     echo '<a title="Principal" href="caja.php">Principal</a></li>';
+     echo $myMenu->generateMenuStructure();
+     echo '<li><span class="menuImg"><img src="imagenes/salir.gif" /></span>';
+     echo '<a title="Salir" href="Logout.php">Salir</a></li><font color=#454c53>'.$row["Nivel"]."";
+     //echo '&nbsp;&nbsp;&nbsp;<b>Id: </b>'.$_SESSION["miSessionNombre"].' <b>Suc: </b>'.$_SESSION["mibgSucursal"].'';
+     echo '</font></ul>';
+     echo "</div>\r";
 
+   $micadenasql="SELECT COUNT(*) AS Cuantos FROM chat AS ch, usuarios AS us WHERE ch.Destino IN ('".$_SESSION["miSessionNombre"]."','Todos') AND us.Usuario='".$_SESSION["miSessionNombre"]."' AND ch.IdChat>us.IdChat ";
+
+ //  echo $micadenasql;
+
+   $result=mysqli_query($link,$micadenasql);
+   $row=mysqli_fetch_array($result);
+   if ($row["Cuantos"]>0)
+   {
+
+    echo " <script> swal('Atencion!!', 'Tiene mensajes pendientes por leer Ayuda -> Chat para leerlos..!', 'info'); </script>";
+      //echo "<script>alert('Tiene mensajes pendientes de leer Ayuda -> Chat para leerlos ...');</script>"  ;
+   }
+   mysqli_free_result($result);
+   mysqli_close($link);
+
+  }
   echo "<div id=\"contenedor\"> \r";
 
   }
 
-if ($_SESSION["NumeroTotalPaginas"]>1)
+if (isset($_SESSION["NumeroTotalPaginas"]) && $_SESSION["NumeroTotalPaginas"]>1)
    {
 				if(isset($_GET['PagInicio']))
 					$_SESSION["PaginaActiaActual"]=1;
@@ -793,7 +708,8 @@ if ($_SESSION["NumeroTotalPaginas"]>1)
  // ardisopie: Pie de pagina
  function ardisopie()
  {
- echo " \r </div> </body></html> ";
+ echo " \r </div>
+</body></html>";
  }
 
   function ConvertirAlert($Mensaje)
@@ -1194,6 +1110,13 @@ function creaencabezapdf2($pdf,$misLineasAumentar=1)
 
 } // fin crear encabeza2
 
+// solo va tener el logo
+function creaencabezapdf3($pdf,$misLineasAumentar=1)
+{
+   $pdf->SetY(6);
+   $pdf->Image('estilos/imagenes/logoempresa3.jpg',7,7,40);
+} // fin crear encabeza2
+
 function creaencabezapdfhorizontal($pdf,$misLineasAumentar=1)
 {
 	$imprimefecha=$misLineasAumentar;
@@ -1227,19 +1150,27 @@ function creaencabezapdfhorizontal($pdf,$misLineasAumentar=1)
 
 // permite conectarse al servidor y base de datos
  function Conectarse($mibasedefecto="***nombre_db***")
-{
-	$_SESSION["mibgUsuarioAct"]="***nombre_usuario***";
-  $_SESSION["mibgClaveUsuar"]="***nombre_pass***";
-  $link = mysqli_connect("localhost", $_SESSION["mibgUsuarioAct"], $_SESSION["mibgClaveUsuar"], $mibasedefecto);
-  if (!$link)
-  {
-    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
-    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
-    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
-    exit;
-  }
-  return $link;
-}
+   {
+
+     $link = mysqli_connect("localhost",$_SESSION["mibgUsuarioAct"],$_SESSION["mibgClaveUsuar"], $mibasedefecto);
+	  if (!$link)
+	  {
+	    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+	    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+	    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+	    exit;
+	  }
+
+   //	$link=mysqli_connect("localhost",$_SESSION["mibgUsuarioAct"],$_SESSION["mibgClaveUsuar"])
+  // 	or die("Error conectando a la base de datos".$_SESSION["mibgUsuarioAct"].$_SESSION["mibgClaveUsuar"]);
+
+//echo $mibasedefecto.$link;
+
+//    mysqli_select_db(	$_SESSION["mibgUsuarioAct"]=,$db)
+//    or die("Error al seleccionar la base de datos");
+
+   	 return $link;
+   }
 
  function validacesion()
    {
@@ -1277,12 +1208,12 @@ if($rowU<>1 || $ArchivoPHP[2]=='caja.php')
     //wwwecho "<meta http-equiv='refresh' content='".($row2['Tiempo']*60)."'/>";
    if($row3['Diferencia']!=0 || $_SESSION["miSessionActual"]!=$row3['Session'])
     {
-					$link=Conectarse();
-     mysqli_query($link,"call CierraSesion('".$_SESSION["miSessionCaja"]."')");
-     mysqli_close($link);
-     //si pasaron 15 minutos o m?s
-     //header("Location: Logout.php"); //env?o al usuario a la pag. de autenticaci?n
-     //exit();
+		 $link=Conectarse();
+	     mysqli_query($link,"call CierraSesion('".$_SESSION["miSessionCaja"]."')");
+	     mysqli_close($link);
+	     //si pasaron 15 minutos o m?s
+	     header("Location: Logout.php"); //env?o al usuario a la pag. de autenticaci?n
+	     exit();
     }
     else //sino, actualizo la fecha de la sesion
     {
@@ -1354,8 +1285,16 @@ exit();
 
 function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombreformulario="generico",$camposocultos=array(),$camposinactivos=array(),$miaccioncomando=1,$misenlacesexternos=array(),$camposvalidar=array(),$mispantallasexternas=array(),$misdatosrelacionados=array(), $minumero=0, $mistags=array(), $misvalores=array(), $misEnumActualizar=array(), $misEnumMensajeAnexo=array(), $horasParaArreglo=array('09:00:00', '10:00:00',  '11:00:00',  '12:00:00',  '13:00:00',  '14:00:00', '15:00:00', '16:00:00', '17:00:00',  '18:00:00',  '19:00:00'), $DigitosParaHora=4)
 {
-	  echo "\n<script language=Javascript> \n";
+	  echo "\n<script language=Javascript> \n var cuenta=0; ";
      echo "function validaformulario(miformulario){\n";
+      echo 'if (cuenta == 0)
+      {
+         cuenta++;
+      }
+      else
+      {
+        return false;
+      }  ';
      for($i=0; $i<count($camposvalidar); $i++)
      {
        if ($camposvalidar[$i][1]=="novacio")
@@ -1525,13 +1464,10 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
 
      $MiCampoDescripcionSpecial = (strlen($MiCampoDescripcionSpecial)>0) ? $MiCampoDescripcionSpecial : $row['Field'] ;
 
-		 if(!empty($Datosfield[3]))
-		 {
-			if ($Datosfield[3]>50)
+     if (isset($Datosfield[3]) && $Datosfield[3]>50)
         $milargo=50;
      else
         $milargo=$Datosfield[3];
-		 }
 
       $midefecto2="";
      if ($registroactivo!=0)
@@ -1633,8 +1569,12 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
           $Datosfield[1]="enlase";
           if (count($misenlacesexternos[$i])>3 && $misenlacesexternos[$i][2]!='->')
           {
-            $cadenaelase="SELECT ".$misenlacesexternos[$i][2].",".$misenlacesexternos[$i][3]." FROM ".$misenlacesexternos[$i][1]. " ORDER BY ".$misenlacesexternos[$i][3].$misenlacesexternos[$i][4];
-            if ($misenlacesexternos[$i][5]=='Actualizar')
+          	$miCadenaOrder="";
+          	if (isset($misenlacesexternos[$i][4]))
+          	  $miCadenaOrder=$misenlacesexternos[$i][4];
+
+            $cadenaelase="SELECT ".$misenlacesexternos[$i][2].",".$misenlacesexternos[$i][3]." FROM ".$misenlacesexternos[$i][1]. " ORDER BY ".$misenlacesexternos[$i][3].$miCadenaOrder;
+            if (isset($misenlacesexternos[$i][5]) && $misenlacesexternos[$i][5]=='Actualizar')
             {
              $misRefrescarSiSeModifica=" onChange='submit();' ";
             }
@@ -1724,7 +1664,7 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
        {
           $Datosfield[1]="pantalla";
           $variable=$mispantallasexternas[$i][0];
-          if (count($mispantallasexternas[$i])>4 && strlen($mispantallasexternas[$i][5])>0 && $mispantallasexternas[$i][5]!='Actualizar1')
+          if (isset($mispantallasexternas[$i]) && count($mispantallasexternas[$i])>4 && isset($mispantallasexternas[$i][5]) && strlen($mispantallasexternas[$i][5])>0 && $mispantallasexternas[$i][5]!='Actualizar1')
           {
             $cadenaelase="<a href=\"buscar.php?miVariable=$variable\" target=\"blank\" onClick=\"jBusca(this); return false;\" title=\"Buscar un registro\">Buscar</a>";
             $_SESSION[$variable."1"]="SELECT ".$mispantallasexternas[$i][2].",".$mispantallasexternas[$i][3]." FROM ".$mispantallasexternas[$i][1];
@@ -1737,18 +1677,15 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
             if ("->"==$mispantallasexternas[$i][2])
             {
               $_SESSION[$variable."1"]="".$mispantallasexternas[$i][1];
-              if ($mispantallasexternas[$i][3]!="")
+              if (isset($mispantallasexternas[$i][3]) && $mispantallasexternas[$i][3]!="")
                 $_SESSION[$variable."5"]="".$mispantallasexternas[$i][3];
 
                if (strlen($mispantallasexternas[$i][3])>0)
                {
-									if(!isset($rowExterna))
-									$rowExterna=array();
                  $miCampoField=$row['Field'];
                  $cadenaSQLExterna=$mispantallasexternas[$i][3] ;
                  $misRefrescarSiSeModifica3=" onChange='submit();' ";
                  $resultExterna=mysqli_query($link,$cadenaSQLExterna);
-								 if(!empty($resultExterna))
                  $rowExterna=mysqli_fetch_array($resultExterna);
                  $miTextoAdicional="".$rowExterna['Nombre'];
                  $misRefrescarSiSeModifica=" onChange='submit();' ";
@@ -1764,7 +1701,7 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
             	$MiBalorTemporalPersona=$mispantallasexternas[$i][0].'1';
             	$MiBalorTemporalPersona2=$mispantallasexternas[$i][0].'2';
 
-            	if (strlen($MiValorActualSeleccionado)>0 && (!isset($_POST[$MiBalorTemporalPersona]) || strlen($_POST[$MiBalorTemporalPersona])<1))
+            	if (isset($MiValorActualSeleccionado) && strlen($MiValorActualSeleccionado)>0 && (!isset($_POST[$MiBalorTemporalPersona]) || strlen($_POST[$MiBalorTemporalPersona])<1))
             	{
                  $cadenasql400="SELECT IdPersona, SocioMigrado AS Anterior FROM personas WHERE IdPersona='".$MiValorActualSeleccionado."' ";
                  $result400=mysqli_query($link,$cadenasql400);
@@ -1791,7 +1728,7 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
 
                 array_push($_SESSION["miArregloNoAplicar"],array($MiBalorTemporalPersona,$row['Field']));
 
-               if ($mispantallasexternas[$i][3]=='Actualizar1' || $mispantallasexternas[$i][5]=='Actualizar1' )
+               if ((isset($mispantallasexternas[$i][3]) && $mispantallasexternas[$i][3]=='Actualizar1') || (isset($mispantallasexternas[$i][5]) && $mispantallasexternas[$i][5]=='Actualizar1' ))
                  $cadenaelase="<input type='button' value='Buscar' onclick=\"javascript:window.open('buscarpersonasolo.php?miVariable=$MiBalorTemporalPersona&miFiltroAdicioinal1=".$mispantallasexternas[$i][1]."&IdFormularioVariable= formularioautomatico' ,'','width=600,height=400,left=50,top=50,scrollbars=yes');\" />";
                else
                  $cadenaelase="<input type='button' value='Buscar' onclick=\"javascript:window.open('buscarpersona.php?miVariable=$MiBalorTemporalPersona&miFiltroAdicioinal1=".$mispantallasexternas[$i][1]."&IdFormularioVariable= formularioautomatico' ,'','width=600,height=400,left=50,top=50,scrollbars=yes');\" />";
@@ -1936,7 +1873,7 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
            }
            else
            {
-           	  if (!isset($micampoactvoespecial) || $micampoactvoespecial=="")
+           	  if ((!isset($micampoactvoespecial) || $micampoactvoespecial=="") && isset($_POST[$row['Field']]))
            	  {
            	  	 $micampoactvoespecial=$_POST[$row['Field']];
            	  }
@@ -2027,7 +1964,7 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
          for($i=0; $i<count($miarreglo); $i++)
          {
             $miarreglouno=substr(substr($miarreglo[$i],0,-1),1);
-            if ($micampoactvoespecial==$miarreglouno || $_POST[$row['Field']]==$miarreglouno || (strlen($midefecto2)>0 && $midefecto2==$miarreglouno))
+            if ((isset($micampoactvoespecial) && $micampoactvoespecial==$miarreglouno) || (isset($_POST[$row['Field']]) && $_POST[$row['Field']]==$miarreglouno) || (isset($midefecto2) && strlen($midefecto2)>0 && $midefecto2==$miarreglouno))
          	    echo "<option selected value=\"$miarreglouno\">$miarreglouno </option>";
             else
          	    echo "<option value=\"$miarreglouno\">$miarreglouno </option>";
@@ -2038,21 +1975,28 @@ function creaformulario($nombretabla,$registroactivo=0,$registroclave="",$nombre
          echo "<td align=right> ".$MiCampoDescripcionSpecial." </td><td>";
          echo "<select name=\"".$row['Field']."\" $misRefrescarSiSeModifica $miactivo>";
          $result2=mysqli_query($link,$cadenaelase);
-         while ($row2=mysqli_fetch_array($result2))
-          {
-     	      if (($micampoactvoespecial!="" && $micampoactvoespecial==$row2[0]) || ($midefecto2!="" && $midefecto2==$row2[0]))
-       	      printf("<option selected value=".$row2[0].">".$row2[1]." </option>");
-            else
-       	      printf("<option value=".$row2[0].">".$row2[1]." </option>");
+         if ($result2)
+         {
+          while ($row2=mysqli_fetch_array($result2))
+            {
+              if ((isset($micampoactvoespecial) && $micampoactvoespecial!="" && $micampoactvoespecial==$row2[0]) || (isset($midefecto2) && $midefecto2!="" && $midefecto2==$row2[0]))
+                printf("<option selected value=".$row2[0].">".$row2[1]." </option>");
+              else
+                printf("<option value=".$row2[0].">".$row2[1]." </option>");
+          }
+          echo "</select>$miEnumMensaje</td>";
          }
-         echo "</select>$miEnumMensaje</td>";
          break;
 	    case "pantalla":
 	      {
-      	  if ($EsDePersonaAmor==1)
+      	  if (isset($EsDePersonaAmor) && $EsDePersonaAmor==1)
 	      	{
-              echo "<input type=\"hidden\" $miactivo name=\"".$row['Field']."\" Value=\"".$_POST[$MiBalorTemporalPersona2]."\"  >";
-	           if (strlen($_POST[$MiBalorTemporalPersona])>0)
+	      		$miValorTemPer2="";
+	      	  if (isset($_POST[$MiBalorTemporalPersona2]))
+	      	   $miValorTemPer2=$_POST[$MiBalorTemporalPersona2];
+
+              echo "<input type=\"hidden\" $miactivo name=\"".$row['Field']."\" Value=\"".$miValorTemPer2."\"  >";
+	           if (isset($_POST[$MiBalorTemporalPersona]) && strlen($_POST[$MiBalorTemporalPersona])>0)
                  echo "<td align=right> ".$MiCampoDescripcionSpecial." </td><td><input type=\"text\" $miactivo name=\"".$MiBalorTemporalPersona."\" Value=\"".$_POST[$MiBalorTemporalPersona]."\" size=$milargo maxlength=".$Datosfield[3]."  $misRefrescarSiSeModifica $miEnumMensaje>$cadenaelase $MiNombrePersonaTemporal </td>";
               else
                  echo "<td align=right> ".$MiCampoDescripcionSpecial." </td><td><input type=\"text\" $miactivo name=\"".$MiBalorTemporalPersona."\" Value=\"".$_POST[$MiBalorTemporalPersona]."\" size=$milargo maxlength=".$Datosfield[3]."  $misRefrescarSiSeModifica $miEnumMensaje>$cadenaelase </td>";
@@ -2199,10 +2143,7 @@ return  $array;
    //PMR
 function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
 {
-	//$dbase='coroneo';
-	$dbase='***nombre_db***';
 
-		$link=Conectarse();
     $micomando="";
     $validotodo=1;
     for($i=0;$i<$minumero;$i++)
@@ -2214,38 +2155,17 @@ function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
       if ($mistags[$i]=="sisiBorrar")
          $micomando="Borrar";
     }
-
-		$result=mysqli_query($link,"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$mitabla' AND table_schema = '$dbase'");
-		$arrayField=array();
-		while($rowField=mysqli_fetch_array($result))
-		{
-			array_push($arrayField,$rowField['COLUMN_NAME']);
-		}
-
     if ($micomando=="Actualizar")
     {
       $lacadena="UPDATE ".$mitabla." SET ";
       $lacondicion="";
       for($i=0;$i<$minumero;$i++)
       {
-				if(in_array($mistags[$i],$arrayField)==true)
-				{
-					if ($mistags[$i]!="sisiActualizar" && $mistags[$i]!="sisiGravar" && $mistags[$i]!="sisiBorrar" && $mistags[$i]!=$micampoclave && $mistags[$i]!="estavalidado")
+        if ($mistags[$i]!="sisiActualizar" && $mistags[$i]!="sisiGravar" && $mistags[$i]!="sisiBorrar" && $mistags[$i]!=$micampoclave && $mistags[$i]!="estavalidado")
          {
            $miValorSiseIncrusta=1;
-					 /*list($dd,$mm,$yyyy) = explode('/',$misvalores[$i]);
-					 if (checkdate($mm,$dd,$yyyy)==true)
-					 $lacadena.=$mistags[$i]."='".fechaamysql($misvalores[$i])."',";
-					 //echo "<br>".$misvalores[$i].":".strlen($misvalores[$i])." cosa: ".preg_match("'/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/i'", $misvalores[$i]);*/
-
-					 if (preg_match("/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/", $misvalores[$i], $matches))
-					 {
-								if (checkdate($matches[2], $matches[1], $matches[3])==true)
-								{
-										$lacadena.=$mistags[$i]."='".fechaamysql($misvalores[$i])."',";
-								}
-
-					 }
+           if (strlen($misvalores[$i]) < 12  && preg_match ("/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $misvalores[$i]))
+             $lacadena.=$mistags[$i]."='".fechaamysql($misvalores[$i])."',";
            else
            {
 
@@ -2270,11 +2190,10 @@ function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
                }
              }
             }
+
           }
         if ($mistags[$i]==$micampoclave)
           $lacondicion=$misvalores[$i];
-				}
-
       }
 
       if ($validotodo==1)
@@ -2297,61 +2216,48 @@ function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
     }
     if ($micomando=="Gravar")
     {
-
       $lacadena="INSERT INTO ".$mitabla." ( ";
       $lacadenavalores="";
       for($i=0;$i<$minumero;$i++)
       {
+        if ($mistags[$i]!="sisiActualizar" && $mistags[$i]!="sisiGravar" && $mistags[$i]!="sisiBorrar" && $mistags[$i]!=$micampoclave  && $mistags[$i]!="estavalidado")
+        {
 
-				if(in_array($mistags[$i],$arrayField)==true)
-				{
-					if ($mistags[$i]!="sisiActualizar" && $mistags[$i]!="sisiGravar" && $mistags[$i]!="sisiBorrar" && $mistags[$i]!=$micampoclave  && $mistags[$i]!="estavalidado")
-		        {
+          $miValorSiseIncrusta=1;
+          if (preg_match ("/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $misvalores[$i]))
+          {
+            $lacadena.= $mistags[$i].",";
+            $lacadenavalores.="'".fechaamysql($misvalores[$i])."',";
+          }
+          else
+           {
+             foreach ($_SESSION["miArregloNoAplicar"] AS $miArregloParcialNoAplicar)
+             {
+               if ($mistags[$i]==$miArregloParcialNoAplicar[0])
+              	   $miValorSiseIncrusta=0;
+             }
 
-						//print_r($_SESSION["miArregloNoAplicar"]);
-		          $miValorSiseIncrusta=1;
-
-					 if (preg_match("/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/", $misvalores[$i], $matches))
-					 {
-					 	 if (checkdate($matches[2], $matches[1], $matches[3])==true)
-						 {
-
-						 	 $lacadena.=$mistags[$i].",";
-					       $lacadenavalores.="'".fechaamysql($misvalores[$i])."',";
-					 	 }
-
-					  }
-		           else
-		           {
-		             foreach ($_SESSION["miArregloNoAplicar"] AS $miArregloParcialNoAplicar)
-		             {
-		               if ($mistags[$i]==$miArregloParcialNoAplicar[0])
-		              	   $miValorSiseIncrusta=0;
-		             }
-
-		           	 if ($miValorSiseIncrusta==1)
-		           	 {
-		               $lacadena.=$mistags[$i].",";
+           	 if ($miValorSiseIncrusta==1)
+           	 {
+               $lacadena.=$mistags[$i].",";
 
 
-		               if ($misvalores[$i]=='now()' || $misvalores[$i]=='NOW()')
-		               {
-		                 $lacadenavalores.=$misvalores[$i].",";
-		              }
-		               else
-		               {
-		           	     if ($_SESSION["miMayusculasActivo"]==1)
-		               	$lacadenavalores.="'".strtr(strtoupper($misvalores[$i]),"àèìòùáéíóúñäëïöü","ÀÈÌÒÙÁÉÍÓÚÑÄËÏÖÜ")."',";
-		                 else
-		                  $lacadenavalores.="'".$misvalores[$i]."',";
-		               }
+               if ($misvalores[$i]=='now()' || $misvalores[$i]=='NOW()')
+               {
+                 $lacadenavalores.=$misvalores[$i].",";
+              }
+               else
+               {
+           	     if ($_SESSION["miMayusculasActivo"]==1)
+               	$lacadenavalores.="'".strtr(strtoupper($misvalores[$i]),"àèìòùáéíóúñäëïöü","ÀÈÌÒÙÁÉÍÓÚÑÄËÏÖÜ")."',";
+                 else
+                  $lacadenavalores.="'".$misvalores[$i]."',";
+               }
 
-		              }
-		            }
+              }
+            }
 
-		        }
-				}
-
+        }
       }
       if ($validotodo==1)
         $lacadena=substr($lacadena,0,-1).") VALUES (".substr($lacadenavalores,0,-1).")";
@@ -2359,7 +2265,7 @@ function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
         $lacadena="";
 
 //echo $lacadena;
-
+$dbase='***nombre_db***';
 if($mitabla!='captacion')
         {
 		//$IdNuevo=explode(",'", $lacadenavalores);
@@ -2437,9 +2343,9 @@ if($mitabla!='captacion')
       $link=Conectarse();
       mysqli_query($link,$lacadena);
 
-			 if (in_array($_SESSION["miSessionCaja"],array(146,8))==true){
-        //echo "$lacadena";
-      }
+	//		 if ($_SESSION["miSessionCaja"]==146  || $_SESSION["miSessionCaja"]==164){
+  //      echo "$lacadena";
+  //    }
 
       //proceso de numero de sociomigrado
       if($mitabla=='personas')
@@ -2459,7 +2365,7 @@ if($mitabla!='captacion')
             $result2=mysqli_query($link,$cadenasql2);
       }
 
-						if($mitabla=='captacion')
+			if($mitabla=='captacion')
       {
 	$IdNuevo=explode(",'", $lacadenavalores);
         $IdNuevo=str_replace("'","",$IdNuevo[0]);
@@ -2471,20 +2377,18 @@ if($mitabla!='captacion')
 
         RegistroBitacoraManual(utf8_encode("Alta: captación, Id: ").$rowBit["IdCaptacion"]."");
       }
-     // echo $lacadena;
+   //   echo $lacadena;
       mysqli_close($link);
     }
-
- //echo $lacadena;
 }  // fin de  accion con registros
 
 
  /* Crea un grid con los registros pasados y con el formato de un arreglo */
-function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0,$vmiborrar=0, $miarreglo=array(),$texmodificar="Modificar",$textborrar="Borrar",$vAdicional=0,$textadicional="Adicional",$conPaginador=1,$mistotales=array(), $miCharEspecial=0, $misArreglosModificar=array(), $misArreglosImprimir=array())
+function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar,$vmiborrar, $miarreglo=array(),$texmodificar="Modificar",$textborrar="Borrar",$vAdicional=0,$textadicional="Adicional",$conPaginador=1,$mistotales=array(), $miCharEspecial=0, $misArreglosModificar=array(), $misArreglosImprimir=array())
 {
    $totalcolumnas=0;
    $_SESSION["misRegistrosEnPantalla"]=0;
-   echo "<form name='formularioautomat' action='".$paginaaenviar."' method=\"POST\" ><center><table id=\"mitabla\" border=1 cellspacing=1 cellpadding=1 style=\"margin: 0 auto\" bordercolor='#ecdfac'><tr>";
+   echo "<form name='formularioautomat' action='".$paginaaenviar."' method='POST' ><center><table id=\"mitabla\" border=1 cellspacing=1 cellpadding=1 style=\"margin: 0 auto\" bordercolor='#ecdfac'><tr>";
    if (!preg_match('/Modificar/',$_SESSION["miNivelUsuario"]) && !preg_match('/Todo/',$_SESSION["miNivelUsuario"]))
      $vmodificar=0;
    if (!preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) && !preg_match('/Todo/',$_SESSION["miNivelUsuario"]))
@@ -2493,191 +2397,195 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
    $paraencabezado=1;
    $banen=0;
 
-
-   while ($row=mysqli_fetch_array($vmiresultado))
+   if ($vmiresultado)
    {
-     $_SESSION["misRegistrosEnPantalla"]=$_SESSION["misRegistrosEnPantalla"]+1;
-   	 $miactiva=1;
-   	 if ($paraencabezado==1)
-   	 {
-   	 	if ((preg_match('/Modificar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmodificar==1)
-          {
-           echo "<th align=center>".Espacios(1)."$texmodificar".Espacios(1)."</th>";
-           $totalcolumnas=$totalcolumnas+1;
-          }
-   	 	foreach($row as $key => $value )
-        {
-   	      if ($miactiva==0)
-   	      {
-   	        echo "<th align=center>".Espacios(1).($key).Espacios(1)."</th>";
-   	        $miactiva=1;
-   	        $totalcolumnas=$totalcolumnas+1;
-   	      }
-   	      else
-   	      {$miactiva=0;}
-        }
-        if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmiborrar==1)
-          {
-            echo "<th align=center>".Espacios(1)."$textborrar".Espacios(1)."</th>";
+    while ($row=mysqli_fetch_array($vmiresultado))
+    {
+      $_SESSION["misRegistrosEnPantalla"]=$_SESSION["misRegistrosEnPantalla"]+1;
+      $miactiva=1;
+      if ($paraencabezado==1)
+      {
+        if ((preg_match('/Modificar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmodificar==1)
+            {
+            echo "<th align=center>".Espacios(1)."$texmodificar".Espacios(1)."</th>";
             $totalcolumnas=$totalcolumnas+1;
-          }
-        if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vAdicional==1)
+            }
+        foreach($row as $key => $value )
           {
-            echo "<th align=center>".Espacios(1)."$textadicional".Espacios(1)."</th>";
-            $totalcolumnas=$totalcolumnas;
+            if ($miactiva==0)
+            {
+              echo "<th align=center>".Espacios(1).($key).Espacios(1)."</th>";
+              $miactiva=1;
+              $totalcolumnas=$totalcolumnas+1;
+            }
+            else
+            {$miactiva=0;}
+          }
+          if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmiborrar==1)
+            {
+              echo "<th align=center>".Espacios(1)."$textborrar".Espacios(1)."</th>";
+              $totalcolumnas=$totalcolumnas+1;
+            }
+          if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vAdicional==1)
+            {
+              echo "<th align=center>".Espacios(1)."$textadicional".Espacios(1)."</th>";
+              $totalcolumnas=$totalcolumnas;
+            }
+
+          $paraencabezado=2;
+          echo "</tr> <div class=\"tablascroll\">";
+      }
+      if ($banen==1)
+      {
+          echo "<tr id=\"columnapar\">";
+          $banen=0;
+      }
+      else
+      {
+          $banen=1;
+        echo "<tr id=\"columnanon\">";
+      }
+      $eselprimero=1;
+      $elvalorclave=0;
+      foreach($row as $key => $value )
+      {
+        if ($miactiva==1)
+        {
+          if ( $eselprimero==1 && (preg_match('/Modificar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"]))  && $vmodificar==1 && $value!=null)
+          {
+            echo "<td align=center><a href=\"$paginaaenviar?$texmodificar=$value\" title=\"$texmodificar el registro marcado\">$texmodificar</a></td>";
+              $elvalorclave=$value;
+            $eselprimero=2;
+          }
+          if ($eselprimero==1 && (preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmodificar==0 && $vmiborrar==1)
+          {
+            $elvalorclave=$value;
+            $eselprimero=2;
+          }
+          if ($value==null)
+          {
+            $eselprimero=2;
           }
 
-        $paraencabezado=2;
-        echo "</tr> <div class=\"tablascroll\">";
-   	 }
-     if ($banen==1)
-     {
-        echo "<tr id=\"columnapar\">";
-        $banen=0;
-     }
-     else
-     {
-       	$banen=1;
-     	echo "<tr id=\"columnanon\">";
-     }
-     $eselprimero=1;
-     $elvalorclave=0;
-     foreach($row as $key => $value )
-     {
-   	   if ($miactiva==1)
-   	   {
-   	   	if ( $eselprimero==1 && (preg_match('/Modificar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"]))  && $vmodificar==1 && $value!=null)
-   	     {
-   	     	echo "<td align=center><a href=\"$paginaaenviar?$texmodificar=$value\" title=\"$texmodificar el registro marcado\">$texmodificar</a></td>";
-            $elvalorclave=$value;
-   	     	$eselprimero=2;
-   	     }
-  	    if ($eselprimero==1 && (preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmodificar==0 && $vmiborrar==1)
-   	     {
-   	     	$elvalorclave=$value;
-   	     	$eselprimero=2;
-   	     }
-		    if ($value==null)
-		    {
-   	     	$eselprimero=2;
-			  }
+          if (isset($miarreglo[$key]) && $miarreglo[$key]==31)
+            if ($value < 0)
+              echo "<td align=right ><font color='red';>".number_format ($value,2).Espacios(1)."</font> </td>";
+            else
+              echo "<td align=right>".number_format ($value,2).Espacios(1)." </td>";
+          elseif (isset($miarreglo[$key]) && $miarreglo[$key]==32)
+            echo "<td align=right>".number_format ($value,2)."%".Espacios(1)."</td>";
+          elseif (isset($miarreglo[$key]) && $miarreglo[$key]==33)
+            if ($value < 0)
+              echo "<td align=right >".Espacios(1)."<font color='red';>$".number_format ($value,2).Espacios(1)."</font></td>";
+            else
+              echo "<td align=right>".Espacios(1)."$".number_format ($value,2).Espacios(1)."</td>";
+        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==34)
+            if ($value < 0)
+              echo "<td align=right ><font color='red';>".number_format ($value,4)."</font></td>";
+            else
+              echo "<td align=right>".number_format ($value,4).Espacios(1)."</td>";
+                  elseif (isset($miarreglo[$key]) && $miarreglo[$key]==35)
+                {
+                if($value=='Registro')
+                  echo "<td align=center><b>".$value."</b></td>";
+                elseif($value=='Inactiva')
+                  echo "<td align=center><font color='#727272'><b>".$value."</b></font></td>";
+                elseif($value=='Bloqueo parcial')
+                  echo "<td align=center><font color='#bf3f00'><b>".$value."</b></font></td>";
+                elseif($value=='Bloqueo definitivo')
+                  echo "<td align=center><font color='#980000'><b>".$value."</b></font></td>";
+                elseif($value=='Activa')
+                  echo "<td align=center><font color='#1b831b'><b>".$value."</b></font></td>";
+                }
+                elseif (isset($miarreglo[$key]) && $miarreglo[$key]==36)
+                {
+                  echo "<td align=left width=20%>".$value."</td>";
+                }
+        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==21)
+            echo "<td align=center>".fechademysql($value)."</td>";
+        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==22)
+        {
+            echo "<td align=center>".fechademysqlh($value)."</td>";
+          }
+        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==2)
+          if ($miCharEspecial==1)
+              echo "<td align=center>".Espacios(1).utf8_decode($value).Espacios(1)."</td>";
+            else
+              echo "<td align=center>".Espacios(1).$value.Espacios(1)."</td>";
+      elseif (isset($miarreglo[$key]) && $miarreglo[$key]==3)
+          if ($miCharEspecial==1)
+              echo "<td align=right>".utf8_decode($value)."</td>";
+            else
+              echo "<td align=right>".$value."</td>";
+          elseif (isset($miarreglo[$key]) && $miarreglo[$key]==5)
+          {
+            if ($value==1 || $value=="Si")
+            echo "<td align=center>Si</td>";
+          else
+              echo "<td align=center>No</td>";
+          }
+          elseif (isset($miarreglo[$key]) && $miarreglo[$key]==6)
+          {
+            if ($value==1 || $value=="Si")
+            echo "<td align=center><input type=\"checkbox\" value=1 checked></td>";
+          else
+            echo "<td align=center><input type=\"checkbox\" value=0></td>";
+          }
+          else
+        {
+          if ($miCharEspecial==1)
+              echo "<td>".utf8_decode($value)."</td>";
+            else
+          echo "<td>".$value."</td>";
+        }
+        $miactiva=0;
+          foreach($mistotales as $i=>$col2 )
+          {
+            if (($key+1)==$mistotales[$i][2])
+                $mistotales[$i][4]+=$value;
+          }
+      }
+      else
+      {
+        $miactiva=1;
+      }
+    }
 
-        if (isset($miarreglo[$key]) && $miarreglo[$key]==31)
-          if ($value < 0)
-            echo "<td align=right ><font color='red';>".number_format ($value,2).Espacios(1)."</font> </td>";
-          else
-            echo "<td align=right>".number_format ($value,2).Espacios(1)." </td>";
-        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==32)
-          echo "<td align=right>".number_format ($value,2)."%".Espacios(1)."</td>";
-        elseif (isset($miarreglo[$key]) && $miarreglo[$key]==33)
-          if ($value < 0)
-            echo "<td align=right >".Espacios(1)."<font color='red';>$".number_format ($value,2).Espacios(1)."</font></td>";
-          else
-            echo "<td align=right>".Espacios(1)."$".number_format ($value,2).Espacios(1)."</td>";
-								elseif (isset($miarreglo[$key]) && $miarreglo[$key]==34)
-          if ($value < 0)
-            echo "<td align=right ><font color='red';>".number_format ($value,4)."</font></td>";
-          else
-            echo "<td align=right>".number_format ($value,4).Espacios(1)."</td>";
-								elseif (isset($miarreglo[$key]) && $miarreglo[$key]==35)
-							{
-							if($value=='Registro')
-								echo "<td align=center><b>".$value."</b></td>";
-							elseif($value=='Inactiva')
-								echo "<td align=center><font color='#727272'><b>".$value."</b></font></td>";
-							elseif($value=='Bloqueo parcial')
-								echo "<td align=center><font color='#bf3f00'><b>".$value."</b></font></td>";
-							elseif($value=='Bloqueo definitivo')
-								echo "<td align=center><font color='#980000'><b>".$value."</b></font></td>";
-							elseif($value=='Activa')
-								echo "<td align=center><font color='#1b831b'><b>".$value."</b></font></td>";
-							}
-							elseif (isset($miarreglo[$key]) && $miarreglo[$key]==36)
-							{
-								echo "<td align=left width=20%>".$value."</td>";
-							}
-	     elseif (isset($miarreglo[$key]) && $miarreglo[$key]==21)
-          echo "<td align=center>".fechademysql($value)."</td>";
-	     elseif (isset($miarreglo[$key]) && $miarreglo[$key]==22)
-	     {
-          echo "<td align=center>".fechademysqlh($value)."</td>";
-        }
-	     elseif (isset($miarreglo[$key]) && $miarreglo[$key]==2)
-	       if ($miCharEspecial==1)
-            echo "<td align=center>".Espacios(1).utf8_decode($value).Espacios(1)."</td>";
-          else
-            echo "<td align=center>".Espacios(1).$value.Espacios(1)."</td>";
-	  elseif (isset($miarreglo[$key]) && $miarreglo[$key]==3)
-	       if ($miCharEspecial==1)
-            echo "<td align=right>".utf8_decode($value)."</td>";
-          else
-            echo "<td align=right>".$value."</td>";
-    	  elseif (isset($miarreglo[$key]) && $miarreglo[$key]==5)
+      if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmiborrar==1)
+      {
+        if (count($misArreglosModificar)>0)
         {
-          if ($value==1 || $value=="Si")
-	         echo "<td align=center>Si</td>";
-	       else
-     	      echo "<td align=center>No</td>";
-        }
-    	  elseif (isset($miarreglo[$key]) && $miarreglo[$key]==6)
-        {
-          if ($value==1 || $value=="Si")
-	         echo "<td align=center><input type=\"checkbox\" value=1 checked></td>";
-	       else
-	         echo "<td align=center><input type=\"checkbox\" value=0></td>";
+          echo "<td align=center><select name='ArregloModificar".$_SESSION["misRegistrosEnPantalla"]."' onChange='submit();'>";
+          echo "<option value=''>Seleccionar</option>";
+          foreach($misArreglosModificar as $valoree)
+          {
+            echo "<option value='".$valoree[0]."=$elvalorclave'>".$valoree[1]."</option>";
+          }
+          echo "</select></td>";
         }
         else
-   	  {
-   	  	 if ($miCharEspecial==1)
-            echo "<td>".utf8_decode($value)."</td>";
-          else
-   	     echo "<td>".$value."</td>";
-   	  }
-   	  $miactiva=0;
-        foreach($mistotales as $i=>$col2 )
+          echo "<td align=center><a href=\"$paginaaenviar?$textborrar=$elvalorclave\" title=\"$textborrar el registro marcado\"/>$textborrar</td>";
+      }
+      if ($vAdicional==1)
+      {
+        if (count($misArreglosImprimir)>0)
         {
-         	if (($key+1)==$mistotales[$i][2])
-          	  $mistotales[$i][4]+=$value;
+          echo "<td align=center><select name='ArregloImprimir".$_SESSION["misRegistrosEnPantalla"]."' onChange='submit();' >";
+          echo "<option value=''>Seleccionar</option>";
+          foreach($misArreglosImprimir as $valoree)
+          {
+            echo "<option value='".$valoree[0]."=$elvalorclave'>".$valoree[1]."</option>";
+          }
+          echo "</select></td>";
         }
-   	}
-   	else
-   	 {
-      $miactiva=1;
-     }
-   }
-//jesus
-     if ((preg_match('/Borrar/',$_SESSION["miNivelUsuario"]) || preg_match('/Todo/',$_SESSION["miNivelUsuario"])) && $vmiborrar==1)
-     {
-      if (count($misArreglosModificar)>0)
-      {
-        echo "<td align=center><select name='ArregloModificar".$_SESSION["misRegistrosEnPantalla"]."' onChange='submit();'>";
-        echo "<option value=''>Seleccionar</option>";
-         foreach($misArreglosModificar as $valoree)
-         {
-           echo "<option value='".$valoree[0]."=$elvalorclave'>".$valoree[1]."</option>";
-         }
-        echo "</select></td>";
+        else
+          echo "<td align=center><a href=\"$paginaaenviar?$textadicional=$elvalorclave\" title=\"$textadicional registro  marcado\"/>$textadicional</td>";
       }
-      else
-       	echo "<td align=center><a href=\"$paginaaenviar?$textborrar=$elvalorclave\" title=\"$textborrar el registro marcado\">$textborrar</a></td>";
-     }
-     if ($vAdicional==1)
-     {
-      if (count($misArreglosImprimir)>0)
-      {
-        echo "<td align=center><select name='ArregloImprimir".$_SESSION["misRegistrosEnPantalla"]."' onChange='submit();' >";
-        echo "<option value=''>Seleccionar</option>";
-         foreach($misArreglosImprimir as $valoree)
-         {
-           echo "<option value='".$valoree[0]."=$elvalorclave'>".$valoree[1]."</option>";
-         }
-        echo "</select></td>";
-      }
-      else
-      	echo "<td align=center><a href=\"$paginaaenviar?$textadicional=$elvalorclave\" title=\"$textadicional registro  marcado\">$textadicional</a></td>";
-	   }
-     echo "</tr>";
-   }
+      echo "</tr>";
+    }
+  }
+
+
    if (count($mistotales)>0)
    {
      echo "<tr id=\"columnaresaltada\">";
@@ -2726,23 +2634,27 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
 						echo "<select name='miPaginaIr' onChange=\"submit();\">";
 
 						$Contador=1;
+						$CadenaDespliegue='';
 						while($Contador<=$_SESSION["NumeroTotalPaginas"])
-					{
+					  {
 							$CadenaDespliegue.="SELECT ".($Contador)." AS Pagina";
 							if($Contador<$_SESSION["NumeroTotalPaginas"])
 									$CadenaDespliegue.=" UNION ";
 							$Contador=$Contador+1;
-					}
-         $link=Conectarse();
-         $result=mysqli_query($link,$CadenaDespliegue);
-         while ($row22=mysqli_fetch_array($result))
-         {
-           if ($_POST['miPaginaIr']==$row22['Pagina'])
-             printf("<option selected value=".$row22['Pagina'].">".$row22['Pagina']."</option>");
-           else
-             printf("<option value=".$row22['Pagina'].">".$row22['Pagina']."</option>");
-         }
-         echo "</select>";
+					  }
+            $link=Conectarse();
+            $result=mysqli_query($link,$CadenaDespliegue);
+            if ($result)
+            {
+              while ($row22=mysqli_fetch_array($result))
+              {
+                if (isset($_POST['miPaginaIr']) && $_POST['miPaginaIr']==$row22['Pagina'])
+                  printf("<option selected value=".$row22['Pagina'].">".$row22['Pagina']."</option>");
+                else
+                  printf("<option value=".$row22['Pagina'].">".$row22['Pagina']."</option>");
+              }
+              echo "</select>";
+            }
 						echo "</td>";
 					}
 							else
@@ -2861,9 +2773,13 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
   //Compara 2 fechas
   function fechasiguales($fecha,$fecha2)
   {
-    preg_match( "/([0-9]{2,4})/([0-9]{1,2})/([0-9]{1,2})/", $fecha, $mifecha);
+    //preg_match( "/([0-9]{2,4})\/([0-9]{1,2})\/([0-9]{1,2})/", $fecha, $mifecha);
+    preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha, $mifecha);
+
     $lafecha1=$mifecha[3]."/".$mifecha[2]."/".$mifecha[1];
-     preg_match( "/([0-9]{2,4})/([0-9]{1,2})/([0-9]{1,2})/", $fecha2, $mifecha);
+
+//     preg_match( "/([0-9]{2,4})\/([0-9]{1,2})\/([0-9]{1,2})/", $fecha2, $mifecha);
+     preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha2, $mifecha);
     $lafecha2=$mifecha[3]."/".$mifecha[2]."/".$mifecha[1];
     if ($lafecha1!=$lafecha2)
       return false;
@@ -2874,9 +2790,12 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
   //Compara fecha mayor que fecha2
   function fechasmayorque($fecha,$fecha2)
   {
-    preg_match( "/([0-9]{2,4})/([0-9]{1,2})/([0-9]{1,2})/", $fecha, $mifecha);
+    //preg_match( "/([0-9]{2,4})\/([0-9]{1,2})\/([0-9]{1,2})/", $fecha, $mifecha);
+    preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha, $mifecha);
     $lafecha1=$mifecha[3]."/".$mifecha[2]."/".$mifecha[1];
-     preg_match( "/([0-9]{2,4})/([0-9]{1,2})/([0-9]{1,2})/", $fecha2, $mifecha);
+
+//     preg_match( "/([0-9]{2,4})\/([0-9]{1,2})\/([0-9]{1,2})/", $fecha2, $mifecha);
+     preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha2, $mifecha);
     $lafecha2=$mifecha[3]."/".$mifecha[2]."/".$mifecha[1];
     if ($lafecha1<=$lafecha2)
       return false;
@@ -2887,7 +2806,7 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
   //Convierte fecha de mysql a normal
   function fechademysql($fecha)
   {
-    preg_match( "/([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})/", $fecha, $mifecha);
+    preg_match("/([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})/", $fecha, $mifecha);
     $lafecha=$mifecha[3]."/".$mifecha[2]."/".$mifecha[1];
     return $lafecha;
   }
@@ -2902,7 +2821,7 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
   //Convierte fecha de normal a mysql
   function fechaamysql($fecha)
   {
-    preg_match("/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4})/", $fecha, $mifecha);
+    preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4})/", $fecha, $mifecha);
     $lafecha=$mifecha[3]."-".$mifecha[2]."-".$mifecha[1];
     return $lafecha;
   }
@@ -2920,8 +2839,7 @@ function creatablaarreglo($vmiresultado,$campoclave,$paginaaenviar,$vmodificar=0
   function fechavalidadmA($fecha)
   {
     preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4})/", $fecha, $mifecha);
-
-   if (checkdate($mifecha[2],$mifecha[1],$mifecha[3]))
+    if (checkdate($mifecha[2],$mifecha[1],$mifecha[3]))
 
     $lafecha=$mifecha[3]."-".$mifecha[2]."-".$mifecha[1];
    else
@@ -3010,6 +2928,7 @@ function FechaFormateada2($FechaStamp)
 function fechaUnDato($fecha,$tipo)
 {
   preg_match( "/([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4})/", $fecha, $mifecha);
+ // preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha, $mifecha);
   if ($tipo=="Dia")
    $lafecha=$mifecha[1];
   if ($tipo=="Mes")
@@ -3045,7 +2964,7 @@ function comillas_inteligentes($valor)
 
     // Colocar comillas si no es entero
     if (!is_numeric($valor)) {
-        $valor = "'" . mysqli_real_escape_string($link,$valor) . "'";
+        $valor = "'" . mysqli_real_escape_string($valor) . "'";
     }
     return $valor;
 }
@@ -3148,7 +3067,7 @@ function dameclave()
   }
   return $clave;
 }
-function num2letras($num=0, $fem = true, $dec = true) {
+function num2letras($num, $fem = true, $dec = true) {
 //if (strlen($num) > 14) die("El n?mero introducido es demasiado grande");
  if ($num==100)
    return 'Cien ';
@@ -3220,14 +3139,9 @@ function num2letras($num=0, $fem = true, $dec = true) {
       $num = substr($num, 1);
    }else
       $neg = '';
-
-	if(!empty($num))
-	{
-		while ($num[0] == '0') $num = substr($num, 1);
+   while ($num[0] == '0') $num = substr($num, 1);
    if ($num[0] < '1' or $num[0] > 9) $num = '0' . $num;
    $zeros = true;
-	}
-
    $punt = false;
    $ent = '';
    $fra = '';
@@ -3404,6 +3318,8 @@ class QueryLimit{
 function respaldar_tablas($tables = '*')
 {
 
+//   $link = mysqli_connect($host,$user,$pass);
+//   mysqli_select_db($name,$link);
 
    $link=Conectarse();
 
@@ -3441,7 +3357,7 @@ echo $nombreArchivo;
             for($j=0; $j<$num_fields; $j++)
             {
                $row[$j] = addslashes($row[$j]);
-               $row[$j] = preg_match("/\n/","\\n",$row[$j]);
+               $row[$j] = ereg_replace("\n","\\n",$row[$j]);
                if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
                if ($j<($num_fields-1)) { $return.= ','; }
             }
@@ -3462,7 +3378,7 @@ echo $nombreArchivo;
 function LimpiaNumeros($lacadena = '',$numeroEspecifico=0,$lanumerodigitos=10)
 {
 
-	 $numero_limpio=preg_replace("/[^0-9]/",'',$lacadena);
+	 $numero_limpio=ereg_replace("[^0-9]",'',$lacadena);
 	 if ($numeroEspecifico==1)
 	  {
       if (strlen($numero_limpio) < $lanumerodigitos)
@@ -3857,22 +3773,14 @@ function interval_date($init,$finish,$tipo)
 function ValidaFecha_dmY($fecha)
 {
 
-  $date=fechaamysql($fecha);
-if ((preg_match("/\d{4}\-\d{2}-\d{2}/", $date)))
-   { return true; }
-else
-   { return false; }
-
-/*
-if (preg_match("/(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)[0-9]{2}/", $fecha))
-{
-return true;
-}
-else
-{
-return false;
-}
-*/
+   if (preg_match('/^([0-9]{1,2})[\/]([0-9]{1,2})[\/]([0-9]{4})$/', $fecha))
+  {
+      return true;
+  }
+  else
+  {
+    return false;
+  }
 
 }
 
@@ -3920,21 +3828,21 @@ function validaRFC($valor, $Tipo='Fisica')
 function limpiarCaracteres($valor, $miSinEspacio=1)
 {
 
-	$valor = mb_ereg_replace("[áàâãª]","A",$valor);
-	$valor = mb_ereg_replace("[ÁÀÂÃ]","A",$valor);
-	$valor = mb_ereg_replace("[éèê]","E",$valor);
-	$valor = mb_ereg_replace("[ÉÈÊ]","E",$valor);
-	$valor = mb_ereg_replace("[íìî]","I",$valor);
-	$valor = mb_ereg_replace("[ÍÌÎ]","I",$valor);
-	$valor = mb_ereg_replace("[óòôõº]","O",$valor);
-	$valor = mb_ereg_replace("[ÓÒÔÕ]","O",$valor);
-	$valor = mb_ereg_replace("[úùû]","U",$valor);
-	$valor = mb_ereg_replace("[ÚÙÛ]","U",$valor);
+	$valor = mb_eregi_replace("[áàâãª]","A",$valor);
+	$valor = mb_eregi_replace("[ÁÀÂÃ]","A",$valor);
+	$valor = mb_eregi_replace("[éèê]","E",$valor);
+	$valor = mb_eregi_replace("[ÉÈÊ]","E",$valor);
+	$valor = mb_eregi_replace("[íìî]","I",$valor);
+	$valor = mb_eregi_replace("[ÍÌÎ]","I",$valor);
+	$valor = mb_eregi_replace("[óòôõº]","O",$valor);
+	$valor = mb_eregi_replace("[ÓÒÔÕ]","O",$valor);
+	$valor = mb_eregi_replace("[úùû]","U",$valor);
+	$valor = mb_eregi_replace("[ÚÙÛ]","U",$valor);
 	if ($miSinEspacio==1)
-   	$valor = mb_ereg_replace(" ","-",$valor);
+   	$valor = mb_eregi_replace(" ","-",$valor);
 
-	$valor = mb_ereg_replace("ñ","N",$valor);
-	$valor = mb_ereg_replace("Ñ","N",$valor);
+	$valor = mb_eregi_replace("ñ","N",$valor);
+	$valor = mb_eregi_replace("Ñ","N",$valor);
 
    return $valor;
 
@@ -3945,12 +3853,12 @@ function CombierteMayusculas($valor)
 {
   $valor=strtoupper($valor);
 
-  $valor = preg_match("/á/","Á",$valor);
-  $valor = preg_match("/é/","É",$valor);
-  $valor = preg_match("/í/","Í",$valor);
-  $valor = preg_match("/ó/","Ó",$valor);
-  $valor = preg_match("/ú/","Ú",$valor);
-  $valor = preg_match("/ñ/","Ñ",$valor);
+  $valor = ereg_replace("á","Á",$valor);
+  $valor = ereg_replace("é","É",$valor);
+  $valor = ereg_replace("í","Í",$valor);
+  $valor = ereg_replace("ó","Ó",$valor);
+  $valor = ereg_replace("ú","Ú",$valor);
+  $valor = ereg_replace("ñ","Ñ",$valor);
 
    return $valor;
 
@@ -3960,12 +3868,12 @@ function CombierteMinusculas($valor)
 {
   $valor=strtolower($valor);
 
-  $valor = preg_match("/Á/","á",$valor);
-  $valor = preg_match("/É/","é",$valor);
-  $valor = preg_match("/Í/","í",$valor);
-  $valor = preg_match("/Ó/","ó",$valor);
-  $valor = preg_match("/Ú/","ú",$valor);
-  $valor = preg_match("/Ñ/","ñ",$valor);
+  $valor = ereg_replace("Á","á",$valor);
+  $valor = ereg_replace("É","é",$valor);
+  $valor = ereg_replace("Í","í",$valor);
+  $valor = ereg_replace("Ó","ó",$valor);
+  $valor = ereg_replace("Ú","ú",$valor);
+  $valor = ereg_replace("Ñ","ñ",$valor);
 
    return $valor;
 
@@ -3975,12 +3883,12 @@ function ConvertirMayusculas($valor)
 {
   $valor=strtoupper($valor);
 
-  $valor = preg_match("/á/","Á",$valor);
-  $valor = preg_match("/é/","É",$valor);
-  $valor = preg_match("/í/","Í",$valor);
-  $valor = preg_match("/ó/","Ó",$valor);
-  $valor = preg_match("/ú/","Ú",$valor);
-  $valor = preg_match("/ñ/","Ñ",$valor);
+  $valor = ereg_replace("á","Á",$valor);
+  $valor = ereg_replace("é","É",$valor);
+  $valor = ereg_replace("í","Í",$valor);
+  $valor = ereg_replace("ó","Ó",$valor);
+  $valor = ereg_replace("ú","Ú",$valor);
+  $valor = ereg_replace("ñ","Ñ",$valor);
 
    return $valor;
 
@@ -3990,12 +3898,12 @@ function ConvertirMinusculas($valor)
 {
   $valor=strtolower($valor);
 
-  $valor = preg_match("/Á/","á",$valor);
-  $valor = preg_match("/É/","é",$valor);
-  $valor = preg_match("/Í/","í",$valor);
-  $valor = preg_match("/Ó/","ó",$valor);
-  $valor = preg_match("/Ú/","ú",$valor);
-  $valor = preg_match("/Ñ/","ñ",$valor);
+  $valor = ereg_replace("Á","á",$valor);
+  $valor = ereg_replace("É","é",$valor);
+  $valor = ereg_replace("Í","í",$valor);
+  $valor = ereg_replace("Ó","ó",$valor);
+  $valor = ereg_replace("Ú","ú",$valor);
+  $valor = ereg_replace("Ñ","ñ",$valor);
 
    return $valor;
 
@@ -4045,497 +3953,497 @@ function RegistroBitacoraManual($Accion)
 }
 
 
-  function ExportarExcel($excelresultado,$miArchivo, $misgrupos=array(), $misformatos=array(), $misEncabezados=array(), $interruptoralerta=1)
+function ExportarExcel($excelresultado,$miArchivo, $misgrupos=array(), $misformatos=array(), $misEncabezados=array(), $interruptoralerta=1)
+{
+
+   $excel=new ExcelEscribir($miArchivo);
+
+    if($excel==false)
+      echo $excel->error;
+
+    $miactiva=1;
+    $MiCuantasColumnas=0;
+    $Rs2 = mysqli_fetch_assoc($excelresultado);
+    foreach($Rs2 as $key => $value )
+    {
+      if ($misgrupos[1]!=$key && $misgrupos[2]!=$key)
+      {
+        $myArr[]=$key;
+        $MiCuantasColumnas=$MiCuantasColumnas+1;
+       }
+    }
+    if (count($misEncabezados)>0)
+       {
+          foreach($misEncabezados as $col)
+          {
+            $excel->writeCol("<tr><td class=xl26 width=64 colspan=$MiCuantasColumnas ><b><font size=2>$col</font></b></td></tr>",1);
+          }
+       }
+
+    $excel->writeLine($myArr,0,1,2);
+
+     if (count($misgrupos)>0)
+       {
+          $excel->writeRow(0);
+          foreach($Rs2 as $miI=>$col)
+          {
+            $SiTieneGrupo=0;
+            if ($misgrupos[1]==$miI)
+             {
+                 if ($misgrupos[3]!=$col)
+                 {
+                   $misgrupos[3]=$col;
+                   if (is_string($col))
+                      $col=utf8_encode($col);
+
+                   if ($misgrupos[5]>0)
+                      $miTextoLineas=" colspan=$MiCuantasColumnas";
+                   else
+                     $miTextoLineas=" ";
+
+                   $excel->writeCol("<tr><td class=xl26 width=64 $miTextoLineas ><b><font size=3>$col</font></b></td></tr>",1);
+                 }
+                 $SiTieneGrupo=1;
+              }
+             if ($misgrupos[2]==$miI)
+             {
+                 if ($misgrupos[4]!=$col)
+                 {
+                   $misgrupos[4]=$col;
+                   if (is_string($col))
+                      $col=utf8_encode($col);
+
+                   if ($misgrupos[6]>0)
+                      $miTextoLineas=" colspan='".($MiCuantasColumnas-1)."'";
+                   else
+                     $miTextoLineas=" ";
+
+                   $excel->writeCol("<tr><td class=xl26 width=64 ></td><td class=xl26 width=64 $miTextoLineas  ><b><font size=2>$col</font></b></td></tr>",1);
+                 }
+                 $SiTieneGrupo=1;
+              }
+
+            if ($SiTieneGrupo==0)
+            {
+              $miTextoLargo=64;
+              $miFormato="xl24 ";
+              foreach($misformatos as $i=>$col2)
+              {
+                if ($col2[1]==$miI)
+                {
+                  $miTextoLargo=$col2[2];
+                  if ($col2[3]=='Numerico')
+                  {
+                    $miFormato=" xl28 ";
+                  }
+                }
+               }
+
+              if (is_string($col))
+               $col=utf8_encode($col);
+
+              $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
+             }
+           }
+           $excel->writeRow(1);
+       }
+       else if(count($misformatos)>0)
+       {
+        $excel->writeRow(0);
+          foreach($Rs2 as $miI=>$col)
+          {
+             $miTextoLargo=64;
+              $miFormato="xl24 ";
+              foreach($misformatos as $i=>$col2)
+              {
+                if ($col2[1]==$miI)
+                {
+                  $miTextoLargo=$col2[2];
+                  if ($col2[3]=='Numerico')
+                  {
+                    $miFormato=" xl28 ";
+                  }
+                }
+               }
+
+              if (is_string($col))
+               $col=utf8_encode($col);
+
+              $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
+           }
+           $excel->writeRow(1);
+        }
+        else
+         $excel->writeLine($Rs2,1,0,1);
+
+     while($Rs2 = mysqli_fetch_assoc($excelresultado))
+    {
+       if (count($misgrupos)>0)
+       {
+          $excel->writeRow(0);
+          foreach($Rs2 as $miI=>$col)
+          {
+            $SiTieneGrupo=0;
+            if ($misgrupos[1]==$miI)
+             {
+                 if ($misgrupos[3]!=$col)
+                 {
+                   $misgrupos[3]=$col;
+                   if (is_string($col))
+                      $col=utf8_encode($col);
+
+                   if ($misgrupos[5]>0)
+                      $miTextoLineas=" colspan=$MiCuantasColumnas";
+                   else
+                     $miTextoLineas=" ";
+
+                   $excel->writeCol("<tr><td class=xl26 width=64 $miTextoLineas><b><font size=3>$col</td></tr>",1);
+                 }
+                 $SiTieneGrupo=1;
+              }
+             if ($misgrupos[2]==$miI)
+             {
+                 if ($misgrupos[4]!=$col)
+                 {
+                   $misgrupos[4]=$col;
+                   if (is_string($col))
+                      $col=utf8_encode($col);
+
+                   if ($misgrupos[6]>0)
+                      $miTextoLineas=" colspan='".($MiCuantasColumnas-1)."'";
+                   else
+                     $miTextoLineas=" ";
+
+                   $excel->writeCol("<tr><td class=xl26 width=64 ></td><td class=xl26 width=64 $miTextoLineas ><b><font size=2>$col</font></b></td></tr>",1);
+                 }
+                 $SiTieneGrupo=1;
+              }
+
+            if ($SiTieneGrupo==0)
+            {
+              $miTextoLargo=64;
+              $miFormato="";
+              foreach($misformatos as $i=>$col2)
+              {
+                if ($col2[1]==$miI)
+                {
+                  $miTextoLargo=$col2[2];
+                  $miFormato=" xl24 ";
+                  if ($col2[3]=='Numerico')
+                  {
+                    $miFormato=" Xl28 ";
+                  }
+                  if ($col2[3]=='Decimal')
+                    $miFormato=" xl29 ";
+                }
+               }
+
+
+               if (is_string($col))
+                 $col=utf8_encode($col);
+
+              $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >".trim($col)."</td>",1);
+             }
+           }
+           $excel->writeRow(1);
+       }
+       else if(count($misformatos)>0)
+       {
+        $excel->writeRow(0);
+          foreach($Rs2 as $miI=>$col)
+          {
+             $miTextoLargo=64;
+              $miFormato="xl24 ";
+              foreach($misformatos as $i=>$col2)
+              {
+                if ($col2[1]==$miI)
+                {
+                  $miTextoLargo=$col2[2];
+                  if ($col2[3]=='Numerico')
+                    $miFormato=" xl28 ";
+                  if ($col2[3]=='Decimal')
+                    $miFormato=" xl29 ";
+                  if ($col2[3]=='Fecha')
+                    $miFormato=" xl30 ";
+                }
+               }
+
+              //if (is_string($col))
+               //$col=utf8_decode($col);
+
+              $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
+           }
+           $excel->writeRow(1);
+       }
+       else
+         $excel->writeLine($Rs2,1,0,1);
+    }
+
+    $excel->close();
+    if($interruptoralerta==1)
+    echo " <script> swal('Exito...!', 'El Archivo de Excel a sido exportado con exito...!', 'success'); </script>";
+  }
+
+  Class ExcelEscribir
   {
 
-     $excel=new ExcelEscribir($miArchivo);
+      var $fp=null;
+      var $error;
+      var $state="SICAPCERRADO";
+      var $newRow=false;
 
-      if($excel==false)
-        echo $excel->error;
-
-      $miactiva=1;
-      $MiCuantasColumnas=0;
-      $Rs2 = mysqli_fetch_assoc($excelresultado);
-      foreach($Rs2 as $key => $value )
+      function ExcelEscribir($file="")
       {
-        if ($misgrupos[1]!=$key && $misgrupos[2]!=$key)
-        {
-          $myArr[]=$key;
-          $MiCuantasColumnas=$MiCuantasColumnas+1;
-         }
+          return $this->open($file);
       }
-      if (count($misEncabezados)>0)
-         {
-            foreach($misEncabezados as $col)
-            {
-              $excel->writeCol("<tr><td class=xl26 width=64 colspan=$MiCuantasColumnas ><b><font size=2>$col</font></b></td></tr>",1);
-            }
-         }
 
-      $excel->writeLine($myArr,0,1,2);
+      function open($file)
+      {
+          if($this->state!="SICAPCERRADO")
+          {
+              $this->error="Error : El archivo no esta abierto cierrelo para guardar los valores ";
+              return false;
+          }
 
-       if (count($misgrupos)>0)
-         {
-            $excel->writeRow(0);
-            foreach($Rs2 as $miI=>$col)
-            {
-              $SiTieneGrupo=0;
-              if ($misgrupos[1]==$miI)
-               {
-                   if ($misgrupos[3]!=$col)
-                   {
-                     $misgrupos[3]=$col;
-                     if (is_string($col))
-                        $col=utf8_encode($col);
-
-                     if ($misgrupos[5]>0)
-                        $miTextoLineas=" colspan=$MiCuantasColumnas";
-                     else
-                       $miTextoLineas=" ";
-
-                     $excel->writeCol("<tr><td class=xl26 width=64 $miTextoLineas ><b><font size=3>$col</font></b></td></tr>",1);
-                   }
-                   $SiTieneGrupo=1;
-                }
-               if ($misgrupos[2]==$miI)
-               {
-                   if ($misgrupos[4]!=$col)
-                   {
-                     $misgrupos[4]=$col;
-                     if (is_string($col))
-                        $col=utf8_encode($col);
-
-                     if ($misgrupos[6]>0)
-                        $miTextoLineas=" colspan='".($MiCuantasColumnas-1)."'";
-                     else
-                       $miTextoLineas=" ";
-
-                     $excel->writeCol("<tr><td class=xl26 width=64 ></td><td class=xl26 width=64 $miTextoLineas  ><b><font size=2>$col</font></b></td></tr>",1);
-                   }
-                   $SiTieneGrupo=1;
-                }
-
-              if ($SiTieneGrupo==0)
-              {
-                $miTextoLargo=64;
-                $miFormato="xl24 ";
-                foreach($misformatos as $i=>$col2)
-                {
-                  if ($col2[1]==$miI)
-                  {
-                    $miTextoLargo=$col2[2];
-                    if ($col2[3]=='Numerico')
-                    {
-                      $miFormato=" xl28 ";
-                    }
-                  }
-                 }
-
-                if (is_string($col))
-                 $col=utf8_encode($col);
-
-                $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
-               }
-             }
-             $excel->writeRow(1);
-         }
-         else if(count($misformatos)>0)
-         {
-          $excel->writeRow(0);
-            foreach($Rs2 as $miI=>$col)
-            {
-               $miTextoLargo=64;
-                $miFormato="xl24 ";
-                foreach($misformatos as $i=>$col2)
-                {
-                  if ($col2[1]==$miI)
-                  {
-                    $miTextoLargo=$col2[2];
-                    if ($col2[3]=='Numerico')
-                    {
-                      $miFormato=" xl28 ";
-                    }
-                  }
-                 }
-
-                if (is_string($col))
-                 $col=utf8_encode($col);
-
-                $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
-             }
-             $excel->writeRow(1);
+          if(!empty($file))
+          {
+              $this->fp=@fopen($file,"w+");
           }
           else
-           $excel->writeLine($Rs2,1,0,1);
-
-       while($Rs2 = mysqli_fetch_assoc($excelresultado))
-      {
-         if (count($misgrupos)>0)
-         {
-            $excel->writeRow(0);
-            foreach($Rs2 as $miI=>$col)
-            {
-              $SiTieneGrupo=0;
-              if ($misgrupos[1]==$miI)
-               {
-                   if ($misgrupos[3]!=$col)
-                   {
-                     $misgrupos[3]=$col;
-                     if (is_string($col))
-                        $col=utf8_encode($col);
-
-                     if ($misgrupos[5]>0)
-                        $miTextoLineas=" colspan=$MiCuantasColumnas";
-                     else
-                       $miTextoLineas=" ";
-
-                     $excel->writeCol("<tr><td class=xl26 width=64 $miTextoLineas><b><font size=3>$col</td></tr>",1);
-                   }
-                   $SiTieneGrupo=1;
-                }
-               if ($misgrupos[2]==$miI)
-               {
-                   if ($misgrupos[4]!=$col)
-                   {
-                     $misgrupos[4]=$col;
-                     if (is_string($col))
-                        $col=utf8_encode($col);
-
-                     if ($misgrupos[6]>0)
-                        $miTextoLineas=" colspan='".($MiCuantasColumnas-1)."'";
-                     else
-                       $miTextoLineas=" ";
-
-                     $excel->writeCol("<tr><td class=xl26 width=64 ></td><td class=xl26 width=64 $miTextoLineas ><b><font size=2>$col</font></b></td></tr>",1);
-                   }
-                   $SiTieneGrupo=1;
-                }
-
-              if ($SiTieneGrupo==0)
-              {
-                $miTextoLargo=64;
-                $miFormato="";
-                foreach($misformatos as $i=>$col2)
-                {
-                  if ($col2[1]==$miI)
-                  {
-                    $miTextoLargo=$col2[2];
-                    $miFormato=" xl24 ";
-                    if ($col2[3]=='Numerico')
-                    {
-                      $miFormato=" Xl28 ";
-                    }
-                    if ($col2[3]=='Decimal')
-                      $miFormato=" xl29 ";
-                  }
-                 }
-
-
-                 if (is_string($col))
-                   $col=utf8_encode($col);
-
-                $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >".trim($col)."</td>",1);
-               }
-             }
-             $excel->writeRow(1);
-         }
-         else if(count($misformatos)>0)
-         {
-          $excel->writeRow(0);
-            foreach($Rs2 as $miI=>$col)
-            {
-               $miTextoLargo=64;
-                $miFormato="xl24 ";
-                foreach($misformatos as $i=>$col2)
-                {
-                  if ($col2[1]==$miI)
-                  {
-                    $miTextoLargo=$col2[2];
-                    if ($col2[3]=='Numerico')
-                      $miFormato=" xl28 ";
-                    if ($col2[3]=='Decimal')
-                      $miFormato=" xl29 ";
-                    if ($col2[3]=='Fecha')
-                      $miFormato=" xl30 ";
-                  }
-                 }
-
-                //if (is_string($col))
-                 //$col=utf8_decode($col);
-
-                $excel->writeCol("<td class=$miFormato width=$miTextoLargo  >$col</td>",1);
-             }
-             $excel->writeRow(1);
-         }
-         else
-           $excel->writeLine($Rs2,1,0,1);
+          {
+              $this->error="Usage : No puedo crear el objeto ExcelEscribir('NombreArchivo')";
+              return false;
+          }
+          if($this->fp==false)
+          {
+              $this->error="Error: No tiene permiso para abrir el archivo.";
+              return false;
+          }
+          $this->state="SICAPABIERTO";
+          fwrite($this->fp,$this->GetHeader());
+          return $this->fp;
       }
 
-      $excel->close();
-			if($interruptoralerta==1)
-      echo " <script> swal('Exito...!', 'El Archivo de Excel a sido exportado con exito...!', 'success'); </script>";
-    }
+      function close()
+      {
+          if($this->state!="SICAPABIERTO")
+          {
+              $this->error="Error : Por favor abra el archivo.";
+              return false;
+          }
+          if($this->newRow)
+          {
+              fwrite($this->fp,"</tr>");
+              $this->newRow=false;
+          }
 
-    Class ExcelEscribir
-    {
-
-        var $fp=null;
-        var $error;
-        var $state="SICAPCERRADO";
-        var $newRow=false;
-
-        function ExcelEscribir($file="")
-        {
-            return $this->open($file);
-        }
-
-        function open($file)
-        {
-            if($this->state!="SICAPCERRADO")
-            {
-                $this->error="Error : El archivo no esta abierto cierrelo para guardar los valores ";
-                return false;
-            }
-
-            if(!empty($file))
-            {
-                $this->fp=@fopen($file,"w+");
-            }
-            else
-            {
-                $this->error="Usage : No puedo crear el objeto ExcelEscribir('NombreArchivo')";
-                return false;
-            }
-            if($this->fp==false)
-            {
-                $this->error="Error: No tiene permiso para abrir el archivo.";
-                return false;
-            }
-            $this->state="SICAPABIERTO";
-            fwrite($this->fp,$this->GetHeader());
-            return $this->fp;
-        }
-
-        function close()
-        {
-            if($this->state!="SICAPABIERTO")
-            {
-                $this->error="Error : Por favor abra el archivo.";
-                return false;
-            }
-            if($this->newRow)
-            {
-                fwrite($this->fp,"</tr>");
-                $this->newRow=false;
-            }
-
-            fwrite($this->fp,$this->GetFooter());
-            fclose($this->fp);
-            $this->state="SICAPCERRADO";
-            return ;
-        }
+          fwrite($this->fp,$this->GetFooter());
+          fclose($this->fp);
+          $this->state="SICAPCERRADO";
+          return ;
+      }
 
 
-        function GetHeader()
-        {
-            $header = <<<EOH
-                <html xmlns:o="urn:schemas-microsoft-com:office:office"
-                xmlns:x="urn:schemas-microsoft-com:office:excel"
-                xmlns="http://www.w3.org/TR/REC-html40">
+      function GetHeader()
+      {
+          $header = <<<EOH
+              <html xmlns:o="urn:schemas-microsoft-com:office:office"
+              xmlns:x="urn:schemas-microsoft-com:office:excel"
+              xmlns="http://www.w3.org/TR/REC-html40">
 
-                <head>
-                <meta http-equiv=Content-Type content="text/html; charset=utf-8">
-                <meta name=ProgId content=Excel.Sheet>
-                <!--[if gte mso 9]><xml>
-                 <o:DocumentProperties>
-                  <o:LastAuthor>Sriram</o:LastAuthor>
-                  <o:LastSaved>2005-01-02T07:46:23Z</o:LastSaved>
-                  <o:Version>10.2625</o:Version>
-                 </o:DocumentProperties>
-                 <o:OfficeDocumentSettings>
-                  <o:DownloadComponents/>
-                 </o:OfficeDocumentSettings>
-                </xml><![endif]-->
-                <style>
-                <!--table
-                    {mso-displayed-decimal-separator:"\.";
-                    mso-displayed-thousand-separator:"\,";}
-                @page
-                    {margin:1.0in .75in 1.0in .75in;
-                    mso-header-margin:.5in;
-                    mso-footer-margin:.5in;}
-                tr
-                    {mso-height-source:auto;}
-                col
-                    {mso-width-source:auto;}
-                br
-                    {mso-data-placement:same-cell;}
-                .style0
-                    {mso-number-format:General;
-                    text-align:general;
-                    vertical-align:bottom;
-                    white-space:nowrap;
-                    mso-rotate:0;
-                    mso-background-source:auto;
-                    mso-pattern:auto;
-                    color:windowtext;
-                    font-size:10.0pt;
-                    font-weight:400;
-                    font-style:normal;
-                    text-decoration:none;
-                    font-family:Arial;
-                    mso-generic-font-family:auto;
-                    mso-font-charset:0;
-                    border:none;
-                    mso-protection:locked visible;
-                    mso-style-name:Normal;
-                    mso-style-id:0;}
-                td
-                    {mso-style-parent:style0;
-                    padding-top:1px;
-                    padding-right:1px;
-                    padding-left:1px;
-                    mso-ignore:padding;
-                    color:windowtext;
-                    font-size:10.0pt;
-                    font-weight:400;
-                    font-style:normal;
-                    text-decoration:none;
-                    font-family:Arial;
-                    mso-generic-font-family:auto;
-                    mso-font-charset:0;
-                    mso-number-format:General;
-                    text-align:general;
-                    vertical-align:bottom;
-                    border:none;
-                    mso-background-source:auto;
-                    mso-pattern:auto;
-                    mso-protection:locked visible;
-                    white-space:nowrap;
-                    mso-rotate:0;}
-                .xl24
-                    {mso-style-parent:style0;
-                    white-space:normal;}
-                .xl26
-                    {mso-style-parent:style0;
-                    white-space:normal;}
-                .xl27
-                    {mso-style-parent:style0;
-                    text-align:center;
-                    mso-background-source: red;
-                    background: red;
-                    border:.5pt solid;
-                    font-style: bold;
-                    font-size:12.0pt;}
-                .xl28
-                    {mso-style-parent:style0;
-                      mso-number-format:"0";
-                      text-align:right;
-                  }
-                .xl29
-                    {mso-style-parent:style0;
-                    mso-number-format:"\#\,\#\#0\.00";
+              <head>
+              <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+              <meta name=ProgId content=Excel.Sheet>
+              <!--[if gte mso 9]><xml>
+               <o:DocumentProperties>
+                <o:LastAuthor>Sriram</o:LastAuthor>
+                <o:LastSaved>2005-01-02T07:46:23Z</o:LastSaved>
+                <o:Version>10.2625</o:Version>
+               </o:DocumentProperties>
+               <o:OfficeDocumentSettings>
+                <o:DownloadComponents/>
+               </o:OfficeDocumentSettings>
+              </xml><![endif]-->
+              <style>
+              <!--table
+                  {mso-displayed-decimal-separator:"\.";
+                  mso-displayed-thousand-separator:"\,";}
+              @page
+                  {margin:1.0in .75in 1.0in .75in;
+                  mso-header-margin:.5in;
+                  mso-footer-margin:.5in;}
+              tr
+                  {mso-height-source:auto;}
+              col
+                  {mso-width-source:auto;}
+              br
+                  {mso-data-placement:same-cell;}
+              .style0
+                  {mso-number-format:General;
+                  text-align:general;
+                  vertical-align:bottom;
+                  white-space:nowrap;
+                  mso-rotate:0;
+                  mso-background-source:auto;
+                  mso-pattern:auto;
+                  color:windowtext;
+                  font-size:10.0pt;
+                  font-weight:400;
+                  font-style:normal;
+                  text-decoration:none;
+                  font-family:Arial;
+                  mso-generic-font-family:auto;
+                  mso-font-charset:0;
+                  border:none;
+                  mso-protection:locked visible;
+                  mso-style-name:Normal;
+                  mso-style-id:0;}
+              td
+                  {mso-style-parent:style0;
+                  padding-top:1px;
+                  padding-right:1px;
+                  padding-left:1px;
+                  mso-ignore:padding;
+                  color:windowtext;
+                  font-size:10.0pt;
+                  font-weight:400;
+                  font-style:normal;
+                  text-decoration:none;
+                  font-family:Arial;
+                  mso-generic-font-family:auto;
+                  mso-font-charset:0;
+                  mso-number-format:General;
+                  text-align:general;
+                  vertical-align:bottom;
+                  border:none;
+                  mso-background-source:auto;
+                  mso-pattern:auto;
+                  mso-protection:locked visible;
+                  white-space:nowrap;
+                  mso-rotate:0;}
+              .xl24
+                  {mso-style-parent:style0;
+                  white-space:normal;}
+              .xl26
+                  {mso-style-parent:style0;
+                  white-space:normal;}
+              .xl27
+                  {mso-style-parent:style0;
+                  text-align:center;
+                  mso-background-source: red;
+                  background: red;
+                  border:.5pt solid;
+                  font-style: bold;
+                  font-size:12.0pt;}
+              .xl28
+                  {mso-style-parent:style0;
+                    mso-number-format:"0";
                     text-align:right;
-                   }
-                .xl30
-                    {mso-style-parent:style0;
-                    mso-number-format:"dd/mm/yyyy";
-                   }
-                -->
-                </style>
-                <!--[if gte mso 9]><xml>
-                 <x:ExcelWorkbook>
-                  <x:ExcelWorksheets>
-                   <x:ExcelWorksheet>
-                    <x:Name>srirmam</x:Name>
-                    <x:WorksheetOptions>
-                     <x:Selected/>
-                     <x:ProtectContents>False</x:ProtectContents>
-                     <x:ProtectObjects>False</x:ProtectObjects>
-                     <x:ProtectScenarios>False</x:ProtectScenarios>
-                    </x:WorksheetOptions>
-                   </x:ExcelWorksheet>
-                  </x:ExcelWorksheets>
-                  <x:WindowHeight>10005</x:WindowHeight>
-                  <x:WindowWidth>10005</x:WindowWidth>
-                  <x:WindowTopX>120</x:WindowTopX>
-                  <x:WindowTopY>135</x:WindowTopY>
-                  <x:ProtectStructure>False</x:ProtectStructure>
-                  <x:ProtectWindows>False</x:ProtectWindows>
-                 </x:ExcelWorkbook>
-                </xml><![endif]-->
-                </head>
+                }
+              .xl29
+                  {mso-style-parent:style0;
+                  mso-number-format:"\#\,\#\#0\.00";
+                  text-align:right;
+                 }
+              .xl30
+                  {mso-style-parent:style0;
+                  mso-number-format:"dd/mm/yyyy";
+                 }
+              -->
+              </style>
+              <!--[if gte mso 9]><xml>
+               <x:ExcelWorkbook>
+                <x:ExcelWorksheets>
+                 <x:ExcelWorksheet>
+                  <x:Name>srirmam</x:Name>
+                  <x:WorksheetOptions>
+                   <x:Selected/>
+                   <x:ProtectContents>False</x:ProtectContents>
+                   <x:ProtectObjects>False</x:ProtectObjects>
+                   <x:ProtectScenarios>False</x:ProtectScenarios>
+                  </x:WorksheetOptions>
+                 </x:ExcelWorksheet>
+                </x:ExcelWorksheets>
+                <x:WindowHeight>10005</x:WindowHeight>
+                <x:WindowWidth>10005</x:WindowWidth>
+                <x:WindowTopX>120</x:WindowTopX>
+                <x:WindowTopY>135</x:WindowTopY>
+                <x:ProtectStructure>False</x:ProtectStructure>
+                <x:ProtectWindows>False</x:ProtectWindows>
+               </x:ExcelWorkbook>
+              </xml><![endif]-->
+              </head>
 
-                <body link=blue vlink=purple>
-                <table x:str border=0 cellpadding=0 cellspacing=0 style='border-collapse: collapse;table-layout:fixed;'>
+              <body link=blue vlink=purple>
+              <table x:str border=0 cellpadding=0 cellspacing=0 style='border-collapse: collapse;table-layout:fixed;'>
 EOH;
-            return $header;
-        }
+          return $header;
+      }
 
-        function GetFooter()
-        {
-            return "</table></body></html>";
-        }
+      function GetFooter()
+      {
+          return "</table></body></html>";
+      }
 
-        function writeLine($line_arr,$AnalizaCampo=0,$ConLinea=0, $ConAlineado=1)
-        {
-            if($this->state!="SICAPABIERTO")
+      function writeLine($line_arr,$AnalizaCampo=0,$ConLinea=0, $ConAlineado=1)
+      {
+          if($this->state!="SICAPABIERTO")
+          {
+              $this->error="Error : Por favor abra el archivo.";
+              return false;
+          }
+          if(!is_array($line_arr))
+          {
+              $this->error="Error : Argumento no valido al crear el arreglo.";
+              return false;
+          }
+          fwrite($this->fp,"<tr>");
+
+     //     if ($ConLinea==1)
+     //       $miBorde=" border: 8px solid; COLOR: black; background-color: #D8D8D8; ";
+     //     else
+     //       $miBorde=" ";
+
+          if ($ConAlineado==2 || $ConLinea==1)
+            $miAlineado=" xl27 ";
+          else
+            $miAlineado=" xl24 ";
+
+      //    $miTextoFormato=" style=' $miBorde ' $miAlineado ";
+
+          foreach($line_arr as $col)
+          {
+            if ($AnalizaCampo==1)
             {
-                $this->error="Error : Por favor abra el archivo.";
-                return false;
-            }
-            if(!is_array($line_arr))
-            {
-                $this->error="Error : Argumento no valido al crear el arreglo.";
-                return false;
-            }
-            fwrite($this->fp,"<tr>");
+              if (is_string($col))
+                $col=($col);
+               fwrite($this->fp,"<td class=$miAlineado width=64 >$col</td>");
+             }
+             else
+             {
+               fwrite($this->fp,"<td class=$miAlineado width=64 >$col</td>");
+             }
 
-       //     if ($ConLinea==1)
-       //       $miBorde=" border: 8px solid; COLOR: black; background-color: #D8D8D8; ";
-       //     else
-       //       $miBorde=" ";
+          }
+          fwrite($this->fp,"</tr>");
+      }
 
-            if ($ConAlineado==2 || $ConLinea==1)
-              $miAlineado=" xl27 ";
-            else
-              $miAlineado=" xl24 ";
+      function writeRow($Linea=0)
+      {
+          if($Linea==0)
+              fwrite($this->fp,"<tr>");
+          else
+              fwrite($this->fp,"</tr>");
 
-        //    $miTextoFormato=" style=' $miBorde ' $miAlineado ";
+      }
 
-            foreach($line_arr as $col)
-            {
-              if ($AnalizaCampo==1)
-              {
-                if (is_string($col))
-                  $col=($col);
-                 fwrite($this->fp,"<td class=$miAlineado width=64 >$col</td>");
-               }
-               else
-               {
-                 fwrite($this->fp,"<td class=$miAlineado width=64 >$col</td>");
-               }
-
-            }
-            fwrite($this->fp,"</tr>");
-        }
-
-        function writeRow($Linea=0)
-        {
-            if($Linea==0)
-                fwrite($this->fp,"<tr>");
-            else
-                fwrite($this->fp,"</tr>");
-
-        }
-
-        function writeCol($value,$Armar=0)
-        {
-           if ($Armar==1)
-            fwrite($this->fp,"$value");
-           else
-           fwrite($this->fp,"<td class=xl24 width=64 >$value</td>");
-        }
-    }
+      function writeCol($value,$Armar=0)
+      {
+         if ($Armar==1)
+          fwrite($this->fp,"$value");
+         else
+         fwrite($this->fp,"<td class=xl24 width=64 >$value</td>");
+      }
+  }
 
 ?>
