@@ -527,7 +527,7 @@ $dbase='***nombre_db***';
   }
 
 
-include("clases/mymenugen_class.php"); // incluir la clase de menus
+include("mymenugen_class.php"); // incluir la clase de menus
 $myMenu = new myMenuObject;
 
     $miVariableArchivo=substr($_SERVER['PHP_SELF'],strrpos($_SERVER['PHP_SELF'],'/')+1);
