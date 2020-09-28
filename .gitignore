@@ -16,6 +16,7 @@ default/app/models/*
 !default/public/vendor/*
 default/app/views/index/*
 !default/app/views/index/ValidaUsuario.php
+!default/app/views/index/caja.php
 
 
 !default/app/views/index/clases/*
