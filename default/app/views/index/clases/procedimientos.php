@@ -572,13 +572,13 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           <script src="clases/validaciones.js" type="text/javascript"></script>
           <script src="clases/shortcut.js" type="text/javascript"></script>
           <script src="clases/calendario.js" type="text/javascript"></script>
-          <script src="../sweetalert/dist/sweetalert.min.js"></script>
-          <link href="../sweetalert/dist/sweetalert.css" rel="stylesheet">
+          <script src="../../../../sweetalert/dist/sweetalert.min.js"></script>
+          <link href="../../.../../sweetalert/dist/sweetalert.css" rel="stylesheet">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
           <script src="clases/jquery-3.2.1.min.js" language="javascript"/></script>
           <script src="clases/cfdinomina.js" language="javascript"/></script>
 					<script src="clases/jquery.maskedinput.js" type="text/javascript"></script>
-          <link rel="stylesheet" type="text/css" href="../sweetalert/dist/sweetalert.css">';
+          <link rel="stylesheet" type="text/css" href="../../../../sweetalert/dist/sweetalert.css">';
 
 //             @import url(estilos/menus.css);
 
