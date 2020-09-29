@@ -525,9 +525,9 @@ def readConfParams():
 def readParams():
      parametros = sys.argv[1:]
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
-     crearModelos = True; crearControladores = True;
-     insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
-     solorMigrar = False; nombreHost = '';  nombreDb = ''; nombreUser = '';
+     crearModelos = False; crearControladores = False;
+     insertarTablaConf = False; insertarTablaMenu = False; soloCopiar = True
+     solorMigrar = True; nombreHost = '';  nombreDb = ''; nombreUser = '';
      nombrePass = ''
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
