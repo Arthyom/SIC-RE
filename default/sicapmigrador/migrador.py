@@ -525,8 +525,8 @@ def readConfParams():
 def readParams():
      parametros = sys.argv[1:]
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
-     crearModelos = False; crearControladores = False;
-     insertarTablaConf = False; insertarTablaMenu = False; soloCopiar = True
+     crearModelos = True; crearControladores = True;
+     insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = True
      solorMigrar = True; nombreHost = '';  nombreDb = ''; nombreUser = '';
      nombrePass = ''
      corregirKeys = False; readRelations = False
@@ -550,7 +550,7 @@ def readParams():
           if '--crear_modelos' in pi:
                crearModelos = pi[1]
           if '--crear_controls' in pi:
-               crearControladores = False
+               crearControladores = pi[1]
           if '--crear_tabla_conf' in pi:
                insertarTablaConf = pi[1]
           if '--crear_tabla_menu' in pi:
