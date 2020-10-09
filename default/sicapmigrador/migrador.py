@@ -526,8 +526,8 @@ def readParams():
      parametros = sys.argv[1:]
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
      crearModelos = True; crearControladores = True;
-     insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = True
-     solorMigrar = True; nombreHost = '';  nombreDb = ''; nombreUser = '';
+     insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
+     solorMigrar = False; nombreHost = '';  nombreDb = ''; nombreUser = '';
      nombrePass = ''
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
@@ -572,7 +572,7 @@ def readParams():
        content = content.replace("***plantilla_caja***", plantillaCaja)
        content = content.replace("'***srtN***'", str(startNum) )
        content = content.replace("'***stpN***'", str(stepNum) )
-       content = content.replace("'***oM***'", str(soloCopiar) )
+       content = content.replace("'***oM***'", str(solorMigrar) )
        content = content.replace("'***cM***'", str(crearModelos))
        content = content.replace("'***cS***'", str(crearControladores))
        content = content.replace("'***cI***'", str(insertarTablaConf))
