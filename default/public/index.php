@@ -71,6 +71,9 @@ define('NOMBRE_CAJA', '***nombre_caja***' );
 define('CORE_PATH', dirname(dirname(APP_PATH)).'/core/');
 //const CORE_PATH = '/path/to/core/';
 
+define('LOGS_PATH', dirname(__DIR__).'/app/temp/logs/');
+
+
 /*
  * Define el PUBLIC_PATH.
  *
