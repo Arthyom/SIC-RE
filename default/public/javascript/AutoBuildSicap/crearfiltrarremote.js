@@ -89,6 +89,7 @@ var Select2Demo = /*#__PURE__*/function () {
 
 
       // empieza definicion de control especial de filtrado 'select'
+      
       var elems =  $('.remoteinfo')
       for (var i = 0; i < elems.length; i++) {
         var el = elems[i];
@@ -100,30 +101,35 @@ var Select2Demo = /*#__PURE__*/function () {
 
         $(el).select2({
           ajax: {
-            url: targetUrl2,
+            url: function url(param) { 
+              var id = this[0].name
+              var da = 'rest_foreingKeyInfo/'+id+'/'+document.getElementById(id).getAttribute('data-filter');
+              return da;
+             },
             type: 'POST',
             dataType: 'json',
             delay: 250,
             data: function data(params) {
 
-                console.log('------', targetUrl2)
 
-              var s = el.getAttribute('data-depend');
-              var ParcialBusqueda = document.getElementById('ParcialBusqueda'+el.id).checked;
-
-              console.log('.d.f.d.f.df', ParcialBusqueda);
+              var id = this[0].name
+              var dependeInfo = '';
+              console.log('elemento', document.getElementById('ParcialBusqueda'+el.id));
+              var dependeDe = document.getElementById(id).getAttribute('data-depend');
+              var dataFilter = document.getElementById(id).getAttribute('data-filter');
+              var ParcialBusqueda = document.getElementById('ParcialBusqueda'+id).checked;
               
-              if(s)
-                var p = document.getElementById(s).value;
-              else
-                var p = ''
-
+              if(dependeDe)
+                 dependeInfo = document.getElementById(id).value;
+           
               return JSON.stringify({
+
+                
                 q: params.term,
-                dependeDe: s,
-                dependeInfo: p,
+                dependeDe,
+                dependeInfo,
                 ParcialBusqueda,
-                dataFilter: el.getAttribute('data-filter'),
+                dataFilter,
                 texto: params.term,
                 // search term
                 page: params.page
@@ -158,8 +164,9 @@ var Select2Demo = /*#__PURE__*/function () {
           multiple: false,
         });
       }
+      
 
-
+ 
 
 
 
@@ -172,27 +179,8 @@ var Select2Demo = /*#__PURE__*/function () {
   return Select2Demo;
 }();
 
-/**
- * Keep in mind that your scripts may not always be executed after the theme is completely ready,
- * you might need to observe the `theme:load` event to make sure your scripts are executed after the theme is ready.
- */
-
 
 $(document).on('theme:init', function () {
-  new Select2Demo();
-
-
+ new Select2Demo();
 });
 
-
-
-function seleccionarField() {
-  field =  $('#remotefield').find(':selected').text();
-  console.log('ssds', field);
-}
-
-function seleccionarInfo() {
-  var url2 = window.location.href.split('/');
-  url2[url2.length-1] = 'rest_foreingKeyInfo/'+field;
-  var targetUrl2 = url2.join('/');
-}

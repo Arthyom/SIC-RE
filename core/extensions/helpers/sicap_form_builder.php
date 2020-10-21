@@ -97,7 +97,7 @@ class SicapFormBuilder
                                 $registros = (new $field->TablaForanea)->count();
 
 
-                                  $campo = $field->CampoForaneoValor;
+                                  $campo = $field->BusquedaSelect;
                                   $campoValue = $field->CampoForaneo;
 
                                   if( self::$maxSelect > $registros ){
@@ -132,7 +132,7 @@ class SicapFormBuilder
                   
 
                                     if( Router::get('action') == 'editar' ){
-                                      $extractor = $field->CampoForaneoValor;
+                                      $extractor = $field->BusquedaSelect;
                                       $buscador = (new $field->TablaForanea)->find_first("conditions: $field->CampoForaneo = $valorCampo ");
 
                                       echo '<select   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'" onchange="seleccionarInfo()"  class="remoteinfo form-control">' , PHP_EOL;
@@ -181,7 +181,7 @@ class SicapFormBuilder
         echo '</div>';
         echo '</form>' , PHP_EOL;
     }
-
+ 
     public static function FromConfigForSearch($table, $model, $action = '', $skipRequireds = false)
     {
         $modelForm = new $table();
@@ -248,7 +248,7 @@ class SicapFormBuilder
                                 $registros = (new $field->TablaForanea)->count();
 
 
-                                  $campo = $field->CampoForaneoValor;
+                                  $campo = $field->BusquedaSelect;
                                   $campoValue = $field->CampoForaneo;
 
                                   if( self::$maxSelect > $registros ){
@@ -283,7 +283,7 @@ class SicapFormBuilder
                   
 
                                     if( Router::get('action') == 'editar' ){
-                                      $extractor = $field->CampoForaneoValor;
+                                      $extractor = $field->BusquedaSelect;
                                       $buscador = (new $field->TablaForanea)->find_first("conditions: $field->CampoForaneo = $valorCampo ");
 
                                       echo '<select   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'" onchange="seleccionarInfo()"  class="remoteinfo form-control">' , PHP_EOL;
