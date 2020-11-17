@@ -368,12 +368,20 @@ def corregirTablaSinPrimaria(tablas):
     log.write('[OK]....Total sin llave '+ str(i) +'\n')
 
 def truncate():
-    conexion = conectar(config.dbConfig)
-    cursor = conexion.cursor()
-    tabla = config.tablaConfiguracion
-    sql = "USE '"+ dbConfig['database'] + "'; TRUNCATE TABLE '" + tabla  +"';"
-    cursor.execute(sql)
-    conexion.commit()
+    try:
+        conexion = conectar(config.dbConfig)
+        cursor = conexion.cursor()
+        tabla = config.tablaConfiguracion
+        sql = "USE "+ config.dbConfig['database']
+        cursor.execute(sql)
+        sql = "TRUNCATE TABLE "+ tabla
+        cursor.execute(sql)
+        conexion.commit()
+
+        print("[OK]....Tabla '" + tabla + "'' truncada correctamente" )
+
+    except Exception as e:
+        raise
 
 def migrate():
     #copiar directorios
@@ -392,7 +400,6 @@ def migrate():
           mediaTarget = os.path.abspath(os.path.realpath(mediaTarget))
 
           if( not os.path.isdir(destinDir) ):
-              print( 'nd ' + name)
               if name != 'estilos' and name != 'imagenes':
                   shutil.copytree(originDir, destinDir)
               elif name == 'estilos':
@@ -500,6 +507,7 @@ def printCriticals():
         escrior.close()
 
 def readConfParams():
+    ## solo para las configuraciones criticas
     for param in sys.argv[1:]:
          pi = param.split('=')
          if '--nombre_caja' in pi:
@@ -511,15 +519,15 @@ def readConfParams():
          if '--orden_saltos_de' in pi:
              config.globalConfig['stepNum']  = pi[1]
          if '--crear_modelos' in pi:
-             config.globalConfig['cM']  = pi[1]
+             config.globalConfig['cM']  = True
          if '--crear_controls' in pi:
-             config.globalConfig['cS']  = pi[1]
+             config.globalConfig['cS']  = True
          if '--crear_tabla_conf' in pi:
-             config.globalConfig['cI']  = pi[1]
+             config.globalConfig['cI']  = True
          if '--solo_migrar' in pi:
-              config.globalConfig['oM']  = pi[1]
+              config.globalConfig['oM']  = True
          if '--crear_tabla_menu' in pi:
-             config.globalConfig['cL']  = pi[1]
+             config.globalConfig['cL']  = True
          if '--nombre_host' in pi:
              config.dbConfig['host']  = pi[1]
          if '--nombre_user' in pi:
@@ -528,15 +536,14 @@ def readConfParams():
              config.dbConfig['database']  = pi[1]
          if '--nombre_pass' in pi:
              config.dbConfig['password']  = pi[1]
-         if '--truncar_tabla' in pi:
-             config.dbConfig['truncar']  = pi[1]
 
 def readParams():
+    ## para cualquier configuracion que se desee realizar
      parametros = sys.argv[1:]
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
      crearModelos = True; crearControladores = True;
      insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
-     solorMigrar = False; nombreHost = '';  nombreDb = ''; nombreUser = '';
+     solorMigrar = True; nombreHost = '';  nombreDb = ''; nombreUser = '';
      nombrePass = ''; truncar = False
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
@@ -594,6 +601,8 @@ def readParams():
        content = content.replace("***nombre_db***", str(nombreDb))
        content = content.replace("***nombre_usuario***", str(nombreUser))
        content = content.replace("***nombre_pass***", str(nombrePass))
+       content = content.replace("'***tT***'", str(truncar) )
+
 
 
 
@@ -614,11 +623,11 @@ def readParams():
      if plantillaCaja == '':
          print("Por favor indique el path de la caja a usar como plantilla con el parametro --plantilla_caja=path  ")
      if nombreHost == '':
-         print("Por favor indique el host que almacena la base de datos con el parametro --nombre_Host=host  ")
+         print("Por favor indique el host que almacena la base de datos con el parametro --nombre_host=host  ")
      if nombreUser == '':
          print("Por favor indique el usuario para acceder a la base de datos con el parametro --nombre_user=user  ")
      if nombreDb == '':
-         print("Por favor indique el nombre de la base de datos a usar con el parametro --nombre_Db=db  ")
+         print("Por favor indique el nombre de la base de datos a usar con el parametro --nombre_db=db  ")
      if nombrePass == '':
          print("Por favor indique el pass para acceder a la base de datos con el parametro --nombre_pass=pass  ")
 
@@ -632,33 +641,42 @@ def checkCriticalConf():
         return marcador in content
 
 def executeMigrator():
+    conexion = conectar(config.dbConfig)
+    nombreTablas = conseguirTablas(conexion)
+    plantillamodelos = platillaModelos()
+    plantillascaffolds = plantillaScaffolds()
+    parametros = sys.argv[1:]
     if( not config.globalConfig['oM'] ):
-      conexion = conectar(config.dbConfig)
-      nombreTablas = conseguirTablas(conexion)
-      plantillamodelos = platillaModelos()
-      plantillascaffolds = plantillaScaffolds()
+      print('migrando')
+      for param in sys.argv[1:]:
 
-      if( config.globalConfig['cK'] ):
-        corregirTablaSinPrimaria( nombreTablas )
+          pi = param.split('=')
 
-      if( config.globalConfig['cS'] ):
-        crearControladores(plantillascaffolds, nombreTablas)
+          if '--truncar_tabla' in pi:
+              truncate()
 
-      if( config.globalConfig['cM'] ):
-        crearModelos(plantillamodelos, nombreTablas)
+          if( config.globalConfig['cK'] ):
+              corregirTablaSinPrimaria( nombreTablas )
 
-      if( config.globalConfig['cI'] ):
-        describirTablas(nombreTablas)
+          if( '--crear_controls' in pi ):
+              crearControladores(plantillascaffolds, nombreTablas)
 
-      if( config.globalConfig['cL'] ):
-        createMenuElements(nombreTablas)
+          if( '--crear_tabla_menu' in pi ):
+              crearModelos(plantillamodelos, nombreTablas)
 
-      if( config.globalConfig['truncar'] ):
-        truncate()
+          if( '--crear_tabla_conf' in pi):
+              describirTablas(nombreTablas)
+
+          if( '--crear_tabla_menu' in pi):
+              createMenuElements(nombreTablas)
 
       migrate()
     else:
-      migrate()
+     print('migrando fuera')
+
+     crearControladores(plantillascaffolds, nombreTablas)
+     describirTablas(nombreTablas)
+     migrate()
 
 
 
