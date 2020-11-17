@@ -640,14 +640,22 @@ def checkCriticalConf():
     for marcador in marcadores:
         return marcador in content
 
-def executeMigrator():
+def executeMigrator( primeraVez = False ):
     conexion = conectar(config.dbConfig)
     nombreTablas = conseguirTablas(conexion)
     plantillamodelos = platillaModelos()
     plantillascaffolds = plantillaScaffolds()
     parametros = sys.argv[1:]
-    if( not config.globalConfig['oM'] ):
-      print('migrando')
+    if( primeraVez ):
+        crearControladores(plantillascaffolds, nombreTablas)
+        crearModelos(plantillamodelos, nombreTablas)
+        describirTablas(nombreTablas)
+        createMenuElements(nombreTablas)
+        migrate()
+
+
+
+    if( config.globalConfig['oM'] ):
       for param in sys.argv[1:]:
 
           pi = param.split('=')
@@ -672,18 +680,16 @@ def executeMigrator():
 
       migrate()
     else:
-     print('migrando fuera')
-
-     crearControladores(plantillascaffolds, nombreTablas)
-     describirTablas(nombreTablas)
      migrate()
 
 
 
 def init():
-
+    primera = False
     if checkCriticalConf():
         readParams()
+        primera = True
+
     else:
         ### no se indican para metros
         if 1 < len( sys.argv )    :
@@ -691,7 +697,7 @@ def init():
 
     ### comenzar la migracion
     createConfigTable()
-    executeMigrator()
+    executeMigrator(primera)
 
 
 
