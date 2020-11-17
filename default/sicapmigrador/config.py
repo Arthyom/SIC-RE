@@ -28,6 +28,8 @@ globalConfig = {
     'startNum' : '***srtN***', ## inicio del indice para ordenar campos de la tabla de configuracion
     'stepsNum' : '***stpN***', ## incremento del indice para ordenar campos de la tabla de configuracion
     'readRelations': '***rL***',    ## habilitar la lectura de relaciones
+    'truncar': '***tT***',    ## habilitar la lectura de relaciones
+
 ########################### FIN DE SECCION EDITABLE ############################
 #########################################################################33#####
 

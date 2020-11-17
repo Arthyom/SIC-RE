@@ -294,14 +294,13 @@ def crearSQL( parametros, conexion, nombreTablas ):
   if( tf != '' ):
     sent  = "SELECT * FROM " +tf
 
-
-
-
-
   if(nulo == 'NOT' ):
     extras += 'required = "true"'
   else:
     extras += 'required = "false"'
+
+  if( tabla == config.tablaConfiguracion ):
+    extras = config.classFormElement
 
   sql = ''
   try:
@@ -367,6 +366,14 @@ def corregirTablaSinPrimaria(tablas):
 
     print('[OK]....Total sin llave '+ str(i) )
     log.write('[OK]....Total sin llave '+ str(i) +'\n')
+
+def truncate():
+    conexion = conectar(config.dbConfig)
+    cursor = conexion.cursor()
+    tabla = config.tablaConfiguracion
+    sql = "USE '"+ dbConfig['database'] + "'; TRUNCATE TABLE '" + tabla  +"';"
+    cursor.execute(sql)
+    conexion.commit()
 
 def migrate():
     #copiar directorios
@@ -521,6 +528,8 @@ def readConfParams():
              config.dbConfig['database']  = pi[1]
          if '--nombre_pass' in pi:
              config.dbConfig['password']  = pi[1]
+         if '--truncar_tabla' in pi:
+             config.dbConfig['truncar']  = pi[1]
 
 def readParams():
      parametros = sys.argv[1:]
@@ -528,7 +537,7 @@ def readParams():
      crearModelos = True; crearControladores = True;
      insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
      solorMigrar = False; nombreHost = '';  nombreDb = ''; nombreUser = '';
-     nombrePass = ''
+     nombrePass = ''; truncar = False
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
      lines = escritor.readlines(); content = ''
@@ -565,6 +574,8 @@ def readParams():
                nombreUser = pi[1]
           if '--nombre_pass' in pi:
                nombrePass = pi[1]
+          if '--truncar_tabla' in pi:
+               truncar = pi[1]
 
 
      if nombreCaja != '' and plantillaCaja != '':
@@ -641,6 +652,10 @@ def executeMigrator():
 
       if( config.globalConfig['cL'] ):
         createMenuElements(nombreTablas)
+
+      if( config.globalConfig['truncar'] ):
+        truncate()
+
       migrate()
     else:
       migrate()
