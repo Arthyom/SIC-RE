@@ -141,10 +141,10 @@ class KumbiaView
     {
       // $rutaEnServidor = APP_PATH."views/". $nombre . "/" . $vista;
 
-        
+         
      
 
-        $path =  '/var/www/'.NOMBRE_CAJA.'/default/app/views/'.self::$_path.self::$_view.'.phtml';
+        $path =   APP_PATH. 'views/'.self::$_path.self::$_view.'.phtml';
 
         if( !file_exists($path) )
             $path = self::$_path.self::$_view.'.php';
@@ -153,7 +153,7 @@ class KumbiaView
  
         
         if (self::$_response) {
-            $path = '/var/www/'.NOMBRE_CAJA.'/default/app/views/'.self::$_path.self::$_view.'.'.self::$_response.'.phtml';
+            $path = 'views/'.self::$_path.self::$_view.'.'.self::$_response.'.phtml';
             if( !file_exists( $path ) )
                 $path = self::$_path.self::$_view.'.'.self::$_response.'.php';
             else
