@@ -1,0 +1,114 @@
+<div id="scaffold">
+    <?php //View::content()?>
+    <!-- .page -->
+
+    <!-- /floating action -->
+
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto">
+            <?php echo $controller_name?>
+            <?php //echo var_dump($data) ?>
+            <?php //echo var_dump($bigdata) ?>
+            <?php //cho var_dump($s) ?>
+
+        </h1>
+
+          <div class="btn-toolbar">
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
+                class="btn btn-light disabled">
+                <i class="oi oi-plus"></i>
+                <span class="ml-1">Nuevo Elemento</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
+                class="btn btn-light disabled">
+                <i class="oi oi-zoom-in"></i>
+                <span class="ml-1">Filtrar Elementos</span>
+            </a>
+
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
+                class="btn btn-light disabled">
+                <i class="oi oi-loop-square"></i>
+                <span class="ml-1">Maestro-Detalle</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                class="btn btn-light">
+                <i class="oi oi-list-rich"></i>
+                <span class="ml-1">Listar Elementos</span>
+            </a>
+        </div>
+        <!--<form >
+        <input type="text" name="busqueda" id="busqueda" placeholder="Buscar">
+        <input type="submit" value="Buscar" class="btn-search">
+        </div>-->
+
+        <!-- .btn-toolbar -->
+
+        <!-- /.btn-toolbar -->
+    </div>
+
+    <!--
+    <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear">
+    Nuevo
+    -->
+    </a>
+</div>
+
+
+
+<?php if ( $conf_campos ) : ?>
+
+    <br>
+    <table class="dtTableSec table table-striped dt-responsive  w-100">
+
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <?php foreach($conf_campos as $campo) : ?>
+
+                    <?php if( $campo->VisibleEnListado ): ?>
+                        <th><?php echo($campo->Etiqueta) ?></th>
+                    <?php endif ?>
+                <?php endforeach?>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+          <?php $i = 0 ?>
+          <?php while( $row = mysqli_fetch_array($data) ): ?>
+            <tr>
+              <td>
+                <?= h($i+1) ?>
+              </td>
+
+              <?php foreach ($conf_campos as $key => $value): ?>
+                <?php if($value->VisibleEnListado) : ?>
+                  <td>
+                    <?= h( $row[ $value->Nombre] ) ?>
+                  </td>
+                <?php endif ?>
+              <?php endforeach ?>
+
+              <td style="width:100px; min-width:100px;">
+
+                  <?= Html::linkAction("ver/".$row[0], '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                  <?= Html::linkAction("editar/".$row[0], '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                  <?= Html::linkAction("borrar/".$row[0], '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+              </td>
+
+            </tr>
+
+          <?php $i += 1 ?>
+          <?php endwhile ?>
+        </tbody>
+
+      </table>
+
+<?php else : ?>
+    <h1>no hay campos</h1>
+
+
+
+<?php endif?>

@@ -13,21 +13,27 @@
 
         </h1>
 
-        <div class="btn-toolbar">
-            <a href="/<?php echo NOMBRE_CAJA ?>//default/public/<?php echo $controller_name ?>/crear "
-                type="button" class="btn btn-light">
+          <div class="btn-toolbar">
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
+                class="btn btn-light">
                 <i class="oi oi-plus"></i>
                 <span class="ml-1">Nuevo Elemento</span>
             </a>
 
-            <a href="/<?php echo NOMBRE_CAJA ?>//default/public/<?php echo $controller_name ?>/filtrar "
-                type="button" class="btn btn-light">
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
+                class="btn btn-light">
                 <i class="oi oi-zoom-in"></i>
                 <span class="ml-1">Filtrar Elementos</span>
             </a>
 
-            <a href="/<?php echo NOMBRE_CAJA ?>//default/public/<?php echo $controller_name ?> "
-                type="button" class="btn btn-light">
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
+                class="btn btn-light">
+                <i class="oi oi-loop-square"></i>
+                <span class="ml-1">Maestro-Detalle</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                class="btn btn-light">
                 <i class="oi oi-list-rich"></i>
                 <span class="ml-1">Listar Elementos</span>
             </a>
@@ -97,13 +103,25 @@
             <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
 
             <td>
+
                 <?= h($valorForaneo->$p)?>
+
             </td>
 
             <?php else:?>
 
             <td>
-                <?= h($registro->$propiedad)?>
+              <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                  <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                    <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                  <?php  else:?>
+                    <?= h($registro->$propiedad)?>
+                  <?php endif ?>
+              <?php else: ?>
+                  <?php if( $campo->DateFormat ): ?>
+                      <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                  <?php endif ?>
+              <?php endif ?>
 
             </td>
             <?php endif?>
@@ -114,6 +132,7 @@
 
                 <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
                 <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-retweet"></i></button>') ?>
                 <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
             </td>
         </tr>
@@ -172,12 +191,19 @@
             <td>
                 <?= h($valorForaneo->$p)?>
             </td>
-
             <?php else:?>
-
             <td>
-                <?= h($registro->$propiedad)?>
-
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                    <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                      <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                    <?php  else:?>
+                      <?= h($registro->$propiedad)?>
+                    <?php endif ?>
+                <?php else: ?>
+                    <?php if( $campo->DateFormat ): ?>
+                        <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                    <?php endif ?>
+                <?php endif ?>
             </td>
             <?php endif?>
 
@@ -187,6 +213,7 @@
 
                 <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
                 <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
                 <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
             </td>
         </tr>
@@ -196,6 +223,4 @@
 </table>
 
 <?php View::partial('paginators/punbb', false, array('page' => $bigdata ,'url' => Router::get('controller_path').'/index')) ?>
-
-
-<?php endif ?>
+<?php endif?>

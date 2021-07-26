@@ -1,4 +1,4 @@
-var host = '***nombre_caja***'
+var host = 'coroneo'
 
 var gdata1 = {
   labels: ['gmc', 'volsvaguen','honda', 'mazda', 'ford', 'nissan',

@@ -1,5 +1,5 @@
 <div id="scaffold">
-    <?php //View::content()?>
+    <?php View::content()?>
     <!-- .page -->
 
     <!-- /floating action -->
@@ -7,7 +7,7 @@
     <div class="d-md-flex align-items-md-start">
         <h1 class="page-title mr-sm-auto">
             <?php echo $controller_name . ' ' . $action_name ?>
-            <?php //echo var_dump($data) ?>
+            <?php //echo var_dump($data)?>
         </h1>
 
         <div class="btn-toolbar">
@@ -23,7 +23,14 @@
                 <span class="ml-1">Filtrar Elementos</span>
             </a>
 
-            <a href="/<?php echo NOMBRE_CAJA ?>/florencioK/default/public/<?php echo $controller_name ?> " type="button" class="btn btn-light">
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
+                class="btn btn-light">
+                <i class="oi oi-loop-square"></i>
+                <span class="ml-1">Maestro-Detalle</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                class="btn btn-light">
                 <i class="oi oi-list-rich"></i>
                 <span class="ml-1">Listar Elementos</span>
             </a>
@@ -35,7 +42,8 @@
     </div>
 
     <!--
-    <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear"> Nuevo
+    <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear">
+    Nuevo
     -->
     </a>
 </div>
@@ -44,5 +52,39 @@
 
 <div class="col-8 offset-2">
     <?php //ModelForm::createFormFromConfig( $configuracion, $model )?>
-    <?php SicapFormBuilder::FromConfig( $configuracion, $model ) ?>
+    <?php SicapFormBuilder::FromConfig($configuracion, $model) ?>
 </div>
+
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalScrollableLabelDate" class="modal-title"> Ups, se ha producido un error </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+
+                <div class="row">
+                    <!-- grid column -->
+                    <div class="col-12">
+
+                       <p>Se ha producido un error inesperado, por favor contacte con el administrador de sistemas</p>
+
+
+                    </div><!-- /grid column -->
+
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+
+                    <button data-dismiss="modal" type="button" class="btn btn-danger">Cerrar</button>
+
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.card-body -->

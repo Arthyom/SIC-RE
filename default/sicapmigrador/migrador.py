@@ -4,6 +4,7 @@ import os.path
 from os.path import isfile, join
 from os import listdir
 import shutil
+import shutil
 import sys, getopt
 import os
 import config
@@ -102,6 +103,13 @@ def crearControladores( plantilla, nombreTablas ):
   log.write('[OK].....Se han omitido '+ str( omitidos )+ ' controladores \n')
   print('[OK].....Se han escrito '+ str( creados ) + ' controladores' )
   print('[OK].....Se han omitido '+ str( omitidos) + ' controladores' )
+
+def get_controller_content( nombreTabla ):
+    exceptions = ['imprime', 'imprimir', ]
+    for exception in exceptions:
+        if exception in nombreTabla:
+            return open('kblank.template','r').read().replace('+', nombreTabla)
+    return open('kappcontroller.template','r').read().replace('+', nombreTabla)
 
 def describirTablas(nombreTablas):
   creados = 0
@@ -232,7 +240,7 @@ def crearSQL( parametros, conexion, nombreTablas ):
   cd    = ''
   campoObjetivo = ''
   sent = ""
-  for chari in config.caracteresEspeciales:
+  for chari in config.caracteresEspecialesTabla:
       tabla = tabla.replace( chari , '')
       campo = campo.replace( chari , '')
       tipo = tipo.replace( chari , '')
@@ -294,10 +302,10 @@ def crearSQL( parametros, conexion, nombreTablas ):
   if( tf != '' ):
     sent  = "SELECT * FROM " +tf
 
-  if(nulo == 'NOT' ):
-    extras += 'required = "true"'
+  if(nulo == 'NOT' or 'NOT' in parametros ):
+    extras += 'required'
   else:
-    extras += 'required = "false"'
+    extras += ''
 
   if( tabla == config.tablaConfiguracion ):
     extras = config.classFormElement
@@ -319,7 +327,9 @@ def alterMenuLink( menuTitle ):
     conexion = conectar(config.dbConfig)
     cursor = conexion.cursor()
 
-    link = config.globalConfig['urlPath']+menuTitle
+#    link = config.globalConfig['urlPath']+menuTitle
+    link = menuTitle
+
     sql = "UPDATE mymenugenerador SET external_link = '" + link + "' WHERE menu_title ='"+ menuTitle.capitalize() +"'"
     cursor.execute(sql)
     conexion.commit()
@@ -355,14 +365,19 @@ def corregirTablaSinPrimaria(tablas):
             datosCrudos = cursor.fetchall()
 
             datosFiltrados = str( datosCrudos[0] ).join('\\n')
+            first_column = datosFiltrados.split(',')[1].split(' ')[6]
             if 'PRIMARY KEY' not in datosFiltrados :
-                print('[NOT PK]....'+ tabla)
+                print('[NOT PK]....'+ tabla + ' [CORRECTING]')
+                sql_add_pk = 'ALTER TABLE '+tabla + ' ADD  CONSTRAINT PK_'+tabla +' PRIMARY KEY (' + first_column  +' );'
+                cursor.execute( sql_add_pk )
+                print( sql_add_pk )
                 log.write('[NOT PK]....'+ tabla +'\n')
                 i = i + 1
 
         except Exception as e:
-              print('[X NOT PK].....Error al leer la tabla '+ tabla)
-              log.write('[X NOT PK].....Error al leer la tabla '+ tabla +'\n')
+              i = i + 1
+              print('[X].....Error al leer la tabla '+ tabla + ' ' + e)
+              log.write('[X].....Error al leer la tabla '+ tabla +' e \n')
 
     print('[OK]....Total sin llave '+ str(i) )
     log.write('[OK]....Total sin llave '+ str(i) +'\n')
@@ -481,6 +496,61 @@ def migrate():
 
     print "[OK]....Archivos copiados " + str(i)
     print "[OK]....Archivos omitidos " + str(m)
+
+def inject_styles_marto_to_inherited( inherited_content ):
+    replaces = {
+        '<input type=\\"submit\\"': '<input type=\\"submit\\" class=\'btn btn-block btn-primary\'',
+        '<button type="submit"': '<button type="submit" class="btn btn-block btn-primary"',
+        '<button type=\\"submit\\"' : '<button type=\\"submit\\" class=\\"btn btn-block btn-primary\\"',
+        '<input type=\\"button\\"': '<input type=\\"button\\" class=\\"btn btn-block btn-primary\\"',
+        '"clases' : 'APP_PATH."views/clases',
+        'table': 'table class=\'table\'',
+        '"clases': 'APP_PATH."/views/clases',
+        '<select': '<select class=\'form-control\'',
+        'action=\\"".$_SERVER[\'PHP_SELF\']."\\"' : 'action=\\"$controller_name\\"',
+        'require(\'imprimir/': 'require(APP_PATH.\'/views/imprimir/'
+
+    }
+
+    for key in replaces.keys():
+        inherited_content = inherited_content.replace(key, replaces[key])
+
+    return inherited_content
+
+def get_inherited_content( file_name ):
+    if os.path.isfile(config.PATH_INHERITS + file_name +'.php'):
+        content_text = open( config.PATH_INHERITS + file_name +'.php', 'r').read()
+        content_text = inject_styles_marto_to_inherited(content_text)
+        return content_text
+    else:
+        return "<?php \t\t * "
+
+def convert_inherited():
+    ## get files from controllers dir
+    inherited_files = [file.replace('.php', '') for file in os.listdir(config.PATH_INHERITS) ]
+    controllers_files = [file.replace('.php', '') for file in os.listdir(config.PATH_MODELS) ]
+    inherited_notin_controllers = [ file_inherited for file_inherited in inherited_files if file_inherited not in controllers_files ]
+    inherited_dirs = []
+
+    for file_name in inherited_notin_controllers:
+        dir_path = config.PATH_VIEWS + file_name
+        ctrl_path = config.PATH_CONTROLLERS + file_name + '_controller.php'
+
+        if file_name not in ['clases','imprimir']:
+            if  os.path.isdir( dir_path ):
+                shutil.rmtree(dir_path)
+
+            os.mkdir( dir_path )
+            open( dir_path + '/index.phtml', 'w' ).write( get_inherited_content(file_name))
+
+            ##if not os.path.isfile(ctrl_path):
+            open( ctrl_path , 'w').write( get_controller_content(file_name) )
+
+
+
+
+
+
 
 def printCriticals():
     for file in config.globalConfig['filesToEdit']:
@@ -655,7 +725,7 @@ def executeMigrator( primeraVez = False ):
 
 
 
-    if( config.globalConfig['oM'] ):
+    if( not config.globalConfig['oM'] ):
       for param in sys.argv[1:]:
 
           pi = param.split('=')
@@ -669,16 +739,24 @@ def executeMigrator( primeraVez = False ):
           if( '--crear_controls' in pi ):
               crearControladores(plantillascaffolds, nombreTablas)
 
-          if( '--crear_tabla_menu' in pi ):
+          if( '--crear_modelos' in pi ):
               crearModelos(plantillamodelos, nombreTablas)
 
+              #### necesitan mejora
           if( '--crear_tabla_conf' in pi):
               describirTablas(nombreTablas)
 
+              ### necesitan mejora
           if( '--crear_tabla_menu' in pi):
               createMenuElements(nombreTablas)
 
-      migrate()
+
+          if( '--convertir_heredados' in pi):
+              convert_inherited()
+
+
+          if( '--migrar' in pi):
+              migrate()
     else:
      migrate()
 

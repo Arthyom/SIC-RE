@@ -436,12 +436,12 @@ function calBody(d,day) {
         var bgColor=dayColor;
         var fgTag="day";
         var fgTagA="daya";
-        if (dayCount==day) { 
-          bgColor=currentDayColor; 
+        if (dayCount==day) {
+          bgColor=currentDayColor;
           fgTag="currentDay";
           fgTagA="currenta";
         }
-        
+
         s+="<td bgcolor='"+bgColor+"'>"+span1(fgTag)+a1(fgTagA)+"'javascript: if (window.opener && !window.opener.closed && window.opener.pickDate) window.opener.pickDate("+dayCount+")'>"+(dayCount++)+"</a>"+span2+"</td>";
       }
     }
@@ -498,6 +498,7 @@ function changeCal(d) {
   calWin.document.close();
 }
 
+
 function markClick(e) {
   if (isIE || isOpera6) {
     winX=event.screenX;
@@ -510,12 +511,12 @@ function markClick(e) {
     document.routeEvent(e);
   }
 
-  if (isN4 || isN6) { 
-    document.routeEvent(e); 
-  } 
-  else { 
-    event.cancelBubble=false; 
-  } 
+  if (isN4 || isN6) {
+    document.routeEvent(e);
+  }
+  else {
+    event.cancelBubble=false;
+  }
 
   return true;
 }
