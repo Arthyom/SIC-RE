@@ -4,7 +4,7 @@
 
 <!-- {% if levelMenu.id == actives[0] %} -->
 <?php //if (isset($_SESSION["pageActive"]) && $levelMenu->item==$_SESSION["pageActive"]) : ?>
-
+ 
 <?php $external_link = str_replace('.php', '', $menupadre->external_link) ?>
 <?php $existerelacion = mymenugenerador::esModeloOControlador($external_link) ?>
 
@@ -16,7 +16,8 @@
         $link =  '/'.NOMBRE_CAJA.'/default/public/'. $link;
     ?>
 
-    <a href="<?php echo 'ds'?>" class="menu-link">
+
+    <a  class="menu-link">
 
         <?php if( $menupadre->parent_id == 0) :?>
         <span class="menu-icon fas fa-rocket"></span>
@@ -24,13 +25,7 @@
 
         <span class="menu-text">
 
-            <?php if( !$external_link) : ?>
-            <?php $menupadre->menu_title .= '!' ?>
-            <?php endif ?>
-
-            <?php if( !$existerelacion) : ?>
-            <?php $menupadre->menu_title .= '?' ?>
-            <?php endif ?>
+            
 
             <?= $menupadre->menu_title ?>
 

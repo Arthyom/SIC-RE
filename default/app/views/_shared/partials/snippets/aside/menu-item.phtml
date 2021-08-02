@@ -16,10 +16,24 @@
 
     <li class="menu-item">
 
-    <?php 
+    <?php
+    $link_name =  explode('/', $external_link);
+    $max_size = count($link_name);
     $link = $external_link;
-    if( substr_count($external_link,  '/'.NOMBRE_CAJA.'/default/public/' ) == 0)
-        $link =   '/'.NOMBRE_CAJA.'/default/public/' . $link;
+    if( is_file( APP_PATH."/controllers"."/". strtolower( $link_name[ $max_size - 1] ) .'_controller.php' ) ){
+        $link = '/'.NOMBRE_CAJA.'/default/public/'. strtolower( $link_name[ $max_size - 1] );
+        $existerelacion = true;
+
+    }
+    else
+        {
+            $link =  '/'.NOMBRE_CAJA.'/default/public/index/' . $link_name[ $max_size - 1] .'.php';
+                    $existerelacion = true;
+
+        }
+    
+
+
     ?>
 
         <a href="<?php echo $link ?>" class="menu-link">
