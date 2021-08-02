@@ -11,25 +11,25 @@ TARGET_FILE_EXTEN = '.php'
 
 ################################################################################
 ########################### INICIO DE SECCION EDITABLE #########################
-nombreCaja = 'coroneo'
-copiaCaja = '/home/juvencio/www/coroneo'
+nombreCaja = '***nombre_caja***'
+copiaCaja = '***plantilla_caja***'
 dbConfig = {
-    'host' : 'localhost',
-    'database': 'coroneo',
-    'user' : 'alfredo',
-    'password': 'Alfredo2020+'
+    'host' : '***nombre_host***',
+    'database': '***nombre_db***',
+    'user' : '***nombre_usuario***',
+    'password': '***nombre_pass***'
 }
 globalConfig = {
-    'oM': False,     ## realizar migracion de archivos y directorios SICAP
-    'cM': False,     ## habilitar la creacion de modelos
-    'cS': False,     ## habilitar la creacion de controladores SCAFFOLD
-    'cC': False,     ## habilitar la creacion controladores APPCONTROLLER
-    'cI': True,     ## habilitar la insercion en la tabla de configuracion
-    'cL': True,     ## habilitar la insercion en la tabla mymenugenerador
-    'cK': False,     ## detectar y corregir tablas sin llave primaria ************
-    'startNum' : 50, ## inicio del indice para ordenar campos de la tabla de configuracion
-    'stepsNum' : 10, ## incremento del indice para ordenar campos de la tabla de configuracion
-    'readRelations': False,    ## habilitar la lectura de relaciones
+    'oM': '***oM***',     ## realizar migracion de archivos y directorios SICAP
+    'cM': '***cM***',     ## habilitar la creacion de modelos
+    'cS': '***cS***',     ## habilitar la creacion de controladores SCAFFOLD
+    'cC': '***cS***',     ## habilitar la creacion controladores APPCONTROLLER
+    'cI': '***cI***',     ## habilitar la insercion en la tabla de configuracion
+    'cL': '***cL***',     ## habilitar la insercion en la tabla mymenugenerador
+    'cK': '***cK***',     ## detectar y corregir tablas sin llave primaria ************
+    'startNum' : '***srtN***', ## inicio del indice para ordenar campos de la tabla de configuracion
+    'stepsNum' : '***stpN***', ## incremento del indice para ordenar campos de la tabla de configuracion
+    'readRelations': '***rL***',    ## habilitar la lectura de relaciones
 ########################### FIN DE SECCION EDITABLE ############################
 #########################################################################33#####
 
