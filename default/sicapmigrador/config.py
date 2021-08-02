@@ -4,7 +4,7 @@ import uuid
 
 PATH_MODELS = '../app/models/'
 PATH_VIEWS = '../app/views/'
-PATH_INHERITS = '../app/views/index/'
+PATH_INHERITS = '***plantilla_caja***'
 PATH_CONTROLLERS = '../app/controllers/'
 TARGET_FILE_EXTEN = '.php'
 

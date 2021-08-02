@@ -80,7 +80,7 @@
                       <span class="sr-only">Go to search result</span>
                     </a>
                     <div class="user-avatar user-avatar-sm bg-muted">
-                      <?= Html::img( "../assets/images/avatars/bootstrap.svg" ) ?>
+                      <?= Html::img("../assets/images/avatars/bootstrap.svg") ?>
                     </div>
                     <div class="ml-2">
                       <div class="mb-n1">Bootstrap</div>
@@ -94,7 +94,7 @@
                       <span class="sr-only">Go to search result</span>
                     </a>
                     <div class="user-avatar user-avatar-sm bg-muted">
-                      <?= Html::img( "../assets/images/avatars/slack.svg" ) ?>
+                      <?= Html::img("../assets/images/avatars/slack.svg") ?>
                     </div>
                     <div class="ml-2">
                       <div class="mb-n1">Slack</div>
@@ -131,7 +131,7 @@
         <!-- /.top-bar-search -->
       </div>
       <!-- /.top-bar-item -->
- 
+
       <!-- .top-bar-item -->
       <div class="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
         <!-- .nav -->
@@ -167,7 +167,7 @@
           <!-- /.nav-item -->
         </ul>
         <!-- /.nav -->
- 
+
         <!-- .btn-account -->
         <div class="dropdown d-none d-md-flex">
           <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -179,8 +179,9 @@
                 <?php echo '[ '. Auth::get('user') .' ]' ?>
               </span>
               <span class="account-description">
-              <?php echo '[ '. (new gruporoles)->find( Auth::get('grupos_id'))->rol .' ]' ?>
-
+                <?php if (class_exits('gruporoles')): ?>
+                  <?php echo '[ '. (new gruporoles)->find(Auth::get('grupos_id'))->rol .' ]' ?>
+                <?php endif ?>
               </span>
 
               <span class="account-description">

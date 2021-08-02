@@ -436,6 +436,7 @@ def migrate():
     print '[OK]....Directorios omitidos '+ str(k)
 
       ## copiar ficheros externos
+    """
     i = 0; m = 0; content = 'View::template(null);' ; nombres = []
     externalFiles = listdir(config.globalConfig['fromDir'])
     reporte =  open(config.globalConfig['ctrlFile'], 'w')
@@ -443,30 +444,23 @@ def migrate():
     reporte.write( "public function index(){\n\t\t"+ '///'+content +"\n\t}\n\n" )
     for fileName in externalFiles:
       if( '.php'  in fileName  and '~' not in fileName and '(copia).php' not in fileName ):
-
         try:
-
           detstiName = config.globalConfig['toDir'] + fileName
           fileDir = os.path.dirname(os.path.realpath('__file__'))
           detstiName = os.path.join(fileDir, detstiName)
           detstiName = os.path.abspath(os.path.realpath(detstiName))
-
           for char in ['.php', '-', ' ','.']:
             fileName = fileName.replace( char, '')
           #methodName = fileName.replace('.php','')
           #methodName = methodName.replace('-','')
-
           methodName = fileName
           ctrlName = config.globalConfig['ctrlDir'] + fileName+'_controller.php';
           fileDir = os.path.dirname(os.path.realpath('__file__'))
           ctrlName = os.path.join(fileDir, ctrlName)
           ctrlName = os.path.abspath(os.path.realpath(ctrlName))
-
           if methodName not in nombres:
             reporte.write( "\tpublic function "+ methodName +"() {\n\t\t"+ content +"\n\t}\n\n" )
             nombres.append(methodName)
-
-
           if( not os.path.isfile( ctrlName ) and fileName != 'ValidaUsuario' and fileName != 'procedimientos'):
               if( not os.path.isfile(detstiName) ):
                   originName = config.globalConfig['fromDir'] + fileName+'.php'
@@ -481,13 +475,10 @@ def migrate():
               except Exception as e:
                   print '[X].... Eror al intentar modificar la tabla de menus'
                   print  e
-
-
-
-
         except Exception as e:
           print '[X].... Eror al copiar Archivo'
           print  e
+    """
 
 
 
@@ -526,7 +517,7 @@ def get_inherited_content( file_name ):
         return "<?php \t\t * "
 
 def convert_inherited():
-    ## get files from controllers dir
+    ## get files from origin dir
     inherited_files = [file.replace('.php', '') for file in os.listdir(config.PATH_INHERITS) ]
     controllers_files = [file.replace('.php', '') for file in os.listdir(config.PATH_MODELS) ]
     inherited_notin_controllers = [ file_inherited for file_inherited in inherited_files if file_inherited not in controllers_files ]
@@ -722,6 +713,7 @@ def executeMigrator( primeraVez = False ):
         describirTablas(nombreTablas)
         createMenuElements(nombreTablas)
         migrate()
+        convert_inherited()
 
 
 
