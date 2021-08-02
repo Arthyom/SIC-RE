@@ -179,7 +179,7 @@
                 <?php echo '[ '. Auth::get('user') .' ]' ?>
               </span>
               <span class="account-description">
-                <?php if (class_exits('gruporoles')): ?>
+                <?php if (class_exists('gruporoles')): ?>
                   <?php echo '[ '. (new gruporoles)->find(Auth::get('grupos_id'))->rol .' ]' ?>
                 <?php endif ?>
               </span>
