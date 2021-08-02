@@ -719,10 +719,7 @@ def executeMigrator( primeraVez = False ):
         createMenuElements(nombreTablas)
         migrate()
         convert_inherited()
-
-
-
-    if( not config.globalConfig['oM'] ):
+    if(  config.globalConfig['oM'] ):
       for param in sys.argv[1:]:
 
           pi = param.split('=')
