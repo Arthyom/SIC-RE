@@ -478,15 +478,16 @@ def migrate():
         except Exception as e:
           print '[X].... Eror al copiar Archivo'
           print  e
-    """
 
 
 
     reporte.write( "}" )
     reporte.close()
 
+
     print "[OK]....Archivos copiados " + str(i)
     print "[OK]....Archivos omitidos " + str(m)
+    """
 
 def inject_styles_marto_to_inherited( inherited_content ):
     replaces = {
@@ -520,7 +521,7 @@ def convert_inherited():
     ## get files from origin dir
     inherited_files = [file.replace('.php', '') for file in os.listdir(config.PATH_INHERITS) ]
     controllers_files = [file.replace('.php', '') for file in os.listdir(config.PATH_MODELS) ]
-    inherited_notin_controllers = [ file_inherited for file_inherited in inherited_files if file_inherited not in controllers_files ]
+    inherited_notin_controllers = [ file_inherited for file_inherited in inherited_files if file_inherited not in controllers_files and ("~" not in file_inherited) and ("." not in file_inherited)]
     inherited_dirs = []
 
     for file_name in inherited_notin_controllers:
@@ -530,12 +531,16 @@ def convert_inherited():
         if file_name not in ['clases','imprimir']:
             if  os.path.isdir( dir_path ):
                 shutil.rmtree(dir_path)
+            try:
+                os.mkdir( dir_path )
+                open( dir_path + '/index.phtml', 'w' ).write( get_inherited_content(file_name))
 
-            os.mkdir( dir_path )
-            open( dir_path + '/index.phtml', 'w' ).write( get_inherited_content(file_name))
+                ##if not os.path.isfile(ctrl_path):
+                open( ctrl_path , 'w').write( get_controller_content(file_name) )
+            except Exception as e:
+                    print e
 
-            ##if not os.path.isfile(ctrl_path):
-            open( ctrl_path , 'w').write( get_controller_content(file_name) )
+
 
 
 
