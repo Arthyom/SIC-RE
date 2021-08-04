@@ -501,7 +501,8 @@ def inject_styles_marto_to_inherited( inherited_content ):
         '<select': '<select class=\'form-control\'',
         'action=\\"".$_SERVER[\'PHP_SELF\']."\\"' : 'action=\\"$controller_name\\"',
         'require(\'imprimir/': 'require(APP_PATH.\'/views/imprimir/',
-        'mysql': 'mysqli'
+        'mysql': 'mysqli',
+        'ereg':'preg_match'
 
     }
 
