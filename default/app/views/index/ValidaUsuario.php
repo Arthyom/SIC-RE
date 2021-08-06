@@ -16,9 +16,9 @@ if (isset($_SESSION["miSessionCaja"]) || isset($_POST['Usuario']) ) //|| isset($
     $_SESSION["miDispositivo"] = 0;
 
     $_SESSION["mibgIdGrupo2"]=0;
-    $_SESSION["mibgUsuarioAct"]="***nombre_usuario***";
-    $_SESSION["mibgClaveUsuar"]="***nombre_pass***";
-    $_SESSION["mibgBaseDatos"]="***nombre_db***";
+    $_SESSION["mibgUsuarioAct"]="alfredo";
+    $_SESSION["mibgClaveUsuar"]="Alfredo2020+";
+    $_SESSION["mibgBaseDatos"]="caminostepeyac";
     $_SESSION["RegistrosPorPagina"]=12;
     $_SESSION["NumeroTotalPaginas"]=0;
     $_SESSION["PaginaActiaActual"]=1;
@@ -265,8 +265,8 @@ if (!isset($_SESSION["miSessionCaja"]) || $_SESSION["miSessionCaja"]<1)
   /**
    * cambiando claves para un usuario correcto
    */
-  $_SESSION["mibgUsuarioAct"]="***nombre_usuario***";
-  $_SESSION["mibgClaveUsuar"]="***nombre_pass***";
+  $_SESSION["mibgUsuarioAct"]="alfredo";
+  $_SESSION["mibgClaveUsuar"]="Alfredo2020+";
   $_SESSION["miDispositivo"] = 0;
 
   ardisoencabezado('0');
