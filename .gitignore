@@ -8,6 +8,7 @@ default/app/views/*
 default/public/*
 default/sicapmigrador/*
 
+!default/app/controllers/a.pjp
 
 
 *.log
