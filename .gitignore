@@ -1,0 +1,19 @@
+default/public/temp/*
+sql/*
+default/app/models/*
+default/app/controllers/*
+default/app/views/*
+default/public/*
+default/sicapmigrador/*
+
+### ignore itself ###
+
+### start section to detec your changes ###
+### use ! to detect your changes ###
+### example !deafult/app/controllers/new_controller.php to detect a new controller ###
+
+
+### your changes here ###
+!deafult/app/controllers/10a.php
+
+### end section to detec your changes ###
