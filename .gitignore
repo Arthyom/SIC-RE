@@ -6,6 +6,10 @@ default/app/views/*
 default/public/*
 default/sicapmigrador/*
 
+.gitignore
+
+!default/app/controllers/10a.php
+
 ### ignore itself ###
 
 ### start section to detec your changes ###
@@ -14,6 +18,6 @@ default/sicapmigrador/*
 
 
 ### your changes here ###
-!deafult/app/controllers/10a.php
+
 
 ### end section to detec your changes ###
