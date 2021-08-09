@@ -400,6 +400,7 @@ def truncate():
 
 
 
+
 def inject_styles_marto_to_inherited( inherited_content ):
     replaces = {
         '<input type=\\"submit\\"': '<input type=\\"submit\\" class=\'btn btn-block btn-primary\'',
@@ -457,10 +458,6 @@ def convert_inherited():
 
 
 
-
-
-
-
 def printCriticals():
     for file in config.globalConfig['filesToEdit']:
         fileDir = os.path.dirname(os.path.realpath('__file__'))
@@ -480,7 +477,7 @@ def printCriticals():
         content = content.replace("***nombre_db***",     config.dbConfig['database'])
         content = content.replace("***nombre_usuario***",config.dbConfig['user'] )
         content = content.replace("***nombre_pass***",   config.dbConfig['password'])
-        content = content.replace("***nombre_alias***",   config.dbConfig['alias'])
+        content = content.replace("***nombre_alias***",   config.alias)
 
 
         escrior = open(file,'w')
@@ -584,14 +581,14 @@ def readParams():
        content = content.replace("***nombre_usuario***", str(nombreUser))
        content = content.replace("***nombre_pass***", str(nombrePass))
        content = content.replace("'***tT***'", str(truncar) )
-       content = content.replace("'***nombre_alias***'", str(truncar) )
+       content = content.replace("'***nombre_alias***'", str(alias) )
 
 
 
 
 
        vacio = False
-       for par in [ nombreCaja, plantillaCaja, nombreHost, nombreDb, nombreUser, nombrePass]:
+       for par in [ nombreCaja, plantillaCaja, nombreHost, nombreDb, nombreUser, nombrePass, alias]:
            if par == '':
                vacio = True
 
@@ -614,6 +611,8 @@ def readParams():
          print("Por favor indique el nombre de la base de datos a usar con el parametro --nombre_db=db  ")
      if nombrePass == '':
          print("Por favor indique el pass para acceder a la base de datos con el parametro --nombre_pass=pass  ")
+     if alias == '':
+         print("Por favor indique el alias de la aplicacion --nombre_alias=alias  ")
 
 def checkCriticalConf():
     lector = open( 'config.py'  ,'r')
@@ -636,7 +635,7 @@ def executeMigrator( primeraVez = False ):
         describirTablas(nombreTablas)
         createMenuElements(nombreTablas)
         convert_inherited()
-    if(  config.globalConfig['oM'] ):
+    if(  True ):
       for param in sys.argv[1:]:
 
           pi = param.split('=')
