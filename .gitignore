@@ -9,16 +9,16 @@ default/app/views/*
 default/public/*
 default/sicapmigrador/*
 
-### ignore itself ###
+# ignore itself
 .gitignore
 
-### start section to detec your changes ###
-### use ! to detect your changes ###
-### example !deafult/app/controllers/new_controller.php to detect a new controller ###
+# start section to detec your changes
+# use ! to detect your changes
+# example !deafult/app/controllers/new_controller.php to detect a new controller
 
-### your changes here ###
+# your changes here
 
-### end section to detec your changes ###
+# end section to detec your changes 
 
 
 *.log

@@ -18,6 +18,7 @@ dbConfig = {
     'database': '***nombre_db***',
     'user' : '***nombre_usuario***',
     'password': '***nombre_pass***'
+    'alias': '***nombre_alias***'
 }
 globalConfig = {
     'oM': '***oM***',     ## realizar migracion de archivos y directorios SICAP
