@@ -12,7 +12,7 @@ from datetime import datetime
 fechaExec = datetime.utcnow().strftime('%Y-%m-%d%H:%M:%S:%f')
 log = open('execlog'+fechaExec+'.log', 'w')
 
-marcadores = ['***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
+marcadores = ['***nombre_alias***','***nombre_caja***', '***plantilla_caja***', '***nombre_db***', '***nombre_host***', '***nombre_usuario***', '***nombre_pass***']
 
 def createConfigTable():
     try:
@@ -398,96 +398,8 @@ def truncate():
     except Exception as e:
         raise
 
-def migrate():
-    #copiar directorios
-    j = 0; k = 0
-    for root, dirs, files in os.walk(config.globalConfig['fromDir'], topdown=False):
-      for name in dirs:
-        try:
-          originDir = os.path.join(root, name)
-          destinDir = config.globalConfig['toDir']+name
-
-          fileDir = os.path.dirname(os.path.realpath('__file__'))
-          destinDir = os.path.join(fileDir, destinDir)
-          destinDir = os.path.abspath(os.path.realpath(destinDir))
-
-          mediaTarget = os.path.join(fileDir, config.globalConfig['filesMedia'][2] )
-          mediaTarget = os.path.abspath(os.path.realpath(mediaTarget))
-
-          if( not os.path.isdir(destinDir) ):
-              if name != 'estilos' and name != 'imagenes':
-                  shutil.copytree(originDir, destinDir)
-              elif name == 'estilos':
-                  shutil.copytree(originDir, mediaTarget+'/estilos')
-              elif name == 'imagenes':
-                  shutil.copytree(originDir, mediaTarget+'/imagenes')
-              j += 1
-          else:
-            k += 1
 
 
-          ##print originDir
-          ##print destinDir
-        except Exception as e:
-          print '[X]....Error al inentar copiar el directorio ' + name + 'dddd'+ destinDir
-          print e
-
-    print '[OK]....Directorios copiados '+ str(j)
-    print '[OK]....Directorios omitidos '+ str(k)
-
-      ## copiar ficheros externos
-    """
-    i = 0; m = 0; content = 'View::template(null);' ; nombres = []
-    externalFiles = listdir(config.globalConfig['fromDir'])
-    reporte =  open(config.globalConfig['ctrlFile'], 'w')
-    reporte.write( "<?php  \nclass IndexController extends AppController{ \n\n" )
-    reporte.write( "public function index(){\n\t\t"+ '///'+content +"\n\t}\n\n" )
-    for fileName in externalFiles:
-      if( '.php'  in fileName  and '~' not in fileName and '(copia).php' not in fileName ):
-        try:
-          detstiName = config.globalConfig['toDir'] + fileName
-          fileDir = os.path.dirname(os.path.realpath('__file__'))
-          detstiName = os.path.join(fileDir, detstiName)
-          detstiName = os.path.abspath(os.path.realpath(detstiName))
-          for char in ['.php', '-', ' ','.']:
-            fileName = fileName.replace( char, '')
-          #methodName = fileName.replace('.php','')
-          #methodName = methodName.replace('-','')
-          methodName = fileName
-          ctrlName = config.globalConfig['ctrlDir'] + fileName+'_controller.php';
-          fileDir = os.path.dirname(os.path.realpath('__file__'))
-          ctrlName = os.path.join(fileDir, ctrlName)
-          ctrlName = os.path.abspath(os.path.realpath(ctrlName))
-          if methodName not in nombres:
-            reporte.write( "\tpublic function "+ methodName +"() {\n\t\t"+ content +"\n\t}\n\n" )
-            nombres.append(methodName)
-          if( not os.path.isfile( ctrlName ) and fileName != 'ValidaUsuario' and fileName != 'procedimientos'):
-              if( not os.path.isfile(detstiName) ):
-                  originName = config.globalConfig['fromDir'] + fileName+'.php'
-                  ## print fileName
-                  shutil.copy(originName, detstiName)
-                  i += 1
-              else:
-                  m += 1
-          else:
-              try:
-                  alterMenuLink(fileName)
-              except Exception as e:
-                  print '[X].... Eror al intentar modificar la tabla de menus'
-                  print  e
-        except Exception as e:
-          print '[X].... Eror al copiar Archivo'
-          print  e
-
-
-
-    reporte.write( "}" )
-    reporte.close()
-
-
-    print "[OK]....Archivos copiados " + str(i)
-    print "[OK]....Archivos omitidos " + str(m)
-    """
 
 def inject_styles_marto_to_inherited( inherited_content ):
     replaces = {
@@ -546,10 +458,6 @@ def convert_inherited():
 
 
 
-
-
-
-
 def printCriticals():
     for file in config.globalConfig['filesToEdit']:
         fileDir = os.path.dirname(os.path.realpath('__file__'))
@@ -569,6 +477,8 @@ def printCriticals():
         content = content.replace("***nombre_db***",     config.dbConfig['database'])
         content = content.replace("***nombre_usuario***",config.dbConfig['user'] )
         content = content.replace("***nombre_pass***",   config.dbConfig['password'])
+        content = content.replace("***nombre_alias***",   config.alias)
+
 
         escrior = open(file,'w')
         escrior.write(content)
@@ -592,8 +502,7 @@ def readConfParams():
              config.globalConfig['cS']  = True
          if '--crear_tabla_conf' in pi:
              config.globalConfig['cI']  = True
-         if '--solo_migrar' in pi:
-              config.globalConfig['oM']  = True
+
          if '--crear_tabla_menu' in pi:
              config.globalConfig['cL']  = True
          if '--nombre_host' in pi:
@@ -604,6 +513,8 @@ def readConfParams():
              config.dbConfig['database']  = pi[1]
          if '--nombre_pass' in pi:
              config.dbConfig['password']  = pi[1]
+         if '--nombre_alias' in pi:
+             config.dbConfig['alias']  = pi[1]
 
 def readParams():
     ## para cualquier configuracion que se desee realizar
@@ -611,11 +522,12 @@ def readParams():
      nombreCaja = ''; plantillaCaja = ''; startNum = 50; stepNum = 10
      crearModelos = True; crearControladores = True;
      insertarTablaConf = True; insertarTablaMenu = True; soloCopiar = False
-     solorMigrar = True; nombreHost = '';  nombreDb = ''; nombreUser = '';
+     nombreHost = '';  nombreDb = ''; nombreUser = '';
      nombrePass = ''; truncar = False
      corregirKeys = False; readRelations = False
      escritor = open( 'config.py'  ,'r');
      lines = escritor.readlines(); content = ''
+     alias=''
 
      for line in lines:
          content += line
@@ -639,8 +551,6 @@ def readParams():
                insertarTablaConf = pi[1]
           if '--crear_tabla_menu' in pi:
                insertarTablaMenu = pi[1]
-          if '--solo_migrar' in pi:
-               solorMigrar  = pi[1]
           if '--nombre_host' in pi:
                nombreHost = pi[1]
           if '--nombre_db' in pi:
@@ -651,6 +561,8 @@ def readParams():
                nombrePass = pi[1]
           if '--truncar_tabla' in pi:
                truncar = pi[1]
+          if '--nombre_alias' in pi:
+               alias = pi[1]
 
 
      if nombreCaja != '' and plantillaCaja != '':
@@ -658,7 +570,6 @@ def readParams():
        content = content.replace("***plantilla_caja***", plantillaCaja)
        content = content.replace("'***srtN***'", str(startNum) )
        content = content.replace("'***stpN***'", str(stepNum) )
-       content = content.replace("'***oM***'", str(solorMigrar) )
        content = content.replace("'***cM***'", str(crearModelos))
        content = content.replace("'***cS***'", str(crearControladores))
        content = content.replace("'***cI***'", str(insertarTablaConf))
@@ -670,12 +581,14 @@ def readParams():
        content = content.replace("***nombre_usuario***", str(nombreUser))
        content = content.replace("***nombre_pass***", str(nombrePass))
        content = content.replace("'***tT***'", str(truncar) )
+       content = content.replace("'***nombre_alias***'", str(alias) )
+
 
 
 
 
        vacio = False
-       for par in [ nombreCaja, plantillaCaja, nombreHost, nombreDb, nombreUser, nombrePass]:
+       for par in [ nombreCaja, plantillaCaja, nombreHost, nombreDb, nombreUser, nombrePass, alias]:
            if par == '':
                vacio = True
 
@@ -698,6 +611,8 @@ def readParams():
          print("Por favor indique el nombre de la base de datos a usar con el parametro --nombre_db=db  ")
      if nombrePass == '':
          print("Por favor indique el pass para acceder a la base de datos con el parametro --nombre_pass=pass  ")
+     if alias == '':
+         print("Por favor indique el alias de la aplicacion --nombre_alias=alias  ")
 
 def checkCriticalConf():
     lector = open( 'config.py'  ,'r')
@@ -719,9 +634,8 @@ def executeMigrator( primeraVez = False ):
         crearModelos(plantillamodelos, nombreTablas)
         describirTablas(nombreTablas)
         createMenuElements(nombreTablas)
-        migrate()
         convert_inherited()
-    if(  config.globalConfig['oM'] ):
+    if(  True ):
       for param in sys.argv[1:]:
 
           pi = param.split('=')
@@ -749,13 +663,6 @@ def executeMigrator( primeraVez = False ):
 
           if( '--convertir_heredados' in pi):
               convert_inherited()
-
-
-          if( '--migrar' in pi):
-              migrate()
-    else:
-     migrate()
-
 
 
 def init():

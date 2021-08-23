@@ -13,14 +13,16 @@ TARGET_FILE_EXTEN = '.php'
 ########################### INICIO DE SECCION EDITABLE #########################
 nombreCaja = '***nombre_caja***'
 copiaCaja = '***plantilla_caja***'
+alias = "'***nombre_alias***'"
+
 dbConfig = {
     'host' : '***nombre_host***',
     'database': '***nombre_db***',
     'user' : '***nombre_usuario***',
     'password': '***nombre_pass***'
 }
+
 globalConfig = {
-    'oM': '***oM***',     ## realizar migracion de archivos y directorios SICAP
     'cM': '***cM***',     ## habilitar la creacion de modelos
     'cS': '***cS***',     ## habilitar la creacion de controladores SCAFFOLD
     'cC': '***cS***',     ## habilitar la creacion controladores APPCONTROLLER
@@ -42,9 +44,16 @@ globalConfig = {
     'ctrlFile': '../../default/app/controllers/index_controller.php',
     'ctrlDir' : '../../default/app/controllers/',
     'urlPath' : '/'+nombreCaja+'/default/public/',
+    'dirToCopy':{
+            'clases':  '../../default/app/views/',
+            'imprimir':'../../default/app/views/',
+            'excel':'../../default/public/excel/',
+            'javascript':'../../default/public/javascript/'
+        },
     'filesToEdit' : [
         '../../default/public/index.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
+        '../../default/app/config/databases.php',
         '../../default/app/views/index/ValidaUsuario.php',
         '../../default/app/views/index/clases/procedimientos.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',

@@ -1,38 +1,24 @@
 vendor
-default/public/temp
-sql/
 
-default/app/controllers/*
-!default/app/controllers/login_controller.php
-!default/app/controllers/index_controller.php
-
+##### ignore automatic changes ####
+default/public/temp/*
+sql/*
 default/app/models/*
-!default/app/models/usuarios.php
-!default/app/models/mymenugenerador.php
-!default/app/models/sicaputils/sicaputils.php
-!default/app/controllers/sicaprest_controller.php
-!default/app/controllers/sicaputils/sicaprest_controller.php
-!default/public/vendor/*
-default/app/views/index/*
-!default/app/views/index/ValidaUsuario.php
-!default/app/views/index/caja.php
+default/app/controllers/*
+default/app/views/*
+default/public/*
+default/sicapmigrador/*
 
+# ignore itself
+.gitignore
 
-!default/app/views/index/clases/*
-!default/app/views/index/clases/procedimientos.php
+# start section to detec your changes
+# use ! to detect your changes
+# example !deafult/app/controllers/new_controller.php to detect a new controller
 
-!default/app/views/_shared
-!default/app/views/tables
+# your changes here
 
-!default/app/views/login
-
-!default/app/views/*.html
-
-
-default/public/imagenes/*
-default/public/estilos/*
-default/public/images/*
-
+# end section to detec your changes 
 
 
 *.log
