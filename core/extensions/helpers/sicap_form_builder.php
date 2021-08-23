@@ -116,7 +116,11 @@ class SicapFormBuilder
                                     $tablaForanea  = (new $field->TablaForanea)->find_all_by_sql($field->Sentencias);
 
 
-                                      echo "<select id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                      if($field->Name && $field->Name != $field->CampoForaneoValor)
+                                      echo "<select id=\"$field->CampoForaneoValor\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                      else
+                                      echo "<select * id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+
 
                                       foreach ($tablaForanea as $value) {
                                         if($valorCampo == $value->$campoValue)
@@ -148,20 +152,22 @@ class SicapFormBuilder
                                         </label>
                                   </div>', PHP_EOL;
 
-
+                                  $nombre=$field->Nombre;
+                                  if($field->CampoForaneoValor&&$field->CampoForaneoValor != $field->Name)
+                                  $nombre = $field->CampoForaneoValor;
 
                                     if( Router::get('action') == 'editar' ){
                                       $extractor = $field->BusquedaSelect;
                                       $buscador = (new $field->TablaForanea)->find_first("conditions: $field->CampoForaneo = $valorCampo ");
 
-                                      echo '<select   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control">' , PHP_EOL;
+                                      echo '<select data-key-replace="'.$nombre.'"   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control">' , PHP_EOL;
                                           echo "<option value='$valorCampo'> ". $buscador->$extractor ."</oprtion>";
                                       echo '</select>' , PHP_EOL;;
                                     }
                                     else{
 
                                       echo '
-                                      <select value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control"></select>
+                                      <select data-key-replace="'.$nombre.'" value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control"></select>
                                       ' , PHP_EOL;
                                     }
 
@@ -225,6 +231,7 @@ class SicapFormBuilder
 
               }
                 } else {
+                  if($pk == $field->Name)
                     echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
                 }
 
