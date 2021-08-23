@@ -4,32 +4,32 @@ import uuid
 
 PATH_MODELS = '../app/models/'
 PATH_VIEWS = '../app/views/'
-PATH_INHERITS = '***plantilla_caja***'
+PATH_INHERITS = '/home/juvencio/www/caminostepeyac/'
 PATH_CONTROLLERS = '../app/controllers/'
 TARGET_FILE_EXTEN = '.php'
 
 
 ################################################################################
 ########################### INICIO DE SECCION EDITABLE #########################
-nombreCaja = '***nombre_caja***'
-copiaCaja = '***plantilla_caja***'
+nombreCaja = 'caminostepeyac'
+copiaCaja = '/home/juvencio/www/caminostepeyac/'
 dbConfig = {
-    'host' : '***nombre_host***',
-    'database': '***nombre_db***',
-    'user' : '***nombre_usuario***',
-    'password': '***nombre_pass***'
+    'host' : 'localhost',
+    'database': 'caminostepeyac',
+    'user' : 'alfredo',
+    'password': 'Alfredo2020+'
 }
 globalConfig = {
-    'oM': '***oM***',     ## realizar migracion de archivos y directorios SICAP
-    'cM': '***cM***',     ## habilitar la creacion de modelos
-    'cS': '***cS***',     ## habilitar la creacion de controladores SCAFFOLD
-    'cC': '***cS***',     ## habilitar la creacion controladores APPCONTROLLER
-    'cI': '***cI***',     ## habilitar la insercion en la tabla de configuracion
-    'cL': '***cL***',     ## habilitar la insercion en la tabla mymenugenerador
-    'cK': '***cK***',     ## detectar y corregir tablas sin llave primaria ************
-    'startNum' : '***srtN***', ## inicio del indice para ordenar campos de la tabla de configuracion
-    'stepsNum' : '***stpN***', ## incremento del indice para ordenar campos de la tabla de configuracion
-    'readRelations': '***rL***',    ## habilitar la lectura de relaciones
+    'oM': True,     ## realizar migracion de archivos y directorios SICAP
+    'cM': True,     ## habilitar la creacion de modelos
+    'cS': True,     ## habilitar la creacion de controladores SCAFFOLD
+    'cC': True,     ## habilitar la creacion controladores APPCONTROLLER
+    'cI': True,     ## habilitar la insercion en la tabla de configuracion
+    'cL': True,     ## habilitar la insercion en la tabla mymenugenerador
+    'cK': False,     ## detectar y corregir tablas sin llave primaria ************
+    'startNum' : 50, ## inicio del indice para ordenar campos de la tabla de configuracion
+    'stepsNum' : 10, ## incremento del indice para ordenar campos de la tabla de configuracion
+    'readRelations': False,    ## habilitar la lectura de relaciones
 ########################### FIN DE SECCION EDITABLE ############################
 #########################################################################33#####
 

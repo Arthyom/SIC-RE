@@ -2,10 +2,10 @@
 function conectarWebService()
 {
 
-$dbserver='***nombre_host***';
-$dbuser='***nombre_usuario***';
-$dbpwd='***nombre_pass***';
-$dbase='***nombre_db***';
+$dbserver='localhost';
+$dbuser='alfredo';
+$dbpwd='Alfredo2020+';
+$dbase='caminostepeyac';
 
 //$link = mysqli_connect ($dbserver, $dbuser, $dbpwd) or die ("No me puedo conectar");
 //mysqli_select_db($dbase,$link) or die("Error al seleccionar la base de datos $dbase".mysqli_error());
@@ -508,10 +508,10 @@ function ardisoencabezado($mimenuactivo='1',$miencabezadofactura='0')
 
 
 
-$dbserver='***nombre_host***';
-$dbuser='***nombre_usuario***';
-$dbpwd='***nombre_pass***';
-$dbase='***nombre_db***';
+$dbserver='localhost';
+$dbuser='alfredo';
+$dbpwd='Alfredo2020+';
+$dbase='caminostepeyac';
 
 //$link = mysqli_connect ($dbserver, $dbuser, $dbpwd) or die ("No me puedo conectar");
 //mysqli_select_db($dbase,$link) or die("Error al seleccionar la base de datos $dbase".mysqli_error());
@@ -545,7 +545,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" >
         <head>
-        <title>SICAP - Caja Popular ***nombre_caja*** </title>
+        <title>SICAP - Caja Popular caminostepeyac </title>
           <link rel="shortcut icon" href="estilos/imagenes/sicap_logo_pila.png" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           <meta http-equiv="refresh" content="'.($rowMeta['Tiempo']*60).'"/>
@@ -1149,7 +1149,7 @@ function creaencabezapdfhorizontal($pdf,$misLineasAumentar=1)
 
 
 // permite conectarse al servidor y base de datos
- function Conectarse($mibasedefecto="***nombre_db***")
+ function Conectarse($mibasedefecto="caminostepeyac")
    {
 
      $link = mysqli_connect("localhost",$_SESSION["mibgUsuarioAct"],$_SESSION["mibgClaveUsuar"], $mibasedefecto);
@@ -2265,7 +2265,7 @@ function accionregistros($minumero,$mistags,$misvalores,$mitabla,$micampoclave)
         $lacadena="";
 
 //echo $lacadena;
-$dbase='***nombre_db***';
+$dbase='caminostepeyac';
 if($mitabla!='captacion')
         {
 		//$IdNuevo=explode(",'", $lacadenavalores);

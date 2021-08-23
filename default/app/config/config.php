@@ -20,7 +20,7 @@ return [
         /**
          * debug: muestra los errores en pantalla (On/off)
          */
-        'debug' => 'On',
+        'debug' => 'off',
         /**
          * log_exceptions: muestra las excepciones en pantalla (On/off)
          */

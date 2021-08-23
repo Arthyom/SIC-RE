@@ -64,7 +64,9 @@
                 $_SESSION["miArregloNoAplicar"]=array();
               //  $miIp=getIP();
 
+
 */
+ $_SESSION["miSessionCaja"]=true;
 
 
 
