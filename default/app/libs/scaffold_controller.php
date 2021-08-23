@@ -30,7 +30,11 @@ abstract class ScaffoldController extends AdminController
 
     public function rest_foreingKeyInfo( $keyName, $fieldName )
     {
+
+
         // conseguir los campos con id del modelo indicado
+
+      try {
         View::template(null);
         View::select('json');
 
@@ -38,7 +42,7 @@ abstract class ScaffoldController extends AdminController
         $respuesta = false;
 
         if (true) {
- 
+
             $datos =  json_decode(file_get_contents('php://input'), true);
             $id = $datos['q'];
             $texto = explode( ',', $datos['texto'] );
@@ -51,7 +55,7 @@ abstract class ScaffoldController extends AdminController
 
             //crear una cadena de busqueda
             foreach ($dataFilter as $i => $filter) {
-                
+
                     if (!$parcial) {
                         if( $texto[$i] )
                             $criteria .= " $filter  LIKE  '$texto[$i]'";
@@ -62,10 +66,10 @@ abstract class ScaffoldController extends AdminController
                     }
                     if( $texto[$i+1]  )
                         $criteria .= " AND ";
-               
+
             }
-            
-            
+
+
             $camposSelect  = (new $this->configuracion)->find_first( "conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'");
 
 
@@ -80,7 +84,7 @@ abstract class ScaffoldController extends AdminController
                     array_push( $matches, $cidfix );
                 }
             }
-            
+
 
             $coinTexto = [];
             if( !is_numeric($texto) ){
@@ -88,13 +92,13 @@ abstract class ScaffoldController extends AdminController
                 $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ");
               else
                 $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo");
-        
+
                 foreach ($coinTexto as $j => $cit) {
                     $filterField = '';
-                    foreach ($dataFilter as $k => $filter) 
+                    foreach ($dataFilter as $k => $filter)
                         $filterField .= $cit->$filter . ' ';
-                    
-                    
+
+
                     $citfix = ['id' => $cit->$keyName, 'text'=> $filterField ];
                     array_push( $matches, $citfix );
                 }
@@ -105,8 +109,11 @@ abstract class ScaffoldController extends AdminController
             //" INSTR( Nombre, 'javier') = 1  AND  INSTR( ApellidoPaterno, '') = 1  AND  INSTR( ApellidoMaterno, '') = 1 "
         }
 
-        $this->data = [ 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
+        $this->data = [ 'pk'=>$keyName, 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
 
+      } catch (\Exception $e) {
+          $this->data = ['err'=>$e->getMessage()];
+      }
     }
 
 
@@ -541,16 +548,16 @@ abstract class ScaffoldController extends AdminController
       $arr = [];
       foreach ($vals as $va) {
         //  echo 'valor '. $va->TablaPropietaria === $this->model;
-          if( $va->tablaPropietaria === $this->model )
               $arr[$va->Name] = Input::post($va->Name);
       }
 
       //se verifica si se ha enviado via POST los datos
-      if (true) {
+      if ( Input::hasPost($arr)  ) {
           $obj = new $this->model;
           if (!$obj->update(Input::post($arr))) {
               //Flash::error('Falló Operación ' . var_dump($arr) );
               //se hacen persistente los datos en el formulario
+              Flash::error('no se puede');
               $this->{$this->model} = Input::post($this->model);
           } else {
               return Redirect::to();
