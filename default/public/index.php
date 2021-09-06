@@ -1,4 +1,3 @@
-
 <?php
 /**
  * KumbiaPHP web & app Framework.
@@ -58,7 +57,7 @@ const PRODUCTION = false;
 define('APP_PATH', dirname(__DIR__).'/app/');
 //const APP_PATH = '/path/to/app/';
 
-define('NOMBRE_CAJA', '***nombre_alias***');
+define('NOMBRE_CAJA', 'caminostepeyac-marte');
 
 
 /*

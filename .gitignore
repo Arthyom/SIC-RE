@@ -1,6 +1,10 @@
 vendor
 
-##### ignore automatic changes ####
+!default/app/models/usuarios/usuarios.php
+!default/app/views/usuarios/index.phtml
+
+
+##### ignore automatic changes 
 default/public/temp/*
 sql/*
 default/app/models/*
@@ -9,6 +13,8 @@ default/app/views/*
 default/public/*
 default/sicapmigrador/*
 
+!default/app/models/usuarios/usuarios.php
+!default/app/views/usuarios/*
 # ignore itself
 .gitignore
 

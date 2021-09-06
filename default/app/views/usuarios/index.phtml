@@ -1,0 +1,237 @@
+<div id="scaffold">
+    <?php View::content()?>
+    <!-- .page -->
+
+    <!-- /floating action -->
+
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto">
+            <?php echo $controller_name?>
+            <?php //echo var_dump($data) ?>
+            <?php //echo var_dump($bigdata) ?>
+            <?php //cho var_dump($s) ?>
+
+        </h1>
+
+        <div class="btn-toolbar">
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
+                class="btn btn-light">
+                <i class="oi oi-plus"></i>
+                <span class="ml-1">Nuevo Elemento</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
+                class="btn btn-light">
+                <i class="oi oi-zoom-in"></i>
+                <span class="ml-1">Filtrar Elementos</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 "
+                type="button" class="btn btn-light">
+                <i class="oi oi-loop-square"></i>
+                <span class="ml-1">Maestro-Detalle</span>
+            </a>
+
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                class="btn btn-light">
+                <i class="oi oi-list-rich"></i>
+                <span class="ml-1">Listar Elementos</span>
+            </a>
+        </div>
+        <!--<form >
+        <input type="text" name="busqueda" id="busqueda" placeholder="Buscar">
+        <input type="submit" value="Buscar" class="btn-search">
+        </div>-->
+
+        <!-- .btn-toolbar -->
+
+        <!-- /.btn-toolbar -->
+    </div>
+
+    <!--
+    <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear">
+    Nuevo
+    -->
+    </a>
+</div>
+
+
+
+<?php if ( isset($data) && isset($configuraciondata) && (count($configuraciondata) > 0)) : ?>
+
+<br>
+<table class="dtTableSec table table-striped dt-responsive  w-100">
+
+    <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+
+            <?php foreach($configuraciondata as $item) : ?>
+            <?php $nombreColumna = $item->Name ?>
+            <?php if( $item->VisibleEnTabla ): ?>
+            <th><?php echo($item->Label) ?>
+            </th>
+            <?php endif ?>
+            <?php endforeach?>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+        <?php foreach ($data as $i => $registro) : ?>
+        <?php $pk =  $registro->primary_key[0]  ?>
+
+        <tr>
+            <td>
+                <?= h( $i +1 ) ?>
+            </td>
+
+
+            <?php foreach ($configuraciondata as $campo) : ?>
+
+            <?php $propiedad = $campo->Name ?>
+
+            <?php $p = $campo->CampoForaneoValor ?>
+
+            <?php  if($campo->VisibleEnTabla) :?>
+
+            <?php if( strlen( $campo->Sentencias ) > 0 ) :?>
+            <?php $s = h($registro->$propiedad) ?>
+            <?php $sql = "SELECT $campo->CampoForaneoValor FROM $campo->TablaForanea WHERE $campo->Name LIKE $s" ?>
+            <?php if($s) :?>
+            <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
+            <?php endif ?>
+
+            <td>
+                <?php if($s) : ?>
+                <?= h($valorForaneo->$p)?>
+                <?php else : ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+
+
+            </td>
+
+            <?php else:?>
+
+            <td>
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?php if($registro->$propiedad): ?>
+                <?= h($registro->$propiedad)?>
+                <?php else: ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+                <?php endif ?>
+                <?php else: ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
+                <?php endif ?>
+
+            </td>
+            <?php endif?>
+
+            <?php endif ?>
+            <?php endforeach?>
+            <td style="width:100px; min-width:100px;">
+                <?= Html::linkAction("regenerar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-sync"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+            </td>
+        </tr>
+
+        <?php endforeach?>
+    </tbody>
+</table>
+
+<?php else : // Si no hay items?>
+
+
+<table class="dtTableHug table table-striped dt-responsive  w-100">
+
+    <thead class="thead-dark">
+        <tr>
+
+            <th>#</th>
+
+            <?php foreach($configuraciondata as $item) : ?>
+            <?php $nombreColumna = $item->Name ?>
+            <?php if( $item->VisibleEnTabla ): ?>
+            <th><?php echo($item->Label) ?>
+            </th>
+            <?php endif ?>
+            <?php endforeach?>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+
+        <?php foreach ($bigdata->items as $i => $registro) : ?>
+        <?php $pk =  $registro->primary_key[0]  ?>
+
+        <tr>
+            <td>
+                <?= h( $i +1 ) ?>
+            </td>
+
+
+            <?php foreach ($configuraciondata as $campo) : ?>
+
+            <?php $propiedad = $campo->Name ?>
+
+            <?php $p = $campo->CampoForaneoValor ?>
+
+            <?php  if($campo->VisibleEnTabla) :?>
+
+            <?php if( strlen( $campo->Sentencias ) > 0 ) :?>
+            <?php $s = h($registro->$propiedad) ?>
+            <?php $sql = "SELECT $campo->CampoForaneoValor FROM $campo->TablaForanea WHERE $campo->Name LIKE $s" ?>
+            <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
+
+            <td>
+                <?= h($valorForaneo->$p)?>
+            </td>
+            <?php else:?>
+            <td>
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?= h($registro->$propiedad)?>
+                <?php endif ?>
+                <?php else: ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
+                <?php endif ?>
+            </td>
+            <?php endif?>
+
+            <?php endif ?>
+            <?php endforeach?>
+            <td style="width:100px; min-width:100px;">
+
+                <?= Html::linkAction("regenerar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-sync"></i></button>') ?>
+                <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+            </td>
+        </tr>
+
+        <?php endforeach?>
+    </tbody>
+</table>
+
+<?php View::partial('paginators/punbb', false, array('page' => $bigdata ,'url' => Router::get('controller_path').'/index')) ?>
+<?php endif?>
