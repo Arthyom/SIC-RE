@@ -74,7 +74,7 @@ class KumbiaView
      *
      * @param string|null    $view     nombre del view a utilizar sin .phtml
      * @param string|null    $template opcional nombre del template a utilizar sin .phtml
-     * 
+     *
      * @return void
      */
     public static function select($view, $template = '')
@@ -91,7 +91,7 @@ class KumbiaView
      * Asigna el template para la vista.
      *
      * @param string|null $template nombre del template a utilizar sin .phtml
-     * 
+     *
      * @return void
      */
     public static function template($template)
@@ -107,7 +107,7 @@ class KumbiaView
      *
      * @param string        $response
      * @param string|null   $template Opcional nombre del template sin .phtml
-     * 
+     *
      * @return void
      */
     public static function response($response, $template = null)
@@ -124,7 +124,7 @@ class KumbiaView
      * Asigna el path de la vista.
      *
      * @param string $path path de la vista sin extension .phtml
-     * 
+     *
      * @return void
      */
     public static function setPath($path)
@@ -141,17 +141,17 @@ class KumbiaView
     {
       // $rutaEnServidor = APP_PATH."views/". $nombre . "/" . $vista;
 
-         
-     
+
+
 
         $path =   APP_PATH. 'views/'.self::$_path.self::$_view.'.phtml';
 
         if( !file_exists($path) )
-            $path = self::$_path.self::$_view.'.php';
+            $path =  'migrados/'.self::$_path.self::$_view.'.phtml';
         else
             $path = self::$_path.self::$_view.'.phtml';
- 
-        
+
+
         if (self::$_response) {
             $path = 'views/'.self::$_path.self::$_view.'.'.self::$_response.'.phtml';
             if( !file_exists( $path ) )
@@ -167,7 +167,7 @@ class KumbiaView
      * Obtiene un atributo de KumbiaView.
      *
      * @param string $atribute nombre de atributo (template, response, path, etc)
-     * 
+     *
      * @return mixed
      */
     public static function get($atribute)
@@ -233,7 +233,7 @@ class KumbiaView
      * Cachea el view o template.
      *
      * @param string $type view o template
-     * 
+     *
      * @return void
      */
     protected static function saveCache($type)
@@ -248,7 +248,7 @@ class KumbiaView
      * Renderiza la vista.
      *
      * @param Controller $controller
-     * 
+     *
      * @return void
      */
     public static function render(Controller $controller)
@@ -256,7 +256,7 @@ class KumbiaView
         if (!self::$_view && !self::$_template) {
             ob_end_flush();
 
-            return; 
+            return;
         }
 
         // Guarda los datos del controlador y los envia
@@ -267,7 +267,7 @@ class KumbiaView
      * Genera la vista.
      *
      * @param array $controller
-     * 
+     *
      * @return void
      */
     protected static function generate($controller)
@@ -324,7 +324,7 @@ class KumbiaView
 
     /**
      * Imprime el contenido del buffer.
-     * 
+     *
      * @return void
      */
     public static function content()
