@@ -36,14 +36,14 @@
         </header>
         <!-- /.aside-header -->
         <br>
-       
+
         <!-- .aside-menu -->
         <div class="aside-menu overflow-hidden">
             <!-- .stacked-menu -->
             <nav id="stacked-menu" class="stacked-menu">
                 <!-- .menu -->
                 <ul class="menu">
-                    
+
                     <?php //$menu = (new menucompleto)->find( 'conditions: INSTR(Nombre, "WflsTest") > 0 '); ?>
 
                     <?php $menu = (new mymenugenerador)->buscarPorIdPadre() ?>
@@ -53,7 +53,7 @@
 
                     <?php foreach ($menu  as $key => $value): ?>
 
-                    <?php  if($value->parent_id == 0 && Auth::get('Grupo') == 'ADMINISTRADOR'): ?>
+                    <?php  if($value->parent_id == 0 ): ?>
                     <?php View::partial('snippets/aside/level-menu', false, array('menupadre' => $value)) ?>
 
                     <?php endif ?>
