@@ -83,6 +83,7 @@ class Load
      */
     public static function models($model)
     {
+        echo 'modelos'. var_dump($model);
         $args = is_array($model) ? $model : func_get_args();
         foreach ($args as $model) {
             $Model = Util::camelcase(basename($model));

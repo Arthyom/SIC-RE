@@ -102,9 +102,9 @@ class KumbiaRouter
 
     /**
      * Carga y devuelve una instancia del controllador
-     * 
+     *
      * @throws KumbiaException
-     * 
+     *
      * @return Controller
      */
     public static function getController($param)
@@ -112,7 +112,9 @@ class KumbiaRouter
         // Extrae las variables para manipularlas facilmente
         extract($param, EXTR_OVERWRITE);
         if (!include_once APP_PATH."controllers/{$controller_path}_controller.php") {
+          if(!include_once APP_PATH."controllers/migrados/{$controller_path}_controller.php" ){
             throw new KumbiaException('', 'no_controller');
+          }
         }
         //Asigna el controlador activo
         $app_controller = Util::camelcase($controller).'Controller';
