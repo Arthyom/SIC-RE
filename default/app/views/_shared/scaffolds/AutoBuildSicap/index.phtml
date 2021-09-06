@@ -1,5 +1,5 @@
 <div id="scaffold">
-    <?php //View::content()?>
+    <?php View::content()?>
     <!-- .page -->
 
     <!-- /floating action -->
@@ -13,7 +13,7 @@
 
         </h1>
 
-          <div class="btn-toolbar">
+        <div class="btn-toolbar">
             <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
                 class="btn btn-light">
                 <i class="oi oi-plus"></i>
@@ -26,8 +26,8 @@
                 <span class="ml-1">Filtrar Elementos</span>
             </a>
 
-                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
-                class="btn btn-light">
+            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 "
+                type="button" class="btn btn-light">
                 <i class="oi oi-loop-square"></i>
                 <span class="ml-1">Maestro-Detalle</span>
             </a>
@@ -100,28 +100,38 @@
             <?php if( strlen( $campo->Sentencias ) > 0 ) :?>
             <?php $s = h($registro->$propiedad) ?>
             <?php $sql = "SELECT $campo->CampoForaneoValor FROM $campo->TablaForanea WHERE $campo->Name LIKE $s" ?>
+            <?php if($s) :?>
             <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
+            <?php endif ?>
 
             <td>
-
+                <?php if($s) : ?>
                 <?= h($valorForaneo->$p)?>
+                <?php else : ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+
 
             </td>
 
             <?php else:?>
 
             <td>
-              <?php if( lcfirst( $propiedad ) != 'fecha') :?>
-                  <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
-                    <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
-                  <?php  else:?>
-                    <?= h($registro->$propiedad)?>
-                  <?php endif ?>
-              <?php else: ?>
-                  <?php if( $campo->DateFormat ): ?>
-                      <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
-                  <?php endif ?>
-              <?php endif ?>
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?php if($registro->$propiedad): ?>
+                <?= h($registro->$propiedad)?>
+                <?php else: ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+                <?php endif ?>
+                <?php else: ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
+                <?php endif ?>
 
             </td>
             <?php endif?>
@@ -132,7 +142,7 @@
 
                 <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
                 <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
-                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-retweet"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
                 <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
             </td>
         </tr>
@@ -194,15 +204,15 @@
             <?php else:?>
             <td>
                 <?php if( lcfirst( $propiedad ) != 'fecha') :?>
-                    <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
-                      <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
-                    <?php  else:?>
-                      <?= h($registro->$propiedad)?>
-                    <?php endif ?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?= h($registro->$propiedad)?>
+                <?php endif ?>
                 <?php else: ?>
-                    <?php if( $campo->DateFormat ): ?>
-                        <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
-                    <?php endif ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
                 <?php endif ?>
             </td>
             <?php endif?>

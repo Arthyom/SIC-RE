@@ -34,17 +34,14 @@ class SicapFormBuilder
     public static function FromConfig($table, $model, $action = '', $skipRequireds = false)
     {
         $modelForm = new $table();
-        $pk = (new $model)->primary_key[0];
+        $pk = (new $model())->primary_key[0];
 
-
-
-        $fields = (new $table)->find("conditions:  TablaPropietaria ='$model'", "order: Orden ASC");
-        $idEditar = '';
+         $idEditar = '';
         $elementoEditado  = '';
         $controlador = Router::get('controller');
         if (Router::get('action') == 'editar') {
             $idEditar = implode(Router::get('parameters'));
-            $elementoEditado = (new $controlador)->find($idEditar);
+            $elementoEditado = (new $controlador())->find($idEditar);
             $action  = $controlador .'/'. $action .'editar/'.$idEditar;
         } else {
             $action =  Router::get('controller') .'/'. Router::get('action'). '/'. implode(Router::get('parameters'));
@@ -52,10 +49,35 @@ class SicapFormBuilder
 
         echo '<form action="', PUBLIC_PATH.$action, '" method="post" >' , PHP_EOL;
 
+
+        $test = (new $table())->find(
+            "conditions:  TablaPropietaria ='$model'",
+            "order: Orden ASC",
+            "group: Type"
+        );
+
+        foreach ($test as $i => $t) {
+            # code...
+            $grouped_type = $t->Type;
+           
+            echo '<hr>';
+        
+
+
+        $fields = (new $table())->find("conditions:  TablaPropietaria ='$model' AND Type = '$grouped_type'", "order: Orden ASC");
+       
+
+        echo '<div class="form-row ">' , PHP_EOL;
+
         //  View::content()
         foreach ($fields as $field) {
             if ($field->TablaPropietaria === $model) {
-                echo '<div class="form-group">' , PHP_EOL;
+                if ($pk !== $field->Name) {
+                    echo '<div class="col-6 pt-2 pb-2">', PHP_EOL;
+                } else {
+                    echo '<div>', PHP_EOL;
+                }
+
 
                 $tipo = $field->Type;
                 $alias = $field->Name;
@@ -70,7 +92,7 @@ class SicapFormBuilder
 
 
                 if ($field->VisibleEnForm && $pk != $field->Name) {
-                  //  echo "<label >$field->Label</label>" , PHP_EOL;
+                    //  echo "<label >$field->Label</label>" , PHP_EOL;
 
 
                     switch ($tipo) {
@@ -83,66 +105,75 @@ class SicapFormBuilder
                                   preg_match("/^enum\(\'(.*)\'\)$/", $sd[0]->COLUMN_TYPE, $matches);
                                   $enum = explode("','", $matches[1]);
 
-                                  if( !substr_count( $field->Extras, 'requiered' ) )
-                                    echo "<label >$field->Label* </label>" , PHP_EOL;
-                                  else
-                                    echo "<label >$field->Label</label>" , PHP_EOL;
+                                  if (substr_count($field->Extras, 'required') > 0) {
+                                      echo "<label >$field->Label 
+                                        <span class='badge badge-danger'>Requerido</span>
+                                    </label>" , PHP_EOL;
+                                  } else {
+                                      echo "<label >$field->Label</label>" , PHP_EOL;
+                                  }
 
 
                                   echo "<select id=\"$field->Name\"    value=\"$valorCampo\"   name=\"$field->Name\" $field->Extras >", PHP_EOL;
 
+                                  echo "<option value=0>Seleccione</option>";
                                   foreach ($enum as $value) {
-                                    if( $valorCampo == $value )
-                                      echo "<option selected value=\"$value\">$value</option>", PHP_EOL;
-                                    else
-                                      echo "<option value=\"$value\">$value</option>", PHP_EOL;
+                                      if ($valorCampo == $value) {
+                                          echo "<option selected value=\"$value\">$value</option>", PHP_EOL;
+                                      } else {
+                                          echo "<option value=\"$value\">$value</option>", PHP_EOL;
+                                      }
                                   }
+                                  echo '<option value=0>Ninguno</option>';
                                   echo '</select>', PHP_EOL;
                               } else {
-
-
-                                $registros = (new $field->TablaForanea)->count();
+                                  $registros = (new $field->TablaForanea())->count();
 
 
                                   $campo = $field->BusquedaSelect;
                                   $campoValue = $field->CampoForaneo;
 
-                                  if( self::$maxSelect > $registros ){
+                                  if (self::$maxSelect > $registros) {
+                                      if (substr_count($field->Extras, 'required') > 0) {
+                                          echo "<label >$field->Label 
+                                          <span class='badge badge-danger'>Requerido</span>
+                                    </label>" , PHP_EOL;
+                                      } else {
+                                          echo "<label >$field->Label</label>" , PHP_EOL;
+                                      }
+                                      $tablaForanea  = (new $field->TablaForanea())->find_all_by_sql($field->Sentencias);
 
-                                  if( !substr_count( $field->Extras, 'requiered' ) )
-                                    echo "<label >$field->Label* </label>" , PHP_EOL;
-                                  else
-                                    echo "<label >$field->Label</label>" , PHP_EOL;
-                                    $tablaForanea  = (new $field->TablaForanea)->find_all_by_sql($field->Sentencias);
 
+                                      if ($field->Name && $field->Name != $field->CampoForaneoValor) {
+                                          echo "<select id=\"$field->CampoForaneoValor\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                      } else {
+                                          echo "<select  id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                      }
 
-                                      if($field->Name && $field->Name != $field->CampoForaneoValor)
-                                      echo "<select id=\"$field->CampoForaneoValor\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
-                                      else
-                                      echo "<select * id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
-
+                                      echo "<option value=0>Seleccione</option>";
 
                                       foreach ($tablaForanea as $value) {
-                                        if($valorCampo == $value->$campoValue)
-                                        echo "<option selected value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
-
-                                        else
-                                          echo "<option value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
+                                          if ($valorCampo == $value->$campoValue) {
+                                              echo "<option selected value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
+                                          } else {
+                                              echo "<option value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
+                                          }
                                       }
+                                      echo '<option value=0>Ninguno</option>';
                                       echo '</select>', PHP_EOL;
-
-                                  }
-                                  else{
-
-                                    echo '
+                                  } else {
+                                      echo '
                                     <div >';
-                                           if( !substr_count( $field->Extras, 'requiered' ) )
-                                    echo "<label class='mr-4'>$field->Label* </label>" , PHP_EOL;
-                                  else
-                                    echo "<label class='mr-4'>$field->Label</label>" , PHP_EOL;
-                                    echo'
-                                        <span class="mr-2" >Busqueda Parcial</span>
-                                        <label class="switcher-control switcher-control-lg">
+                                      if (substr_count($field->Extras, 'required') > 0) {
+                                          echo "<label class='mr-4' style='margin-bottom: -20px;'>$field->Label 
+                                        <span class='badge badge-danger'>Requerido</span>
+                                    </label>" , PHP_EOL;
+                                      } else {
+                                          echo "<label class='mr-4' style='margin-bottom: -20px;'>$field->Label</label>" , PHP_EOL;
+                                      }
+                                      echo ' <span class="mr-2" >Parcial</span>';
+                                      echo'
+                                        <label class="switcher-control switcher-control-lg mt-1 mb-1">
                                             <input id="ParcialBusqueda'. $field->Name .'" type="checkbox" class="switcher-input" >
                                             <span class="switcher-indicator"></span>
                                             <span class="switcher-label-on">
@@ -152,30 +183,24 @@ class SicapFormBuilder
                                         </label>
                                   </div>', PHP_EOL;
 
-                                  $nombre=$field->Nombre;
-                                  if($field->CampoForaneoValor&&$field->CampoForaneoValor != $field->Name)
-                                  $nombre = $field->CampoForaneoValor;
+                                      $nombre=$field->Nombre;
+                                      if ($field->CampoForaneoValor&&$field->CampoForaneoValor != $field->Name) {
+                                          $nombre = $field->CampoForaneoValor;
+                                      }
 
-                                    if( Router::get('action') == 'editar' ){
-                                      $extractor = $field->BusquedaSelect;
-                                      $buscador = (new $field->TablaForanea)->find_first("conditions: $field->CampoForaneo = $valorCampo ");
-
-                                      echo '<select data-key-replace="'.$nombre.'"   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control">' , PHP_EOL;
+                                      if (Router::get('action') == 'editar') {
+                                          $extractor = $field->BusquedaSelect;
+                                          $buscador = (new $field->TablaForanea())->find_first("conditions: $field->CampoForaneo = $valorCampo ");
+                                          echo '<select data-key-replace="'.$nombre.'"   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control">' , PHP_EOL;
                                           echo "<option value='$valorCampo'> ". $buscador->$extractor ."</oprtion>";
-                                      echo '</select>' , PHP_EOL;;
-                                    }
-                                    else{
-
-                                      echo '
+                                          echo '</select>' , PHP_EOL;
+                                          ;
+                                      } else {
+                                          echo '
                                       <select data-key-replace="'.$nombre.'" value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control"></select>
                                       ' , PHP_EOL;
-                                    }
-
-
-
-
+                                      }
                                   }
-
                               }
                   break;
 
@@ -185,30 +210,33 @@ class SicapFormBuilder
 
 
                   case 'textarea':
-                       if( !substr_count( $field->Extras, 'requiered' ) )
-                                    echo "<label >$field->Label* </label>" , PHP_EOL;
-                                  else
-                                    echo "<label >$field->Label</label>" , PHP_EOL;
+                       if (substr_count($field->Extras, 'required') > 0) {
+                           echo "<label >$field->Label                                         <span class='badge badge-danger'>Requerido</span>
+                 </label>" , PHP_EOL;
+                       } else {
+                                      echo "<label >$field->Label</label>" , PHP_EOL;
+                                  }
 
                     echo "<textarea  $field->Extras id=\"$field->Name\" value=\"$valorCampo\" name=\"$field->Name\" >$valorCampo</textarea>" , PHP_EOL;
 
                   break;
 
                   default:
-                       if( !substr_count( $field->Extras, 'requiered' ) )
-                            echo "<label >$field->Label* </label>" , PHP_EOL;
-                        else
+                       if (substr_count($field->Extras, 'required') > 0) {
+                           echo "<label >$field->Label                                         <span class='badge badge-danger'>Requerido</span></label>" , PHP_EOL;
+                       } else {
                             echo "<label >$field->Label</label>" , PHP_EOL;
+                        }
 
-                    if( !($field->DateFormat) ){
-                      if( $field->Type == 'number' || $field->Type == 'decimal' )
-                        echo "<input type= \"$tipo\" autocomplete='off' data-allow-decimal='true' data-decimal-limit='2' data-mask='currency'  $field->Extras id=\"$field->Name\" name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
-                      else
-                        echo "<input type= \"$tipo\"   $field->Extras id=\"$field->Name\" name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
-
-                    }
-                    else
-                    {
+                    if (!($field->DateFormat)) {
+                        if ($field->Type === 'int') {
+                            echo "<input type= \"text\"  data-allow-decimal='false'   data-mask='currency'  $field->Extras id=\"$field->Name\" name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                        } elseif ($field->Type == 'number' || $field->Type == 'decimal') {
+                            echo "<input type= \"text\" autocomplete='off' data-allow-decimal='true' data-decimal-limit='2' data-mask='currency'  $field->Extras id=\"$field->Name\" name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                        } else {
+                            echo "<input type= \"$tipo\"   $field->Extras id=\"$field->Name\" name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                        }
+                    } else {
                         echo "
 
                         <div id=\"flatpickr9\"  class=\"input-group input-group-alt flatpickr\"  data-wrap=\"true\" data-alt-input=\"true\" data-alt-format=\"$field->DateFormat\" data-date-format=\"yy-m-d\"  data-toggle=\"flatpickr\">
@@ -231,13 +259,16 @@ class SicapFormBuilder
 
               }
                 } else {
-                  if($pk == $field->Name)
-                    echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                    if ($pk == $field->Name) {
+                        echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                    }
                 }
 
                 echo '</div>';
             }
         }
+        echo '</div>';
+    }
 
         echo '<div class="row">';
         echo '<div class="col">  <input class="btn btn-primary btn-block" type="submit" value="Enviar" /> </div>';
@@ -339,7 +370,7 @@ class SicapFormBuilder
                                     <div >
                                         <label class="mr-5" >'.$field->Label.'</label>
                                         <span class="mr-2" >Busqueda Parcial</span>
-                                        <label class="switcher-control switcher-control-lg">
+                                        <label class="switcher-control switcher-control-lg pt-1 pb-1">
                                             <input id="ParcialBusqueda'. $field->Name .'" type="checkbox" class="switcher-input" >
                                             <span class="switcher-indicator"></span>
                                             <span class="switcher-label-on">

@@ -72,6 +72,8 @@ abstract class ScaffoldController extends AdminController
 
             $camposSelect  = (new $this->configuracion)->find_first( "conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'");
 
+            if(!$camposSelect)
+              $camposSelect = (new $this->configuracion)->find_first( "conditions: CampoForaneoValor LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'");
 
             if( is_numeric( $id ) ){
                 if( !$dependeDe )
@@ -81,7 +83,9 @@ abstract class ScaffoldController extends AdminController
 
                 foreach ($coincidenciasId as $i => $cid) {
                     $cidfix = [ 'id' => $cid->$keyName, 'text' => $cid->Nombre ];
+
                     array_push( $matches, $cidfix );
+
                 }
             }
 
@@ -101,6 +105,7 @@ abstract class ScaffoldController extends AdminController
 
                     $citfix = ['id' => $cit->$keyName, 'text'=> $filterField ];
                     array_push( $matches, $citfix );
+
                 }
             }
 
@@ -109,10 +114,14 @@ abstract class ScaffoldController extends AdminController
             //" INSTR( Nombre, 'javier') = 1  AND  INSTR( ApellidoPaterno, '') = 1  AND  INSTR( ApellidoMaterno, '') = 1 "
         }
 
-        $this->data = [ 'pk'=>$keyName, 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
+
+        array_push( $matches, ['id' =>'0' , 'text'=>'Ninguno' ] );
+
+
+        $this->data = [ 'pk'=>"conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'", 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
 
       } catch (\Exception $e) {
-          $this->data = ['err'=>$e->getMessage()];
+          $this->data = ['err OOO'=>$e->getMessage()];
       }
     }
 
@@ -513,7 +522,9 @@ abstract class ScaffoldController extends AdminController
      */
     public function crear()
     {
-      $vals = (new $this->configuracion)->find_all_by('TablaPropietaria', $this->model);
+        try {
+
+    $vals = (new $this->configuracion)->find_all_by('TablaPropietaria', $this->model);
       $arr = [];
       foreach ($vals as $va) {
           $arr[$va->Name] = Input::post($va->Name);
@@ -521,19 +532,34 @@ abstract class ScaffoldController extends AdminController
 
       $obj = new $this->model;
 
+      if ( Input::hasPost($arr)  ) {
       //En caso que falle la operación de guardar
-      if ( !$obj->save($arr) ) {
-        //  Flash::error('Falló Operación' . var_dump($arr));
+      if ( !$obj->create($arr) ) {
+      //    Flash::error($th->getError());
           //se hacen persistente los datos en el formulario
           //$this->{$this->model} = $obj;
 
          // Redirect::to('err');
           return;
       }
-  //    Flash::info('la operacion tuvoexito' . var_dump($arr));
+      else{
+                          Flash::info('Operacion exitosa', 'success', 'Correcto');
 
-      return Redirect::to('');
+        Redirect::to();
+
+      }
+
+
+
+
+        }
     }
+    catch (\Throwable $th) {
+        //throw $th;
+        Flash::error($th->getMessage());
+
+    }
+}
 
     /**
      * Edita un Registro
@@ -542,26 +568,36 @@ abstract class ScaffoldController extends AdminController
      */
     public function editar($id)
     {
-      View::select('crear');
+      try {
+        View::select('crear');
 
-      $vals = (new $this->configuracion)->find_all_by('TablaPropietaria', $this->model);
-      $arr = [];
-      foreach ($vals as $va) {
-        //  echo 'valor '. $va->TablaPropietaria === $this->model;
-              $arr[$va->Name] = Input::post($va->Name);
+        $vals = (new $this->configuracion)->find_all_by('TablaPropietaria', $this->model);
+        $arr = [];
+        foreach ($vals as $va) {
+          //  echo 'valor '. $va->TablaPropietaria === $this->model;
+                $arr[$va->Name] = Input::post($va->Name);
+        }
+
+        //se verifica si se ha enviado via POST los datos
+        if ( Input::hasPost($arr)  ) {
+            $obj = new $this->model;
+            if (!$obj->update(Input::post($arr))) {
+                //Flash::error('Falló Operación ' . var_dump($arr) );
+                //se hacen persistente los datos en el formulario
+               // Flash::error( );
+                $this->{$this->model} = Input::post($this->model);
+            }   else{
+                          Flash::info('Operacion exitosa', 'success', 'Correcto');
+
+          Redirect::to();
+//          Flash::info('Correcto');
+
       }
+        }
+      } catch (\Throwable $th) {
+          //throw $th;
+          Flash::error($th->getMessage());
 
-      //se verifica si se ha enviado via POST los datos
-      if ( Input::hasPost($arr)  ) {
-          $obj = new $this->model;
-          if (!$obj->update(Input::post($arr))) {
-              //Flash::error('Falló Operación ' . var_dump($arr) );
-              //se hacen persistente los datos en el formulario
-              Flash::error('no se puede');
-              $this->{$this->model} = Input::post($this->model);
-          } else {
-              return Redirect::to();
-          }
       }
     }
 
@@ -572,11 +608,19 @@ abstract class ScaffoldController extends AdminController
      */
     public function borrar($id)
     {
-        if (!(new $this->model)->delete((int) $id)) {
-            Flash::error('Falló Operación');
+        try {
+            //code...
+            if (!(new $this->model)->delete((int) $id)) {
+                Flash::error('Falló Operación');
+            }
+            //enrutando al index para listar los articulos
+            Flash::info('Operacion exitosa', 'success', 'Correcto');
+            Redirect::to();
+        } catch (\Throwable $th) {
+            //throw $th;
+                      Flash::error($th->getMessage());
+
         }
-        //enrutando al index para listar los articulos
-        Redirect::to();
     }
 
     /**

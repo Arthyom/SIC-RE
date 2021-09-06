@@ -1,5 +1,12 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require_once '../../vendor/autoload.php';
+
+
     class usuarios extends ActiveRecord
     {
         protected $source = 'usuarios';
@@ -100,4 +107,147 @@
                 return false;
             }
         }
+
+
+        //override save method to customice the saving data process
+        public function create( $data_to_save ){
+            try {
+
+            $base_64_string_data = base64_encode( serialize(uniqid()) );
+            $path = dirname(__DIR__).'/temp/'.$data_to_save['Usuario'].'.key';
+            $data_to_save['Clave'] = substr( $base_64_string_data, 0, 34);
+            $to_mail = $data_to_save['CorreoElectronico'];
+            /*
+            $headers = 'From: webmaster@example.com'       . "\r\n" .
+                 'Reply-To: webmaster@example.com' . "\r\n" .
+                 'X-Mailer: PHP/' . phpversion();*/
+
+            $mail = new PHPMailer();
+
+
+            $mail->isSMTP();
+            $mail->IsHTML();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPKeepAlive = true;
+
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 465;
+
+
+            //$mail->SMTPAuth = true;
+
+            $mail->Username = 'allpipiasaaa@gmail.com';
+            $mail->Password = '2010_Wflsyo?!';
+
+            //$mail->Username = 'juvenciotrejo@gmail.com';
+            //$mail->Password = 'Facil1970Ju';
+
+
+            $mail->setFrom('allpipiasaaa@gmail.com');
+          //  $mail->setFrom('allpipiasaaa@gmail.com');
+
+            $mail->addAddress($to_mail);
+            $mail->Subject = 'Envio de archivo KEY, creada';
+            $mail->Body    = 'Envio de archivo key de contraseña, creada';
+
+
+            if( parent::save( $data_to_save ) ){
+
+
+                $key_file_resource = fopen($path, "w");
+                fwrite($key_file_resource, $base_64_string_data);
+                fclose($key_file_resource);
+
+                //if ( mail($to_mail, 'Confirmation', $base_64_string_data) )
+                //Flash::info($path);
+                //else
+                $mail->AddAttachment($path,'keyname.key');
+                $mail->Send();
+
+                          Flash::info( 'Envio Correcto, usuario creado' );
+                    //  echo( var_dump(  $mail->send() ));
+
+
+                //Flash::error($path);
+
+            }
+                //code...
+            } catch (\Throwable $th) {
+                //throw $th;
+                Flash::error('Error al enviar el correo');
+            }
+        }
+
+        public function regenerate( $id )
+        {
+          try {
+
+            $current_model = $this->find($id);
+
+            $base_64_string_data = base64_encode( serialize(uniqid()) );
+            $path = dirname(__DIR__).'/temp/'.$current_model->Usuario.'.key';
+            $current_model->Clave  = substr( $base_64_string_data, 0, 34);
+            $to_mail = $current_model->CorreoElectronico;
+
+
+            $mail = new PHPMailer();
+
+
+            $mail->isSMTP();
+            $mail->IsHTML();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPKeepAlive = true;
+
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 465;
+
+
+            //$mail->SMTPAuth = true;
+
+            $mail->Username = 'allpipiasaaa@gmail.com';
+            $mail->Password = '2010_Wflsyo?!';
+
+            //$mail->Username = 'juvenciotrejo@gmail.com';
+            //$mail->Password = 'Facil1970Ju';
+
+
+            $mail->setFrom('allpipiasaaa@gmail.com');
+          //  $mail->setFrom('allpipiasaaa@gmail.com');
+
+            $mail->addAddress($to_mail);
+            $mail->Subject = 'Envio de archivo KEY, regenerada';
+            $mail->Body    = 'Envio de archivo key de contraseña, regenerada';
+
+
+            if( ( parent::update( (array)$current_model ) ) ){
+
+
+                $key_file_resource = fopen($path, "w");
+                fwrite($key_file_resource, $base_64_string_data);
+                fclose($key_file_resource);
+
+                //if ( mail($to_mail, 'Confirmation', $base_64_string_data) )
+                //Flash::info($path);
+                //else
+                $mail->AddAttachment($path,'keyname.key');
+                $mail->Send();
+
+                          Flash::info( 'Envio Correcto, clave regenerada');
+                    //  echo( var_dump(  $mail->send() ));
+
+
+                //Flash::error($path);
+
+            }
+
+          } catch (\Exception $e) {
+            Flash::error('Error al intentar regenerar la clave');
+          }
+
+        }
+
     }

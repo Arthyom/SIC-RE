@@ -4,7 +4,7 @@
 
         public $model = 'usuariorol';
 
-        public function index() 
+        public function index()
         {
             // seleccionar una plantilla simple, no mostrando el menu
             View::template('layouts/empty');
@@ -20,13 +20,14 @@
                     Redirect::to('/');
                 }
                 else{
-                    Redirect::to('login');
-                    Flash::error('Credenciales invalidos, por favor verifiquelas');
+                  Flash::error('Credenciales invalidos, por favor verifiquelas');
+
+                  //  Redirect::to('login');
                 }
-                
+
             }
         }
-            
+
 
 
 

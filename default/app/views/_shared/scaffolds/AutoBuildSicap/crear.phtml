@@ -1,51 +1,52 @@
+<div class="col-12 offset-0">
 
 
+    <div id="scaffold">
+
+        <h1 class="page-title mr-sm-auto">
+            <?php echo $controller_name . ' ' . $action_name ?>
+        </h1>
+
+        <div class="d-md-flex align-items-md-start">
 
 
-<div class="col-8 offset-2">
+            <div class="btn-toolbar">
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
+                    class="btn btn-light">
+                    <i class="oi oi-plus"></i>
+                    <span class="ml-1">Nuevo Elemento</span>
+                </a>
 
-  <div id="scaffold">
-      <div class="d-md-flex align-items-md-start">
-          <h1 class="page-title mr-sm-auto">
-              <?php echo $controller_name . ' ' . $action_name ?>
-          </h1>
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar "
+                    type="button" class="btn btn-light">
+                    <i class="oi oi-zoom-in"></i>
+                    <span class="ml-1">Filtrar Elementos</span>
+                </a>
 
-          <div class="btn-toolbar">
-              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
-                  class="btn btn-light">
-                  <i class="oi oi-plus"></i>
-                  <span class="ml-1">Nuevo Elemento</span>
-              </a>
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 "
+                    type="button" class="btn btn-light">
+                    <i class="oi oi-loop-square"></i>
+                    <span class="ml-1">Maestro-Detalle</span>
+                </a>
 
-              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
-                  class="btn btn-light">
-                  <i class="oi oi-zoom-in"></i>
-                  <span class="ml-1">Filtrar Elementos</span>
-              </a>
+                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                    class="btn btn-light">
+                    <i class="oi oi-list-rich"></i>
+                    <span class="ml-1">Listar Elementos</span>
+                </a>
+            </div>
+        </div>
 
-                  <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
-                  class="btn btn-light">
-                  <i class="oi oi-loop-square"></i>
-                  <span class="ml-1">Maestro-Detalle</span>
-              </a>
 
-              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
-                  class="btn btn-light">
-                  <i class="oi oi-list-rich"></i>
-                  <span class="ml-1">Listar Elementos</span>
-              </a>
-          </div>
-      </div>
-      </a>
-  </div>
+    </div>
 
     <?php View::content() ?>
 
     <?php SicapFormBuilder::FromConfig($configuracion, $model) ?>
 </div>
 
-<div class="modal fade" id="modalError" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableLabel"
+    aria-hidden="true">
     <!-- .modal-dialog -->
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <!-- .modal-content -->
@@ -61,7 +62,7 @@
                     <!-- grid column -->
                     <div class="col-12">
 
-                       <p>Se ha producido un error inesperado, por favor contacte con el administrador de sistemas</p>
+                        <p>Se ha producido un error inesperado, por favor contacte con el administrador de sistemas</p>
 
 
                     </div><!-- /grid column -->

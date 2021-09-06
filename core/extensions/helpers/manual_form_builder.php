@@ -97,6 +97,7 @@ class ManualFormBuilder
                                     else
                                       echo "<option value=\"$value\">$value</option>", PHP_EOL;
                                   }
+                                  echo '<option value=0>Ninguno</option>';
                                   echo '</select>', PHP_EOL;
                               } else {
 
@@ -125,6 +126,7 @@ class ManualFormBuilder
                                         else
                                           echo "<option value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
                                       }
+                                      echo '<option value=0>Ninguno</option>';
                                       echo '</select>', PHP_EOL;
 
                                   }

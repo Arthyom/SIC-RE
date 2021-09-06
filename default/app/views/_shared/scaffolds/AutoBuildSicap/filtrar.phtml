@@ -1,55 +1,56 @@
-<div id="scaffold">
-    <?php //View::content()?>
-    <!-- .page -->
-
-    <!-- /floating action -->
-
-    <div class="d-md-flex align-items-md-start">
-        <h1 class="page-title mr-sm-auto">
-            <?php echo $controller_name . ' ' . $action_name ?>
-            <?php //echo var_dump($data)?>
-        </h1>
-
-       <div class="btn-toolbar">
-            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
-                class="btn btn-light">
-                <i class="oi oi-plus"></i>
-                <span class="ml-1">Nuevo Elemento</span>
-            </a>
-
-            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
-                class="btn btn-light">
-                <i class="oi oi-zoom-in"></i>
-                <span class="ml-1">Filtrar Elementos</span>
-            </a>
-
-                <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
-                class="btn btn-light">
-                <i class="oi oi-loop-square"></i>
-                <span class="ml-1">Maestro-Detalle</span>
-            </a>
-
-            <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
-                class="btn btn-light">
-                <i class="oi oi-list-rich"></i>
-                <span class="ml-1">Listar Elementos</span>
-            </a>
-        </div>
-        <!-- .btn-toolbar -->
-
-        <!-- /.btn-toolbar -->
-    </div>
-
-    <!--
-    <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear">
-    Nuevo
-    -->
-    </a>
-</div>
-
-
 
 <div class="col-8 offset-2">
+  <div id="scaffold">
+      <?php //View::content()?>
+      <!-- .page -->
+
+      <!-- /floating action -->
+      <h1 class="page-title mr-sm-auto">
+          <?php echo $controller_name . ' ' . $action_name ?>
+          <?php //echo var_dump($data)?>
+      </h1>
+      <div class="d-md-flex align-items-md-start">
+
+
+         <div class="btn-toolbar">
+              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/crear " type="button"
+                  class="btn btn-light">
+                  <i class="oi oi-plus"></i>
+                  <span class="ml-1">Nuevo Elemento</span>
+              </a>
+
+              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/filtrar " type="button"
+                  class="btn btn-light">
+                  <i class="oi oi-zoom-in"></i>
+                  <span class="ml-1">Filtrar Elementos</span>
+              </a>
+
+                  <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?>/masterdetail/1 " type="button"
+                  class="btn btn-light">
+                  <i class="oi oi-loop-square"></i>
+                  <span class="ml-1">Maestro-Detalle</span>
+              </a>
+
+              <a href="/<?php echo NOMBRE_CAJA ?>/default/public/<?php echo $controller_name ?> " type="button"
+                  class="btn btn-light">
+                  <i class="oi oi-list-rich"></i>
+                  <span class="ml-1">Listar Elementos</span>
+              </a>
+          </div>
+          <!-- .btn-toolbar -->
+
+          <!-- /.btn-toolbar -->
+      </div>
+
+      <!--
+      <a class="btn btn-danger btn-block" href="/florencioK/default/public/<?php echo $controller_name ?>/crear">
+      Nuevo
+      -->
+      </a>
+  </div>
+
+
+
     <?php //ModelForm::createFormFromConfig( $configuracion, $model )?>
     <?php SicapFormBuilder::FromConfigForSearch($configuracion, $model, '', true) ?>
 </div>

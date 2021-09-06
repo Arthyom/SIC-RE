@@ -176,7 +176,12 @@ var Select2Demo = /*#__PURE__*/function () {
             return $('<b>' + param.text + ' : ' + param.id + ' </b>');
           },
           templateSelection: function templateSelection(param) {
-            return $('<b>' + param.text + ' : [Id] ' + param.id + ' </b>');
+            var id = el.name;
+            if( el.dataset.keyReplace )
+              id = el.dataset.keyReplace;
+
+            var k = $('<b>' + param.text + ' : ['+ id +'] ' + param.id + ' </b>');
+            return k;
 
           },
           minimumInputLength: 1,

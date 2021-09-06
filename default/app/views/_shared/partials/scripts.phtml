@@ -6,7 +6,7 @@
 <?= Tag::js('../assets/vendor/pace-progress/pace.min') ?>
 <?= Tag::js('../assets/vendor/stacked-menu/js/stacked-menu.min') ?>
 <?= Tag::js('../assets/javascript/theme.min') ?>
- 
+
 <?= Tag::js('../assets/vendor/datatables.net/js/jquery.dataTables.min') ?>
 <?= Tag::js('../assets/vendor/datatables.net-buttons/js/dataTables.buttons.min') ?>
 <?= Tag::js('../assets/vendor/datatables.net-buttons/js/buttons.html5.min') ?>
@@ -26,7 +26,7 @@
 <?= Tag::js('AutoBuildSicap/crearfiltrarremote') ?>
 
 
- 
+
 
 <?php if( $action_name == 'codificar') : ?>
 <?= Tag::js('../assets/vendor/ace-builds/src-min-noconflict/ace') ?>
@@ -47,3 +47,23 @@
 <?= Tag::js('../assets/vendor/select2/js/select2.min') ?>
 
 <?= Tag::js('../assets/vendor/bootstrap-select/js/bootstrap-select.min') ?>
+
+<?= Tag::js('../assets/vendor/vanilla-text-mask/vanillaTextMask') ?>
+<?= Tag::js('../assets/vendor/text-mask-addons/textMaskAddons') ?>
+
+
+<?= Tag::js("../assets/vendor/particles.js/particles") ?>
+<script>
+  /**
+   * Keep in mind that your scripts may not always be executed after the theme is completely ready,
+   * you might need to observe the `theme:load` event to make sure your scripts are executed after the theme is ready.
+   */
+  $(document).on('theme:init', () =>
+  {
+    /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+    particlesJS.load('auth-header', 'assets/javascript/pages/particles.json');
+  })
+</script> <!-- END PLUGINS JS -->
+<!-- BEGIN THEME JS
+
+<script src="assets/javascript/theme.js"></script>  END THEME JS -->
