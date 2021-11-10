@@ -64,14 +64,14 @@
         </a>
            <span class="sr-only">Sign In</span>
         </h1>
-        <p> Don't have a account? <a href="auth-signup.html">Create One</a>
+        <p> ¿Aun no activas tu cuenta? <?= Html::link('login/activar', 'Activar') ?>
         </p>
       </header><!-- form -->
 
      
 
-      <?= Form::open('login','post', "class='auth-form'")?>
-     
+      <?= Form::open('login', 'post', "class='auth-form'")?>
+
         <!-- .form-group -->
         <div class="form-group">
           <div class="form-label-group">

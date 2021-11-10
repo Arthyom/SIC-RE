@@ -1,0 +1,69 @@
+<!--[if lt IE 10]>
+    <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+    <![endif]-->
+<!-- .auth -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>assets/stylesheets/theme-dark.min.css" data-skin="dark">
+
+
+<main class="auth">
+    <header id="auth-header" class="auth-header" style="background-color: #852A6D;">
+        <h1>
+            <a href="index.html">
+                <?= Html::img('sicap-logo.png', '', 'style="max-width: 500px;" class="img-fluid max-auto "') ?>
+            </a>
+            <span class="sr-only">Sign In</span>
+        </h1>
+        <p> ¿Ya tienes una cuenta activa? <?= Html::link('login', 'Iniciar sesion') ?>
+        </p>
+        <h1>Activa tu usuario </h1>
+    </header><!-- form -->
+
+    <?= View::content() ?>
+
+
+
+    <?= Form::openMultipart('login/activar', "class='auth-form'")?>
+
+
+    <!-- .form-group -->
+    <div class="form-group">
+        <label>Archivo Key</label>
+        <div class="form-label-group">
+            <?= Form::file('key', ' class="form-control" required') ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?= Form::submit('Activar', 'class="btn btn-lg btn-primary btn-block"') ?>
+        <?= Html::link('login', 'Cancelar', 'class="btn btn-lg btn-danger btn-block"') ?>
+    </div><!-- /.form-group -->
+    <!-- .form-group -->
+    <div class="form-group text-center">
+        <div class="custom-control custom-control-inline custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="remember-me"> <label class="custom-control-label"
+                for="remember-me">Keep me sign in(aun no funciona)</label>
+        </div>
+    </div><!-- /.form-group -->
+    <!-- recovery links -->
+    <div class="text-center pt-3">
+        <a href="auth-recovery-username.html" class="link">¿Olvidaste tu contraseña (aun no funciona)?</a>
+        <!--
+          <span class="mx-2">·</span>
+        -->
+        <!--
+          <a href="auth-recovery-password.html" class="link">Forgot Password?</a>
+        -->
+    </div><!-- /recovery links -->
+    <?= Form::close() ?>
+
+    <!-- copyright -->
+    <footer class="auth-footer">
+        © 2018 All Rights Reserved. <a href="#">Privacy</a> and <a href="#">Terms</a>
+    </footer>
+</main><!-- /.auth -->
+
+<!-- BEGIN BASE JS
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> END BASE JS
+  BEGIN PLUGINS JS -->

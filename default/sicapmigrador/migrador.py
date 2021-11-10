@@ -91,6 +91,7 @@ def crearControladores( plantilla, nombreTablas ):
     if(  config.scaffoldConfig['ow'] ):
       contenidoNuevoControlador = plantilla.replace('+', tabla.capitalize() )
       contenidoNuevoControlador = contenidoNuevoControlador.replace('-', tabla.lower() )
+      contenidoNuevoControlador = contenidoNuevoControlador.replace('%', config.scaffoldConfig['%'] )
       contenidoNuevoControlador = contenidoNuevoControlador.replace('*', config.scaffoldConfig['*'] )
       contenidoNuevoControlador = contenidoNuevoControlador.replace('/', config.scaffoldConfig['/'] )
 

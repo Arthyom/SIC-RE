@@ -66,6 +66,7 @@ globalConfig = {
 }
 
 scaffoldConfig = {
+    '%': 'AjaxScaffold',
     '*': 'AutoBuildSicap', #'AutoBuildSicap',        ##nombre del scaffold a usar dentro de un controlador basado en un scaffoldConroller
     '/': 'configuraciontabla',     ##nombre de la tabla para generar formularios automaticos
     'ow': True         ##habilitar la sobre escritura de controladores tipo scaffold

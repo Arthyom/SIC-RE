@@ -1,5 +1,8 @@
 <?php
 
+
+
+
     class usuarios extends ActiveRecord
     {
         protected $source = 'usuarios';
@@ -9,7 +12,7 @@
         {
             // Clave -> nombre del campo que representa a la contraseña
             // Usuario -> nombre del campo que representa al nombre de usuario
-            $auth = new Auth("model", "class: usuarios", "Usuario: $usr", "Clave: $pwd");
+            $auth = new Auth("model", "class: usuarios", "Usuario: $usr", "Clave: $pwd", "Activo: Si ");
 
             if ($auth->authenticate()) {
                 $usrData =  $auth->get_identity() ;
@@ -65,6 +68,7 @@
               //  $miIp=getIP();
 
 */
+                $_SESSION["miSessionCaja"]=true;
 
 
 
@@ -97,5 +101,70 @@
             } else {
                 return false;
             }
+        }
+
+
+        //override save method to customice the saving data process
+        public function create($data_to_save)
+        {
+            $base_64_string_data = base64_encode( uniqid() . serialize($data_to_save) );
+            $path = dirname(__DIR__).'/temp/'.$data_to_save['Usuario'].'.key';
+            $data_to_save['Clave'] = substr($base_64_string_data, 0, 34);
+            $to_mail = $data_to_save['CorreoElectronico'];
+            $mail = new MarteMailer('allpipiasaaa@gmail.com', '2010_Wflsyo?!');
+            if (parent::save($data_to_save)) {
+                    $key_file_resource = fopen($path, "w");
+                    fwrite($key_file_resource, $base_64_string_data);
+                    fclose($key_file_resource);
+
+                     $mail->Subject = 'Envio de archivo KEY, alta de usuario';
+                    $mail->Body    = 'Envio de archivo key de contraseña, alta de usuario';
+                    $mail->AddAttachment($path, 'keyname.key');
+                    $mail->addAddress($to_mail);
+                    $mail->Send();
+
+                  
+                }
+            
+        }
+
+        public function regenerate($id)
+        {
+            $current_model = $this->find($id);
+
+                $base_64_string_data = base64_encode(uniqid().serialize($current_model));
+                $path = dirname(__DIR__).'/temp/'.$current_model->Usuario.'.key';
+                $current_model->Clave  = substr($base_64_string_data, 0, 34);
+                $to_mail = $current_model->CorreoElectronico;
+            $mail = new MarteMailer('allpipiasaaa@gmail.com', '2010_Wflsyo?!');
+
+                if ((parent::update((array)$current_model))) {
+                    $key_file_resource = fopen($path, "w");
+                    fwrite($key_file_resource, $base_64_string_data);
+                    fclose($key_file_resource);
+
+                    $mail->AddAttachment($path, 'keyname.key');
+                    $mail->Subject = 'Envio de archivo KEY, clave regenerado';
+                    $mail->Body    = 'Envio de archivo key de contraseña, clave regenerada';
+                                        $mail->addAddress($to_mail);
+
+                    $mail->Send();
+                }
+
+          
+        }
+
+        public function confirmar()
+        {
+            
+            $mail = new MarteMailer('allpipiasaaa@gmail.com', '2010_Wflsyo?!');
+            $mail->addAddress($this->CorreoElectronico);
+            $mail->Subject = 'Envio de archivo KEY, confirmacion';
+            $mail->Body    = 'Envio de archivo key: contraseña y usuario, creada y validada';
+            $mail->Body  = "<h1> Clave: {$this->Clave} Usuario: {$this->Usuario} </h1>";
+            $mail->Send();
+
+
+            // code...
         }
     }

@@ -35,10 +35,26 @@ class Flash
      */
     public static function show($name, $text)
     {
+
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
-            echo '<div class="', $name, ' flash">', $text, '</div>', PHP_EOL;
-            return;
+        echo '
+        
+        <div class="alert alert-'.$name.' has-icon alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <div class="alert-icon">
+                <span class="oi oi-'.$icon.'"></span>
+            </div>
+            <h4 class="alert-heading"> '.$heading.' </h4>
+            <p class="mb-0"> 
+                '. $text .'
+            </p>
+        </div>';
         }
+        
+        //if (isset($_SERVER['SERVER_SOFTWARE'])) {
+        //echo '<div class="', $name, ' flash">', $text, '</div>', PHP_EOL;
+          //  return;
+        //}
         // salida CLI
         echo $name, ': ', strip_tags($text), PHP_EOL;
     }
@@ -60,7 +76,7 @@ class Flash
      */
     public static function warning($text)
     {
-        return self::show('warning', $text);
+        return self::show('warning', $message, $heading);
     }
 
     /**
@@ -70,7 +86,7 @@ class Flash
      */
     public static function info($text)
     {
-        return self::show('info', $text);
+        return self::show($class, $message, $heading, $icon);
     }
 
     /**
@@ -80,7 +96,7 @@ class Flash
      */
     public static function valid($text)
     {
-        return self::show('valid', $text);
+        return self::show($class, $message, $heading, $icon);
     }
 
 }
