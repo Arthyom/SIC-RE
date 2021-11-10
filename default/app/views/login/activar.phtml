@@ -2,6 +2,8 @@
     <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
     <![endif]-->
 <!-- .auth -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>assets/stylesheets/theme-dark.min.css" data-skin="dark">
+
 
 <main class="auth">
     <header id="auth-header" class="auth-header" style="background-color: #852A6D;">
@@ -11,34 +13,29 @@
             </a>
             <span class="sr-only">Sign In</span>
         </h1>
-        <p> ¿Aun no activas tu cuenta? <?= Html::link('login/activar', 'Activar') ?>
+        <p> ¿Ya tienes una cuenta activa? <?= Html::link('login', 'Iniciar sesion') ?>
         </p>
+        <h1>Activa tu usuario </h1>
     </header><!-- form -->
 
     <?= View::content() ?>
 
 
 
-      <?= Form::open('login', 'post', "class='auth-form'")?>
+    <?= Form::openMultipart('login/activar', "class='auth-form'")?>
 
-        <!-- .form-group -->
-        <div class="form-group">
-          <div class="form-label-group">
-            <?= Form::text('usr', ' id="inputUser" class="form-control" placeholder="Username" autofocus="" ') ?>
-            <label for="inputUser">Usuario</label>
-        </div>
-    </div><!-- /.form-group -->
+
     <!-- .form-group -->
     <div class="form-group">
+        <label>Archivo Key</label>
         <div class="form-label-group">
-            <?= Form::password('pwd', ' id="inputPassword" class="form-control" placeholder="Password" ') ?>
-            <label for="inputPassword">Clave</label>
+            <?= Form::file('key', ' class="form-control" required') ?>
         </div>
-    </div><!-- /.form-group -->
-    <!-- .form-group -->
-    <div class="form-group">
-        <?= Form::submit('Entrar', 'class="btn btn-lg btn-primary btn-block"') ?>
+    </div>
 
+    <div class="form-group">
+        <?= Form::submit('Activar', 'class="btn btn-lg btn-primary btn-block"') ?>
+        <?= Html::link('login', 'Cancelar', 'class="btn btn-lg btn-danger btn-block"') ?>
     </div><!-- /.form-group -->
     <!-- .form-group -->
     <div class="form-group text-center">

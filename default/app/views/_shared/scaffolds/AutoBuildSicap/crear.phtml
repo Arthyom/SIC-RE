@@ -50,9 +50,9 @@
 
 
 
-<div class="col-8 offset-2">
-    <?php //ModelForm::createFormFromConfig( $configuracion, $model )?>
-    <?php SicapFormBuilder::FromConfig($configuracion, $model) ?>
+    <?php //SicapFormBuilder::FromConfig($configuracion, $model)?>
+
+    <?php SicapFormBuilder::FromModelToAddForm($configuracion, $model)?>
 </div>
 
 <div class="modal fade" id="modalError" tabindex="-1" role="dialog"

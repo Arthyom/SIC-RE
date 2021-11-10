@@ -19,6 +19,7 @@ dbConfig = {
     'user' : 'alfredo',
     'password': 'Alfredo2020+'
 }
+
 globalConfig = {
     'oM': True,     ## realizar migracion de archivos y directorios SICAP
     'cM': True,     ## habilitar la creacion de modelos
@@ -42,9 +43,16 @@ globalConfig = {
     'ctrlFile': '../../default/app/controllers/index_controller.php',
     'ctrlDir' : '../../default/app/controllers/',
     'urlPath' : '/'+nombreCaja+'/default/public/',
+    'dirToCopy':{
+            'clases':  '../../default/app/views/',
+            'imprimir':'../../default/app/views/',
+            'excel':'../../default/public/excel/',
+            'javascript':'../../default/public/javascript/'
+        },
     'filesToEdit' : [
         '../../default/public/index.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
+        '../../default/app/config/databases.php',
         '../../default/app/views/index/ValidaUsuario.php',
         '../../default/app/views/index/clases/procedimientos.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
@@ -57,6 +65,7 @@ globalConfig = {
 }
 
 scaffoldConfig = {
+    '%': 'AjaxScaffold',
     '*': 'AutoBuildSicap', #'AutoBuildSicap',        ##nombre del scaffold a usar dentro de un controlador basado en un scaffoldConroller
     '/': 'configuraciontabla',     ##nombre de la tabla para generar formularios automaticos
     'ow': True         ##habilitar la sobre escritura de controladores tipo scaffold
