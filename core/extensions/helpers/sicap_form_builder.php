@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -390,10 +391,10 @@ class SicapFormBuilder
         $controlador = Router::get('controller');
         if (Router::get('action') == 'editar') {
             $idEditar = implode(Router::get('parameters'));
-            $elementoEditado = (new $controlador)->find($idEditar);
-            $action  = $controlador .'/'. $action .'editar/'.$idEditar;
+            $elementoEditado = (new $controlador())->find($idEditar);
+            $action  = $controlador . '/' . $action . 'editar/' . $idEditar;
         } else {
-            $action =  Router::get('controller') .'/'. Router::get('action'). '/'. implode(Router::get('parameters'));
+            $action =  Router::get('controller') . '/' . Router::get('action') . '/' . implode(Router::get('parameters'));
         }
 
         echo '<form action="', PUBLIC_PATH.$action, '" method="post" >' , PHP_EOL;
@@ -411,6 +412,11 @@ class SicapFormBuilder
 
             echo '<hr>';
 
+        $test = (new $table())->find(
+            "conditions:  TablaPropietaria ='$model'",
+            "order: Orden ASC",
+            "group: Type"
+        );
 
 
             $fields = (new $table())->find("conditions:  TablaPropietaria ='$model' AND Type = '$grouped_type'", "order: Orden ASC");
@@ -451,8 +457,6 @@ class SicapFormBuilder
                                   $sql = "SELECT COLUMN_TYPE FROM information_schema.`COLUMNS`WHERE TABLE_NAME = '$field->TablaPropietaria' AND COLUMN_NAME = '$field->Name'";
                                   $sd = $modelForm->find_all_by_sql($sql);
 
-                                  preg_match("/^enum\(\'(.*)\'\)$/", $sd[0]->COLUMN_TYPE, $matches);
-                                  $enum = explode("','", $matches[1]);
 
                                   if (substr_count($field->Extras, 'required') > 0) {
                                       echo "<label >$field->Label
@@ -463,23 +467,28 @@ class SicapFormBuilder
                                   }
 
 
-                                  echo "<select id=\"$field->Name\"    value=\"$valorCampo\"   name=\"$field->Name\" $field->Extras >", PHP_EOL;
+            echo '<div class="form-row ">', PHP_EOL;
 
-                                  foreach ($enum as $value) {
-                                    if( $valorCampo == $value )
-                                      echo "<option selected value=\"$value\">$value</option>", PHP_EOL;
-                                    else
-                                      echo "<option value=\"$value\">$value</option>", PHP_EOL;
-                                  }
-                                  echo '</select>', PHP_EOL;
-                              } else {
-
-
-                                $registros = (new $field->TablaForanea)->count();
+            //  View::content()
+            foreach ($fields as $field) {
+                if ($field->TablaPropietaria === $model) {
+                    if ($pk !== $field->Name) {
+                        echo '<div class="col-6 pt-2 pb-2">', PHP_EOL;
+                    } else {
+                        echo '<div>', PHP_EOL;
+                    }
 
 
-                                  $campo = $field->BusquedaSelect;
-                                  $campoValue = $field->CampoForaneo;
+                    $tipo = $field->Type;
+                    $alias = $field->Name;
+                    $nombreCampo = $field->Name;
+                    $valorCampo = $elementoEditado->$nombreCampo;
+
+
+                    if ($skipRequireds) {
+                        $field->Extras = str_replace('required', '', $field->Extras);
+                        $field->Extras = str_replace('required = "false"', '', $field->Extras);
+                    }
 
                                   if (self::$maxSelect > $registros) {
                                       if (substr_count($field->Extras, 'required') > 0) {
@@ -492,25 +501,75 @@ class SicapFormBuilder
                                       $tablaForanea  = (new $field->TablaForanea())->find_all_by_sql($field->Sentencias);
 
 
-                                      if($field->Name && $field->Name != $field->CampoForaneoValor)
-                                      echo "<select id=\"$field->CampoForaneoValor\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
-                                      else
-                                      echo "<select * id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                        switch ($tipo) {
+                            case 'select':
+                                $sql = '';
+                                $enum = '';
+                                if (strlen($field->TablaForanea) <= 0) {
+                                    $sql = "SELECT COLUMN_TYPE FROM information_schema.`COLUMNS`WHERE TABLE_NAME = '$field->TablaPropietaria' AND COLUMN_NAME = '$field->Name'";
+                                    $sd = $modelForm->find_all_by_sql($sql);
+
+                                    preg_match("/^enum\(\'(.*)\'\)$/", $sd[0]->COLUMN_TYPE, $matches);
+                                    $enum = explode("','", $matches[1]);
+
+                                    if (substr_count($field->Extras, 'required') > 0) {
+                                        echo "<label >$field->Label 
+                                        <span class='badge badge-danger'>Requerido</span>
+                                    </label>", PHP_EOL;
+                                    } else {
+                                        echo "<label >$field->Label</label>", PHP_EOL;
+                                    }
 
 
-                                      foreach ($tablaForanea as $value) {
-                                        if($valorCampo == $value->$campoValue)
-                                        echo "<option selected value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
+                                    echo "<select id=\"$field->Name\"    value=\"$valorCampo\"   name=\"$field->Name\" $field->Extras >", PHP_EOL;
 
-                                        else
-                                          echo "<option value=\"".$value->$campoValue."\">" . $value->$campo ."</option>", PHP_EOL;
-                                      }
-                                      echo '</select>', PHP_EOL;
+                                    echo "<option value=0>Seleccione</option>";
+                                    foreach ($enum as $value) {
+                                        if ($valorCampo == $value) {
+                                            echo "<option selected value=\"$value\">$value</option>", PHP_EOL;
+                                        } else {
+                                            echo "<option value=\"$value\">$value</option>", PHP_EOL;
+                                        }
+                                    }
+                                    echo '<option value=0>Ninguno</option>';
+                                    echo '</select>', PHP_EOL;
+                                } else {
+                                    $registros = (new $field->TablaForanea())->count();
 
-                                  }
-                                  else{
 
-                                    echo '
+                                    $campo = $field->BusquedaSelect;
+                                    $campoValue = $field->CampoForaneo;
+
+                                    if (self::$maxSelect > $registros) {
+                                        if (substr_count($field->Extras, 'required') > 0) {
+                                            echo "<label >$field->Label 
+                                          <span class='badge badge-danger'>Requerido</span>
+                                    </label>", PHP_EOL;
+                                        } else {
+                                            echo "<label >$field->Label</label>", PHP_EOL;
+                                        }
+                                        $tablaForanea  = (new $field->TablaForanea())->find_all_by_sql($field->Sentencias);
+
+
+                                        if ($field->Name && $field->Name != $field->CampoForaneoValor) {
+                                            echo "<select id=\"$field->CampoForaneoValor\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                        } else {
+                                            echo "<select  id=\"$field->Name\"  value=\"$valorCampo\" $field->Extras  name=\"$field->Name\" >", PHP_EOL;
+                                        }
+
+                                        echo "<option value=0>Seleccione</option>";
+
+                                        foreach ($tablaForanea as $value) {
+                                            if ($valorCampo == $value->$campoValue) {
+                                                echo "<option selected value=\"" . $value->$campoValue . "\">" . $value->$campo . "</option>", PHP_EOL;
+                                            } else {
+                                                echo "<option value=\"" . $value->$campoValue . "\">" . $value->$campo . "</option>", PHP_EOL;
+                                            }
+                                        }
+                                        echo '<option value=0>Ninguno</option>';
+                                        echo '</select>', PHP_EOL;
+                                    } else {
+                                        echo '
                                     <div >';
                                       if (substr_count($field->Extras, 'required') > 0) {
                                           echo "<label class='mr-4' style='margin-bottom: -20px;'>$field->Label
@@ -531,35 +590,49 @@ class SicapFormBuilder
                                         </label>
                                   </div>', PHP_EOL;
 
-                                  $nombre=$field->Nombre;
-                                  if($field->CampoForaneoValor&&$field->CampoForaneoValor != $field->Name)
-                                  $nombre = $field->CampoForaneoValor;
+                                        $nombre = $field->Nombre;
+                                        if ($field->CampoForaneoValor && $field->CampoForaneoValor != $field->Name) {
+                                            $nombre = $field->CampoForaneoValor;
+                                        }
 
-                                    if( Router::get('action') == 'editar' ){
-                                      $extractor = $field->BusquedaSelect;
-                                      $buscador = (new $field->TablaForanea)->find_first("conditions: $field->CampoForaneo = $valorCampo ");
-
-                                      echo '<select data-key-replace="'.$nombre.'"   value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control">' , PHP_EOL;
-                                          echo "<option value='$valorCampo'> ". $buscador->$extractor ."</oprtion>";
-                                      echo '</select>' , PHP_EOL;;
+                                        if (Router::get('action') == 'editar') {
+                                            $extractor = $field->BusquedaSelect;
+                                            $buscador = (new $field->TablaForanea())->find_first("conditions: $field->CampoForaneo = $valorCampo ");
+                                            echo '<select data-key-replace="' . $nombre . '"   value="' . $valorCampo . '" data-depend="' . $field->DependeDe . '" data-filter="' . $field->BusquedaSelect . '" id="' . $field->Name . '" name="' . $field->Name . '"  class="remoteinfo form-control">', PHP_EOL;
+                                            echo "<option value='$valorCampo'> " . $buscador->$extractor . "</oprtion>";
+                                            echo '</select>', PHP_EOL;;
+                                        } else {
+                                            echo '
+                                      <select data-key-replace="' . $nombre . '" value="' . $valorCampo . '" data-depend="' . $field->DependeDe . '" data-filter="' . $field->BusquedaSelect . '" id="' . $field->Name . '" name="' . $field->Name . '"  class="remoteinfo form-control"></select>
+                                      ', PHP_EOL;
+                                        }
                                     }
-                                    else{
-
-                                      echo '
-                                      <select data-key-replace="'.$nombre.'" value="'.$valorCampo.'" data-depend="'.$field->DependeDe.'" data-filter="'.$field->BusquedaSelect.'" id="'.$field->Name.'" name="'. $field->Name .'"  class="remoteinfo form-control"></select>
-                                      ' , PHP_EOL;
-                                    }
+                                }
+                                break;
 
 
 
 
-                                  }
-
-                              }
-                  break;
 
 
+                            case 'textarea':
+                                if (substr_count($field->Extras, 'required') > 0) {
+                                    echo "<label >$field->Label                                         <span class='badge badge-danger'>Requerido</span>
+                 </label>", PHP_EOL;
+                                } else {
+                                    echo "<label >$field->Label</label>", PHP_EOL;
+                                }
 
+                                echo "<textarea  $field->Extras id=\"$field->Name\" value=\"$valorCampo\" name=\"$field->Name\" >$valorCampo</textarea>", PHP_EOL;
+
+                                break;
+
+                            default:
+                                if (substr_count($field->Extras, 'required') > 0) {
+                                    echo "<label >$field->Label                                         <span class='badge badge-danger'>Requerido</span></label>", PHP_EOL;
+                                } else {
+                                    echo "<label >$field->Label</label>", PHP_EOL;
+                                }
 
 
 
@@ -605,11 +678,17 @@ class SicapFormBuilder
                             </div>
                         </div>
 
-                        " , PHP_EOL;
+                        ", PHP_EOL;
+                                }
+
+
+                                break;
+                        }
+                    } else {
+                        if ($pk == $field->Name) {
+                            echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >", PHP_EOL;
+                        }
                     }
-
-
-                break;
 
               }
                     } else {
@@ -629,7 +708,7 @@ class SicapFormBuilder
         echo '<div class="col">  ';
         echo Html::linkAction('', 'Cancelar', 'class="btn btn-danger btn-block"');
         echo '</div>';
-        echo '</form>' , PHP_EOL;
+        echo '</form>', PHP_EOL;
     }
 
     public static function FromConfigForSearch($table, $model, $action = '', $skipRequireds = false)
@@ -646,17 +725,17 @@ class SicapFormBuilder
         if (Router::get('action') == 'editar') {
             $idEditar = implode(Router::get('parameters'));
             $elementoEditado = (new $controlador)->find($idEditar);
-            $action  = $controlador .'/'. $action .'editar/'.$idEditar;
+            $action  = $controlador . '/' . $action . 'editar/' . $idEditar;
         } else {
-            $action =  Router::get('controller') .'/'. Router::get('action'). '/'. implode(Router::get('parameters'));
+            $action =  Router::get('controller') . '/' . Router::get('action') . '/' . implode(Router::get('parameters'));
         }
 
-        echo '<form action="', PUBLIC_PATH.$action, '" method="post" >' , PHP_EOL;
+        echo '<form action="', PUBLIC_PATH . $action, '" method="post" >', PHP_EOL;
 
         //  View::content()
         foreach ($fields as $field) {
             if ($field->TablaPropietaria === $model) {
-                echo '<div class="form-group">' , PHP_EOL;
+                echo '<div class="form-group">', PHP_EOL;
 
                 $tipo = $field->Type;
                 $alias = $field->Name;
@@ -675,22 +754,23 @@ class SicapFormBuilder
 
 
                     switch ($tipo) {
-                  case 'select':
-                              $sql = ''; $enum = '';
-                              if (strlen($field->TablaForanea) <= 0) {
-                                  $sql = "SELECT COLUMN_TYPE FROM information_schema.`COLUMNS`WHERE TABLE_NAME = '$field->TablaPropietaria' AND COLUMN_NAME = '$field->Name'";
-                                  $sd = $modelForm->find_all_by_sql($sql);
+                        case 'select':
+                            $sql = '';
+                            $enum = '';
+                            if (strlen($field->TablaForanea) <= 0) {
+                                $sql = "SELECT COLUMN_TYPE FROM information_schema.`COLUMNS`WHERE TABLE_NAME = '$field->TablaPropietaria' AND COLUMN_NAME = '$field->Name'";
+                                $sd = $modelForm->find_all_by_sql($sql);
 
-                                  preg_match("/^enum\(\'(.*)\'\)$/", $sd[0]->COLUMN_TYPE, $matches);
-                                  $enum = explode("','", $matches[1]);
+                                preg_match("/^enum\(\'(.*)\'\)$/", $sd[0]->COLUMN_TYPE, $matches);
+                                $enum = explode("','", $matches[1]);
 
-                                  echo "<label >$field->Label</label>" , PHP_EOL;
-                                  echo "editando un select" , PHP_EOL;
+                                echo "<label >$field->Label</label>", PHP_EOL;
+                                echo "editando un select", PHP_EOL;
 
 
-                                  echo "<select id=\"$field->Name\"    value=\"$valorCampo\"   name=\"$field->Name\" $field->Extras >", PHP_EOL;
+                                echo "<select id=\"$field->Name\"    value=\"$valorCampo\"   name=\"$field->Name\" $field->Extras >", PHP_EOL;
 
-                                  echo "<option selected value=\"\"> </option>", PHP_EOL;
+                                echo "<option selected value=\"\"> </option>", PHP_EOL;
 
                                   foreach ($enum as $value) {
                                       echo "<option value=\"$value\">$value</option>", PHP_EOL;
@@ -700,8 +780,8 @@ class SicapFormBuilder
                                   $registros = (new $field->TablaForanea)->count();
 
 
-                                  $campo = $field->BusquedaSelect;
-                                  $campoValue = $field->CampoForaneo;
+                                $campo = $field->BusquedaSelect;
+                                $campoValue = $field->CampoForaneo;
 
                                   if (self::$maxSelect > $registros) {
                                       echo "<label >$field->Label</label>" , PHP_EOL;
@@ -717,10 +797,10 @@ class SicapFormBuilder
                                   } else {
                                       echo '
                                     <div >
-                                        <label class="mr-5" >'.$field->Label.'</label>
+                                        <label class="mr-5" >' . $field->Label . '</label>
                                         <span class="mr-2" >Busqueda Parcial</span>
-                                        <label class="switcher-control switcher-control-lg">
-                                            <input id="ParcialBusqueda'. $field->Name .'" type="checkbox" class="switcher-input" >
+                                        <label class="switcher-control switcher-control-lg pt-1 pb-1">
+                                            <input id="ParcialBusqueda' . $field->Name . '" type="checkbox" class="switcher-input" >
                                             <span class="switcher-indicator"></span>
                                             <span class="switcher-label-on">
                                                 <i class="fas fa-check"></i></span> <span class="switcher-label-off">
@@ -748,9 +828,8 @@ class SicapFormBuilder
                               }
                   break;
 
-                  case 'textarea':
-                    echo "<label >$field->Label</label>" , PHP_EOL;
-                    echo "<textarea  $field->Extras id=\"$field->Name\" value=\"$valorCampo\" name=\"$field->Name\" >$valorCampo</textarea>" , PHP_EOL;
+                        default:
+                            echo "<label >$field->Label</label>", PHP_EOL;
 
                   break;
 
@@ -778,16 +857,15 @@ class SicapFormBuilder
                             </div>
                         </div>
 
-                        " , PHP_EOL;
+                        ", PHP_EOL;
+                            }
+
+
+
+                            break;
                     }
-
-
-
-                break;
-
-              }
                 } else {
-                    echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >" , PHP_EOL;
+                    echo "<input type= \"hidden\" $field->Extras id=\"$field->Name\"   name=\"$field->Name\" value=\"$valorCampo\" >", PHP_EOL;
                 }
 
                 echo '</div>';
@@ -799,7 +877,7 @@ class SicapFormBuilder
         echo '<div class="col">  ';
         echo Html::linkAction('', 'Cancelar', 'class="btn btn-danger btn-block"');
         echo '</div>';
-        echo '</form>' , PHP_EOL;
+        echo '</form>', PHP_EOL;
     }
 
     public static function FromConfigMasterDetail($tablaMaestro, $configuracion = 'configuracionTabla')

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -33,7 +34,7 @@ class Flash
      * @param string $name  Para tipo de mensaje y para CSS class='$name'.
      * @param string $text  Mensaje a mostrar
      */
-    public static function show($name, $text)
+    public static function show($name, $text, $heading = 'Information', $icon = 'flag')
     {
 
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
@@ -56,7 +57,7 @@ class Flash
           //  return;
         //}
         // salida CLI
-        echo $name, ': ', strip_tags($text), PHP_EOL;
+        //echo $name, ': ', strip_tags($text), PHP_EOL;
     }
 
     /**
@@ -64,9 +65,9 @@ class Flash
      *
      * @param string $text
      */
-    public static function error($text)
+    public static function error($message, $class = 'danger', $heading = 'Error')
     {
-        return self::show('error', $text);
+        return self::show($class, $message, $heading);
     }
 
     /**
@@ -74,7 +75,7 @@ class Flash
      *
      * @param string $text
      */
-    public static function warning($text)
+    public static function warning($message, $class = 'warning', $heading = 'Warning')
     {
         return self::show('warning', $message, $heading);
     }
@@ -84,7 +85,7 @@ class Flash
      *
      * @param string $text
      */
-    public static function info($text)
+    public static function info($message, $class = 'info',  $heading = 'Info', $icon = 'check')
     {
         return self::show($class, $message, $heading, $icon);
     }
@@ -94,9 +95,8 @@ class Flash
      *
      * @param string $text
      */
-    public static function valid($text)
+    public static function valid($message, $class = 'success', $heading = 'Correct', $icon = 'check')
     {
         return self::show($class, $message, $heading, $icon);
     }
-
 }
