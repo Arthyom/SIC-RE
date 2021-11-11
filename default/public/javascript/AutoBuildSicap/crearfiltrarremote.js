@@ -127,6 +127,9 @@ var Select2Demo = /*#__PURE__*/function () {
                 k = k.slice(0, k.length -1 ).join('/');
 
               var da =  k +'/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
+              da = da.replace('/editar','');
+              da = da.replace('/crear','');
+              da = da.replace('/filtrar','');
               return da;
             },
             type: 'POST',
