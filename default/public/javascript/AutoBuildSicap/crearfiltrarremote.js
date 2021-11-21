@@ -94,6 +94,7 @@ var Select2Demo = /*#__PURE__*/function () {
       var elems = $('.remoteinfo')
       for (var i = 0; i < elems.length; i++) {
         var el = elems[i];
+        /*
         var url2 = window.location.href.split('/');
         var name = el.name
         if(el.getAttribute('data-key-replace') )
@@ -103,7 +104,7 @@ var Select2Demo = /*#__PURE__*/function () {
         var targetUrl2 = url2.join('/');
         targetUrl2 = targetUrl2.replace('/editar', '')
         targetUrl2 = targetUrl2.replace('/crear', '')
-        targetUrl2 = targetUrl2.replace('/filtrar', '')
+        targetUrl2 = targetUrl2.replace('/filtrar', '')*/
 
 
 
@@ -112,24 +113,24 @@ var Select2Demo = /*#__PURE__*/function () {
           ajax: {
             error: function error(param) {
               console.log('atrapando un error', param);
-              if(param.statusText != 'abort')
-              $('#modalError').modal('show');
-             },
+              if (param.statusText != 'abort')
+                $('#modalError').modal('show');
+            },
             url: function url(param) {
               var id = this[0].name
-              if(this[0].dataset.keyReplace)
-              id = this[0].dataset.keyReplace
+              if (this[0].dataset.keyReplace)
+                id = this[0].dataset.keyReplace
 
               var k = window.location.href.split('/');
-              if( window.location.href.search('editar') > 0)
+              if (window.location.href.search('editar') > 0)
                 k = k.slice(0, k.length - 2).join('/');
               else
-                k = k.slice(0, k.length -1 ).join('/');
+                k = k.slice(0, k.length - 1).join('/');
 
-              var da =  k +'/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
-              da = da.replace('/editar','');
-              da = da.replace('/crear','');
-              da = da.replace('/filtrar','');
+              var da = k + '/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
+              da = da.replace('/editar', '');
+              da = da.replace('/crear', '');
+              da = da.replace('/filtrar', '');
               return da;
             },
             type: 'POST',
@@ -137,23 +138,25 @@ var Select2Demo = /*#__PURE__*/function () {
             delay: 250,
             data: function data(params) {
 
-
+              params.term = params.term.replace(' ', '');
               var id = this[0].name
               var dependeInfo = '';
               var dependeDe = this[0].dataset.depend;
               var dataFilter = this[0].dataset.filter;
+              var limitado = this[0].dataset.limited;
               var ParcialBusqueda = document.getElementById('ParcialBusqueda' + id).checked;
               console.log('elemento', ParcialBusqueda);
 
               if (dependeDe)
                 var dependiente = document.getElementById(dependeDe)
-                if( dependiente )
-                  dependeInfo = dependiente.value;
+              if (dependiente)
+                dependeInfo = dependiente.value;
 
               return JSON.stringify({
 
 
                 q: params.term,
+                limitado,
                 dependeDe,
                 dependeInfo,
                 ParcialBusqueda,
@@ -184,10 +187,10 @@ var Select2Demo = /*#__PURE__*/function () {
           },
           templateSelection: function templateSelection(param) {
             var id = el.name;
-            if( el.dataset.keyReplace )
+            if (el.dataset.keyReplace)
               id = el.dataset.keyReplace;
 
-            var k = $('<b>' + param.text + ' : ['+ id +'] ' + param.id + ' </b>');
+            var k = $('<b>' + param.text + ' : [' + id + '] ' + param.id + ' </b>');
             return k;
 
           },

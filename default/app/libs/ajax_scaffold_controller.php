@@ -10,16 +10,14 @@ abstract class AjaxScaffoldController extends ScaffoldController
 {
     public function rest_foreingKeyInfo($keyName, $fieldName)
     {
-
-
       // conseguir los campos con id del modelo indicado
-
         try {
             View::template(null);
             View::select('json');
 
             $metodo = $_SERVER['REQUEST_METHOD'];
             $respuesta = false;
+            $s = '';
 
             if (true) {
                 $datos =  json_decode(file_get_contents('php://input'), true);
@@ -31,6 +29,7 @@ abstract class AjaxScaffoldController extends ScaffoldController
                 $dataFilter = explode(',', $datos['dataFilter']);
                 $criteria = '';
                 $matches = [];
+                $limitar = $datos['limitado'];
 
                 //crear una cadena de busqueda
                 foreach ($dataFilter as $i => $filter) {
@@ -59,7 +58,7 @@ abstract class AjaxScaffoldController extends ScaffoldController
                     if (!$dependeDe) {
                         $coincidenciasId     = (new $camposSelect->TablaForanea)->find("conditions: $keyName = $id");
                     } else {
-                        $coincidenciasId     = (new $camposSelect->TablaForanea)->find("conditions: $keyName = $id AND $dependeDe = $dependeInfo");
+                        $coincidenciasId     = (new $camposSelect->TablaForanea)->find("conditions: $keyName = $id AND $dependeDe = $dependeInfo ");
                     }
 
                     foreach ($coincidenciasId as $i => $cid) {
@@ -73,9 +72,25 @@ abstract class AjaxScaffoldController extends ScaffoldController
                 $coinTexto = [];
                 if (!is_numeric($texto)) {
                     if (!$dependeDe) {
-                        $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ");
+                        if(!$limitar)
+                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ");
+                        else{
+
+                            $s = "inner join {$camposSelect->TablaPropietaria} on {$camposSelect->TablaPropietaria}.{$camposSelect->CampoForaneoValor} = {$camposSelect->TablaForanea}.{$camposSelect->CampoForaneoValor}";
+                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ", "columns: *", "join: $s");
+                        }
+
+                          
                     } else {
-                        $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo");
+                        if( !$limitar  )
+                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo");
+                        else{
+                            $s = //"inner join $TablaForanea on {$camposSelect->TablaPropietaria}.{$camposSelect->CampoForaneoValor} = {$camposSelect->TablaForanea}.{$campoSelect->CampoForaneoValor}";
+
+                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo", 
+                            "join: $s");
+                        }
+
                     }
 
                     foreach ($coinTexto as $j => $cit) {
@@ -99,9 +114,10 @@ abstract class AjaxScaffoldController extends ScaffoldController
             array_push($matches, ['id' =>'0' , 'text'=>'Ninguno' ]);
 
 
-            $this->data = [ 'pk'=>"conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'", 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
+            $this->data = [ 'sqs'=> $s, 'l'=>$limitar, 'pk'=>"conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'", 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
         } catch (\Exception $e) {
             $this->data = ['err OOO'=>$e->getMessage()];
         }
     }
+
 }

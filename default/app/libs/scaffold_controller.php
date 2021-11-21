@@ -121,7 +121,7 @@ abstract class ScaffoldController extends AdminController
     }
 
 
-    /**
+      /**
      * Crea un Registro
      */
     public function crear()
@@ -147,7 +147,7 @@ abstract class ScaffoldController extends AdminController
                 } else {
                     Flash::info('Operacion exitosa', 'success', 'Correcto');
 
-                    Redirect::to('editar');
+                    Redirect::to("{$this->controller_name}");
                 }
             }
         } catch (\Throwable $th) {
@@ -155,6 +155,7 @@ abstract class ScaffoldController extends AdminController
             Flash::error($th->getMessage());
         }
     }
+
 
     /**
      * Edita un Registro
@@ -228,6 +229,17 @@ abstract class ScaffoldController extends AdminController
      * @param int $id Identificador de registro
      */
     public function ver($id)
+    {
+        $this->data = (new $this->model)->find_first((int) $id);
+    } 
+
+
+      /**
+     * Maestro-Detalle de un Registro (elemento que necesita mejorarse)
+     *
+     * @param int $id Identificador de registro
+     */
+    public function details($id)
     {
         $this->data = (new $this->model)->find_first((int) $id);
     }
