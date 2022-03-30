@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -33,9 +34,10 @@ class Flash
      * @param string $name  Para tipo de mensaje y para CSS class='$name'.
      * @param string $text  Mensaje a mostrar
      */
-    public static function show($name, $text, $heading='Information', $icon='flag')
+    public static function show($name, $text, $heading = 'Information', $icon = 'flag')
     {
 
+        if (isset($_SERVER['SERVER_SOFTWARE'])) {
         echo '
         
         <div class="alert alert-'.$name.' has-icon alert-dismissible fade show">
@@ -48,6 +50,7 @@ class Flash
                 '. $text .'
             </p>
         </div>';
+        }
         
         //if (isset($_SERVER['SERVER_SOFTWARE'])) {
         //echo '<div class="', $name, ' flash">', $text, '</div>', PHP_EOL;
@@ -62,7 +65,7 @@ class Flash
      *
      * @param string $text
      */
-    public static function error( $message, $class='danger',$heading='Error')
+    public static function error($message, $class = 'danger', $heading = 'Error')
     {
         return self::show($class, $message, $heading);
     }
@@ -72,9 +75,9 @@ class Flash
      *
      * @param string $text
      */
-    public static function warning( $message, $class='warning', $heading='Warning')
+    public static function warning($message, $class = 'warning', $heading = 'Warning')
     {
-        return self::show('warning', $text, $heading);
+        return self::show('warning', $message, $heading);
     }
 
     /**
@@ -82,9 +85,9 @@ class Flash
      *
      * @param string $text
      */
-    public static function info($message, $class='info',  $heading='Info', $icon='check')
+    public static function info($message, $class = 'info',  $heading = 'Info', $icon = 'check')
     {
-        return self::show($class, $text, $heading, $icon);
+        return self::show($class, $message, $heading, $icon);
     }
 
     /**
@@ -92,9 +95,8 @@ class Flash
      *
      * @param string $text
      */
-    public static function valid( $message, $class='success', $heading='Correct', $icon='check')
+    public static function valid($message, $class = 'success', $heading = 'Correct', $icon = 'check')
     {
-        return self::show($class, $text, $heading, $icon);
+        return self::show($class, $message, $heading, $icon);
     }
-
 }

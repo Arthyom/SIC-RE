@@ -94,6 +94,7 @@ var Select2Demo = /*#__PURE__*/function () {
       var elems = $('.remoteinfo')
       for (var i = 0; i < elems.length; i++) {
         var el = elems[i];
+        /*
         var url2 = window.location.href.split('/');
         var name = el.name
         if(el.getAttribute('data-key-replace') )
@@ -102,6 +103,10 @@ var Select2Demo = /*#__PURE__*/function () {
         url2[url2.length - 1] = 'rest_foreingKeyInfo/' + name + '/' + el.getAttribute('data-filter');
         var targetUrl2 = url2.join('/');
         targetUrl2 = targetUrl2.replace('/editar', '')
+        targetUrl2 = targetUrl2.replace('/crear', '')
+        targetUrl2 = targetUrl2.replace('/filtrar', '')*/
+
+
 
 
         $(el).select2({
@@ -123,6 +128,9 @@ var Select2Demo = /*#__PURE__*/function () {
                 k = k.slice(0, k.length -1 ).join('/');
 
               var da =  k +'/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
+              da = da.replace('/editar','');
+              da = da.replace('/crear','');
+              da = da.replace('/filtrar','');
               return da;
             },
             type: 'POST',
@@ -130,11 +138,12 @@ var Select2Demo = /*#__PURE__*/function () {
             delay: 250,
             data: function data(params) {
 
-
+              params.term = params.term.replace(' ', '');
               var id = this[0].name
               var dependeInfo = '';
               var dependeDe = this[0].dataset.depend;
               var dataFilter = this[0].dataset.filter;
+              var limitado= this[0].dataset.limited;
               var ParcialBusqueda = document.getElementById('ParcialBusqueda' + id).checked;
               console.log('elemento', ParcialBusqueda);
 
@@ -147,6 +156,7 @@ var Select2Demo = /*#__PURE__*/function () {
 
 
                 q: params.term,
+                limitado,
                 dependeDe,
                 dependeInfo,
                 ParcialBusqueda,

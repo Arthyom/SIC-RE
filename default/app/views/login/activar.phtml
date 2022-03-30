@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>assets/stylesheets/theme-dark.min.css" data-skin="dark">
+
+
+<main class="auth">
+    <header id="auth-header" class="auth-header" style="background-color: #852A6D;">
+        <h1>
+            <a href="index.html">
+                <?= Html::img('sicap-logo.png', '', 'style="max-width: 500px;" class="img-fluid max-auto "') ?>
+            </a>
+            <span class="sr-only">Sign In</span>
+        </h1>
+        <p> ¿Ya tienes una cuenta activa? <?= Html::link('login', 'Iniciar sesion') ?>
+        </p>
+        <h1>Activa tu usuario </h1>
+    </header>
+
+    <?= View::content() ?>
+
+
+
+    <?= Form::openMultipart('login/activar', "class='auth-form'")?>
+
+
+    <div class="form-group">
+        <label>Archivo Key</label>
+        <div class="form-label-group">
+            <?= Form::file('key', ' class="form-control" required') ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?= Form::submit('Activar', 'class="btn btn-lg btn-primary btn-block"') ?>
+        <?= Html::link('login', 'Cancelar', 'class="btn btn-lg btn-danger btn-block"') ?>
+    </div>
+
+
+    <?= Form::close() ?>
+
+    <!--
+    <div class="form-group text-center">
+        <div class="custom-control custom-control-inline custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="remember-me"> <label class="custom-control-label"
+                for="remember-me">Keep me sign in(aun no funciona)</label>
+        </div>
+    </div>
+    <div class="text-center pt-3">
+        <a href="auth-recovery-username.html" class="link">¿Olvidaste tu contraseña (aun no funciona)?</a>
+    </div>
+
+-->
+    <footer class="auth-footer">
+        © 2021 Todos los derechos reservados. <a href="#">Acuerdo </a> y <a href="#">Teminos</a>
+    </footer>
+</main>

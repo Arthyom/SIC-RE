@@ -46,4 +46,8 @@ return [
          */
         //'routes' => '1',
     ],
+
+    'global_constants'=>[
+        'max_select_items' => 15
+    ]
 ];
