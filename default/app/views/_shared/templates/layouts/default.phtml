@@ -1,17 +1,13 @@
 <!doctype html>
 <html lang="en">
 
-<head> 
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- End Required meta tags -->
-
     <?php View::partial('head') ?>
 
 </head>
 
-<!-- {% if page.hasScrollSpy == true %} -->
 <?php if (false) : ?>
 
 <body data-spy="scroll" data-target="#nav-content" data-offset="76">
@@ -19,43 +15,27 @@
 
     <body>
         <?php endif ?>
-        <!-- .app -->
         <div class="app">
-            <!--[if lt IE 10]>
-      <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
-      <![endif]-->
 
-            <!-- .app-header
-      {% include header-nosearch.html %}-->
+
             <?php View::partial('header') ?>
 
-            <!-- /.app-header -->
-
-            <!-- .app-aside -->
-            <?php //
+            <?php 
             View::partial('aside', '', array( 'menu' => $menu )) ?>
 
-            <!-- /.app-aside -->
 
-            <!-- .app-main -->
             <main class="app-main">
-                <!-- .wrapper -->
                 <div class="wrapper">
 
-                    <!-- .page -->
                     <div class="page">
-                        <!-- .page-inner -->
                         <div class="page-inner">
-                            <!-- .page-title-bar -->
                             <header class="page-title-bar">
 
                                 <div class="page-section">
-                                    <!-- .card -->
                                     <div class="card card-fluid">
-                                        <!-- .card-body -->
                                         <div class="card-body">
                                             <?php View::content() ?>
-                                           
+
 
                                         </div>
                                     </div>
@@ -66,12 +46,9 @@
         </div>
         </div>
 
-        <?php View::partial('footer') ?>
-        <!-- /.wrapper -->
+        <?php //View::partial('footer') ?>
         </main>
-        <!-- /.app-main -->
         </div>
-        <!-- /.app -->
 
         <?php View::partial('scripts', null, array( 'action_name' => $action_name) )?>
 

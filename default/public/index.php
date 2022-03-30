@@ -61,6 +61,7 @@ define('APP_PATH', dirname(__DIR__).'/app/');
 define('NOMBRE_CAJA', 'caminostepeyac-marte');
 
 
+
 /*
  * Define el CORE_PATH
  *
