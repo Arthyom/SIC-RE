@@ -4,32 +4,34 @@ import uuid
 
 PATH_MODELS = '../app/models/'
 PATH_VIEWS = '../app/views/'
-PATH_INHERITS = '/home/juvencio/www/caminostepeyac/'
+PATH_INHERITS = '***plantilla_caja***'
 PATH_CONTROLLERS = '../app/controllers/'
 TARGET_FILE_EXTEN = '.php'
 
 
 ################################################################################
 ########################### INICIO DE SECCION EDITABLE #########################
-nombreCaja = 'caminostepeyac'
-copiaCaja = '/home/juvencio/www/caminostepeyac/'
+nombreCaja = '***nombre_caja***'
+copiaCaja = '***plantilla_caja***'
+alias = "'***nombre_alias***'"
+
 dbConfig = {
-    'host' : 'localhost',
-    'database': 'caminostepeyac',
-    'user' : 'alfredo',
-    'password': 'Alfredo2020+'
+    'host' : '***nombre_host***',
+    'database': '***nombre_db***',
+    'user' : '***nombre_usuario***',
+    'password': '***nombre_pass***'
 }
+
 globalConfig = {
-    'oM': True,     ## realizar migracion de archivos y directorios SICAP
-    'cM': True,     ## habilitar la creacion de modelos
-    'cS': True,     ## habilitar la creacion de controladores SCAFFOLD
-    'cC': True,     ## habilitar la creacion controladores APPCONTROLLER
-    'cI': True,     ## habilitar la insercion en la tabla de configuracion
-    'cL': True,     ## habilitar la insercion en la tabla mymenugenerador
-    'cK': False,     ## detectar y corregir tablas sin llave primaria ************
-    'startNum' : 50, ## inicio del indice para ordenar campos de la tabla de configuracion
-    'stepsNum' : 10, ## incremento del indice para ordenar campos de la tabla de configuracion
-    'readRelations': False,    ## habilitar la lectura de relaciones
+    'cM': '***cM***',     ## habilitar la creacion de modelos
+    'cS': '***cS***',     ## habilitar la creacion de controladores SCAFFOLD
+    'cC': '***cS***',     ## habilitar la creacion controladores APPCONTROLLER
+    'cI': '***cI***',     ## habilitar la insercion en la tabla de configuracion
+    'cL': '***cL***',     ## habilitar la insercion en la tabla mymenugenerador
+    'cK': '***cK***',     ## detectar y corregir tablas sin llave primaria ************
+    'startNum' : '***srtN***', ## inicio del indice para ordenar campos de la tabla de configuracion
+    'stepsNum' : '***stpN***', ## incremento del indice para ordenar campos de la tabla de configuracion
+    'readRelations': '***rL***',    ## habilitar la lectura de relaciones
 ########################### FIN DE SECCION EDITABLE ############################
 #########################################################################33#####
 
@@ -42,9 +44,16 @@ globalConfig = {
     'ctrlFile': '../../default/app/controllers/index_controller.php',
     'ctrlDir' : '../../default/app/controllers/',
     'urlPath' : '/'+nombreCaja+'/default/public/',
+    'dirToCopy':{
+            'clases':  '../../default/app/views/',
+            'imprimir':'../../default/app/views/',
+            'excel':'../../default/public/excel/',
+            'javascript':'../../default/public/javascript/'
+        },
     'filesToEdit' : [
         '../../default/public/index.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
+        '../../default/app/config/databases.php',
         '../../default/app/views/index/ValidaUsuario.php',
         '../../default/app/views/index/clases/procedimientos.php',
         '../../default/public/javascript/AutoBuildSicap/index-chart.js',
@@ -57,6 +66,7 @@ globalConfig = {
 }
 
 scaffoldConfig = {
+    '%': 'AjaxScaffold',
     '*': 'AutoBuildSicap', #'AutoBuildSicap',        ##nombre del scaffold a usar dentro de un controlador basado en un scaffoldConroller
     '/': 'configuraciontabla',     ##nombre de la tabla para generar formularios automaticos
     'ow': True         ##habilitar la sobre escritura de controladores tipo scaffold
