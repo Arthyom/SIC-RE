@@ -1,4 +1,4 @@
-<?php
+  <?php
 
     class LoginController extends AppController
     {
@@ -26,7 +26,7 @@
             }
         }
             
-
+  
 
 
 
@@ -57,6 +57,7 @@
 
 
                 $unser = unserialize( $to_unserialize );
+                $unser->Clave = $dinamic_uid;
                 $unser->Activo = 'Si';
                 $unser->update();
                 $unser->confirmar();

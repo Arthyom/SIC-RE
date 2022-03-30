@@ -21,33 +21,23 @@
 
                 /*
                 $s = (new usuarios)->sql("SELECT Nombre, Lineasporpagina, Tiempoespera, Diascaptacion, Diasprestamo, OrdenNombre, (SELECT Fecha FROM dolares WHERE Fecha=DATE(NOW())) AS FechaDolar, DATE(NOW()) AS Hoy, DAYOFWEEK(now()) AS Dia FROM configuracion");
-
                 $s =  $s->fetch_assoc();
-
-
                 $_SESSION["RegistrosPorPagina"]=$s["Lineasporpagina"];
                 $_SESSION["Tiempoespera"]=$s["Tiempoespera"];
                 $_SESSION["Nombredelacaja"]=$s["Nombre"];
                 $_SESSION["Diascaptacion"]=$s["DiasCaptacion"];
                 $_SESSION["Diasprestamo"]=$s["DiasPrestamo"];
                 $_SESSION["miOrdenNombre"]=$s["OrdenNombre"];
-
                 $_SESSION['Usuario'] = $usr;
                 $_SESSION["miSessionCaja"]=$usrData["IdUsuario"];
                 $_SESSION["mibgUsuarioAct"]="alfredo";
                 $_SESSION["mibgClaveUsuar"]="Alfredo2020+";
                 $_SESSION["mibgBaseDatos"]="florenciocopia";
-
                 $_POST['Usuario'] = $usr;
-
                 // fijar elementos en la session
-
                 $k = (new usuarios)->sql( "SELECT IdUsuario, Nombre, Nivel, IdGrupoUsuarios, DameGrupoUsuario(IdUsuario) AS Grupo, IdSucursal, (SELECT Nombre FROM sucursales WHERE IdSucursal=us.IdSucursal LIMIT 0,1) AS Sucursal, DATEDIFF(NOW(),FechaClave) AS DiasClave, (SELECT MayusculasActivo FROM configuracion) AS MayusculasActivo, (SELECT DiasCaducaClaveAcceso FROM configuracion) AS DiasCaduca, DATE_FORMAT(NOW(),'%d/%m/%Y') AS Fecha, DATE_FORMAT(NOW(),'%H:%i:%s') AS Hora, us.NominaExterna FROM usuarios AS us WHERE IdUsuario='".$_SESSION["miSessionCaja"]."'  ");
                 $k = $k->fetch_assoc();
-
                 echo var_dump( $k );
-
-
                // $result2=mysql_query($miCadenaSQL);
                // $row2=mysql_fetch_array($result2);
                 $_SESSION["mibgIdGrupo2"]=$k["IdGrupoUsuarios"];
@@ -66,8 +56,6 @@
                 $_SESSION["miSessionActual"]=date("YnjHis");
                 $_SESSION["miArregloNoAplicar"]=array();
               //  $miIp=getIP();
-
-
 */
                 $_SESSION["miSessionCaja"]=true;
 
@@ -123,21 +111,26 @@
                     $mail->AddAttachment($path, 'keyname.key');
                     $mail->addAddress($to_mail);
                     $mail->Send();
+                    Flash::info( 'Registro creado correctamente' );
+
+                    Redirect::to('');
+
 
                   
                 }
             
-        }
+        } 
 
         public function regenerate($id)
         {
             $current_model = $this->find($id);
 
+            $current_model->Activo = 'No';
                 $base_64_string_data = base64_encode(uniqid().serialize($current_model));
                 $path = dirname(__DIR__).'/temp/'.$current_model->Usuario.'.key';
                 $current_model->Clave  = substr($base_64_string_data, 0, 34);
                 $to_mail = $current_model->CorreoElectronico;
-            $mail = new MarteMailer('allpipiasaaa@gmail.com', '2010_Wflsyo?!');
+                $mail = new MarteMailer('allpipiasaaa@gmail.com', '2010_Wflsyo?!');
 
                 if ((parent::update((array)$current_model))) {
                     $key_file_resource = fopen($path, "w");

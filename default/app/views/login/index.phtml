@@ -1,8 +1,3 @@
-<!--[if lt IE 10]>
-    <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
-    <![endif]-->
-<!-- .auth -->
-
 <main class="auth">
     <header id="auth-header" class="auth-header" style="background-color: #852A6D;">
         <h1>
@@ -13,60 +8,47 @@
         </h1>
         <p> ¿Aun no activas tu cuenta? <?= Html::link('login/activar', 'Activar') ?>
         </p>
-    </header><!-- form -->
+    </header>
 
     <?= View::content() ?>
 
 
 
-      <?= Form::open('login', 'post', "class='auth-form'")?>
+    <?= Form::open('login', 'post', "class='auth-form'")?>
 
-        <!-- .form-group -->
-        <div class="form-group">
-          <div class="form-label-group">
+    <div class="form-group">
+        <div class="form-label-group">
             <?= Form::text('usr', ' id="inputUser" class="form-control" placeholder="Username" autofocus="" ') ?>
             <label for="inputUser">Usuario</label>
         </div>
-    </div><!-- /.form-group -->
-    <!-- .form-group -->
+    </div>
     <div class="form-group">
         <div class="form-label-group">
             <?= Form::password('pwd', ' id="inputPassword" class="form-control" placeholder="Password" ') ?>
             <label for="inputPassword">Clave</label>
         </div>
-    </div><!-- /.form-group -->
-    <!-- .form-group -->
+    </div>
     <div class="form-group">
         <?= Form::submit('Entrar', 'class="btn btn-lg btn-primary btn-block"') ?>
 
-    </div><!-- /.form-group -->
-    <!-- .form-group -->
-    <div class="form-group text-center">
-        <div class="custom-control custom-control-inline custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="remember-me"> <label class="custom-control-label"
-                for="remember-me">Keep me sign in(aun no funciona)</label>
-        </div>
-    </div><!-- /.form-group -->
-    <!-- recovery links -->
-    <div class="text-center pt-3">
-        <a href="auth-recovery-username.html" class="link">¿Olvidaste tu contraseña (aun no funciona)?</a>
-        <!--
-          <span class="mx-2">·</span>
-        -->
-        <!--
-          <a href="auth-recovery-password.html" class="link">Forgot Password?</a>
-        -->
-    </div><!-- /recovery links -->
+    </div>
+
+
     <?= Form::close() ?>
 
-    <!-- copyright -->
     <footer class="auth-footer">
-        © 2018 All Rights Reserved. <a href="#">Privacy</a> and <a href="#">Terms</a>
+        © 2021 Todos los derechos reservados. <a href="#">Acuerdo </a> y <a href="#">Teminos</a>
     </footer>
-</main><!-- /.auth -->
+</main>
 
-<!-- BEGIN BASE JS
-    <script src="assets/vendor/jquery/jquery.min.js"></script>
-    <script src="assets/vendor/popper.js/umd/popper.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> END BASE JS
-  BEGIN PLUGINS JS -->
+<!--
+<div class="form-group text-center">
+    <div class="custom-control custom-control-inline custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="remember-me"> <label class="custom-control-label"
+            for="remember-me">Keep me sign in(aun no funciona)</label>
+    </div>
+</div>
+<div class="text-center pt-3">
+    <a href="auth-recovery-username.html" class="link">¿Olvidaste tu contraseña (aun no funciona)?</a>
+</div>
+-->

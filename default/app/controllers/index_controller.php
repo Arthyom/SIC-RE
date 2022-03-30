@@ -3,12 +3,12 @@ class IndexController extends AppController{
 
 public function index(){
 		//View::template(null);
-		 //View::select(null);
-           // View::template(null);
 
-            $var = (new Migrados);
-           // echo var_dump($var);
-            echo 'mostrando algo'; 
+     /*   View::select(null);
+        View::template(null);
+        $s = new Usuarios();*/
+    
+
 	}
 
 	public function serviciogrupofinalidad() {

@@ -118,8 +118,8 @@ var Select2Demo = /*#__PURE__*/function () {
             },
             url: function url(param) {
               var id = this[0].name
-              if (this[0].dataset.keyReplace)
-                id = this[0].dataset.keyReplace
+              if(this[0].dataset.keyReplace)
+              id = this[0].dataset.keyReplace
 
               var k = window.location.href.split('/');
               if (window.location.href.search('editar') > 0)
@@ -127,10 +127,10 @@ var Select2Demo = /*#__PURE__*/function () {
               else
                 k = k.slice(0, k.length - 1).join('/');
 
-              var da = k + '/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
-              da = da.replace('/editar', '');
-              da = da.replace('/crear', '');
-              da = da.replace('/filtrar', '');
+              var da =  k +'/rest_foreingKeyInfo/' + id + '/' + this[0].dataset.filter;
+              da = da.replace('/editar','');
+              da = da.replace('/crear','');
+              da = da.replace('/filtrar','');
               return da;
             },
             type: 'POST',
@@ -143,7 +143,7 @@ var Select2Demo = /*#__PURE__*/function () {
               var dependeInfo = '';
               var dependeDe = this[0].dataset.depend;
               var dataFilter = this[0].dataset.filter;
-              var limitado = this[0].dataset.limited;
+              var limitado= this[0].dataset.limited;
               var ParcialBusqueda = document.getElementById('ParcialBusqueda' + id).checked;
               console.log('elemento', ParcialBusqueda);
 
@@ -187,10 +187,10 @@ var Select2Demo = /*#__PURE__*/function () {
           },
           templateSelection: function templateSelection(param) {
             var id = el.name;
-            if (el.dataset.keyReplace)
+            if( el.dataset.keyReplace )
               id = el.dataset.keyReplace;
 
-            var k = $('<b>' + param.text + ' : [' + id + '] ' + param.id + ' </b>');
+            var k = $('<b>' + param.text + ' : ['+ id +'] ' + param.id + ' </b>');
             return k;
 
           },

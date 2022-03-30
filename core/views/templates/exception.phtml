@@ -16,7 +16,7 @@
     a:focus{outline:thin dotted #333;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}
     ul.inline {padding-left: 0px;list-style: outside none none}
     ul.inline > li {display: inline-block;padding-left: 5px;padding-right: 5px;}
-    
+
     /* Formatea los mensajes Flash::xxx() de KumbiaPHP */
     .flash {
         margin: 5px 0;
@@ -48,38 +48,38 @@
     }
     pre{display:block;padding:10.5px;margin:0 0 11px;line-height:1.5;word-break:break-all;word-wrap:break-word;color:#333;background-color:#f5f5f5;border-radius: 5px;}
     pre code{padding:0;font-size:inherit;color:inherit;white-space:pre-wrap;border:0}
-    
+
     .container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}
     .container:before,.container:after{content:" ";display:table;}
     .container:after{clear:both}
     .col-6{width:50%;float:left}
-    
+
     #trace{background-color:#DDD;padding:2em;margin-bottom:1.5em}
     #trace table {background-color:white;width:100%}
-    
+
     .file{word-break: break-word;}
     .php {width: 100%;border-spacing: 2px 2px;color: white;margin:1em 0;table-layout: fixed}
     .php td{background-color:#00A1CB; text-align:center;padding-bottom:.5em}
     .php tr:nth-child(even) td{background-color:#007493}
     .php a{color:#FFF}
-    
+
     #files li[title ^='<?= CORE_PATH?>']{color: red}
     #files li[title ^='<?= APP_PATH?>']{color: green}
     #files li[title ^='<?= dirname(CORE_PATH).'/vendor/'?>']{color: #0A29FF}
-    
+
     .status{padding:5px;border-radius:5px;margin-left:5px;color:#FFF}
     .status.red{background-color:#a33}
     .status.green{background-color:#759e1a}
     .status.blue{background-color:#0A29FF}
-    
+
     #viewfiles{display:none}
     #viewfiles:target{display:block}
-    
+
     table.t{margin:auto;margin-bottom:22px;width:100%}
     table.t tr>th,table.t tr>td{padding:8px;line-height:1.5;border-top:1px solid #ddd}
     table.t thead>tr>th{vertical-align:bottom;border-bottom:2px solid #ddd}
     table.t tbody tr:hover{background-color:#BDE5F8}
-       
+
     footer{border-top:4px solid #00A1CB;margin-top:-5px;padding:1em}
     </style>
 </head>
@@ -90,7 +90,7 @@
     <sup><?= kumbia_version() ?></sup></h2>
 </header>
 
-    <?= $content ?> 
+    <?= $content ?>
 
 </div>
 <div id="trace">
@@ -118,7 +118,7 @@
         </table>
 
     <?php endif ?>
-<?php endforeach ?> 
+<?php endforeach ?>
 </div>
     <table class="t">
         <thead>
@@ -164,7 +164,7 @@
 <ol id="files"><!-- TODO: usar :hover para mostrarlos -->
 <?php foreach ($files as $file) : ?>
     <li title="<?= $file ?>"><?= $file ?></li>
-<?php endforeach ?> 
+<?php endforeach ?>
 </ol>
 <span class="status red">core</span>
 <span class="status green">app</span>
@@ -191,7 +191,7 @@
 <em class="file"><?= APP_PATH ?>views/_shared/errors/404.phtml</em> <br>
 ¡ Modifica el template de error 404 a tu gusto !</p>
 </div>
- 
+
 <footer>
     <div class="col-6">
         <ul class="inline">
@@ -205,11 +205,11 @@
         </div>
     </div>
     <div class="col-6">
-        <p>Ayuda Online: <a href="irc://irc.freenode.org/#kumbiaphp" title="IRC donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">IRC</a> | 
-                         <a href="http://webchat.freenode.net/?channels=kumbiaphp" title="Web Chat IRC donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">Web IRC</a> | 
+        <p>Ayuda Online: <a href="irc://irc.freenode.org/#kumbiaphp" title="IRC donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">IRC</a> |
+                         <a href="http://webchat.freenode.net/?channels=kumbiaphp" title="Web Chat IRC donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">Web IRC</a> |
                          <a href="http://groups.google.com/group/kumbia" title="Lista de Correo de KumbiaPHP donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">Grupo</a> | <a href="http://foro.kumbiaphp.com" title="Foro de KumbiaPHP donde podrás encontrar ayuda a problemas que tengas, hacer comentarios, proponer ideas, reportar bugs, socializar temas relacionados y disfrutar de KumbiaPHP.">Foro</a></p>
     </div>
-    
+
     <p>Ejecutado en <?= round((microtime(1) - $_SERVER['REQUEST_TIME_FLOAT'])*1000, 4), ' ms'?> usando <?= number_format(memory_get_usage() / 1048576, 3),' MB' ?> de memoria</p>
 </footer>
 </body>
