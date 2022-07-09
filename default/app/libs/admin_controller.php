@@ -20,11 +20,11 @@ abstract class AdminController extends Controller
 
     final protected function initialize()
     {
-    
+
         // toda la verificacion se hace justo aqui
         return ( new usuarios )->estaAutenticado();
-       
-         
+
+
     }
 
     public function FunctionName()

@@ -118,26 +118,26 @@
 
             <div class="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
 
-                <!-- remove messages and notifications 
+                <!-- remove messages and notifications
                 <ul class="header-nav nav">
                     <li class="nav-item dropdown header-nav-dropdown has-notified">
                         <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="oi oi-pulse"></span>
                         </a>
-                        <?php //View::partial('ui/dropdown-notifications') ?>
+                        <?php //View::partial('ui/dropdown-notifications')?>
                     </li>
                     <li class="nav-item dropdown header-nav-dropdown has-notified">
                         <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="oi oi-envelope-open"></span>
                         </a>
-                        <?php //View::partial('ui/dropdown-messages') ?>
+                        <?php //View::partial('ui/dropdown-messages')?>
                     </li>
 
                     <li class="nav-item dropdown header-nav-dropdown">
                         <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="oi oi-grid-three-up"></span>
                         </a>
-                        <?php //View::partial('ui/dropdown-sheets') ?>
+                        <?php //View::partial('ui/dropdown-sheets')?>
 
                     </li>
                 </ul>
@@ -148,11 +148,11 @@
                     <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         <span class="user-avatar user-avatar-md">
-                            <img src="<?= (new usuarios)->getImage( Auth::get('IdUsuario') )?>" alt="" srcset="">
+                            <img src="<?= (new usuarios)->getImage(Auth::get('IdUsuario'), 'usuarios')?>" alt="" srcset="">
                         </span>
                         <span class="account-summary pr-lg-4 d-none d-lg-block">
                             <span class="account-name">
-                                <?php echo '[ '. ucfirst( Auth::get('Usuario') ).' ]' ?>
+                                <?php echo '[ '. ucfirst(Auth::get('Usuario')).' ]' ?>
                             </span>
                             <span class="account-description">
                                 <?php if (class_exists('gruporoles')): ?>
@@ -177,7 +177,7 @@
                         <a class="dropdown-item" href="/<?= NOMBRE_CAJA ?>/default/public/login/logout">
                             <span class="dropdown-icon oi oi-account-logout"></span> Salir </a>
                         <div class="dropdown-divider"></div>
-                        <!-- 
+                        <!--
                         <a class="dropdown-item" href="#">Help Center</a>
                         <a class="dropdown-item" href="#">Ask Forum</a>
                         <a class="dropdown-item" href="#">Keyboard Shortcuts</a>

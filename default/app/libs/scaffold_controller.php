@@ -6,7 +6,7 @@
  * @category Kumbia
  * @package Controller
  */
-abstract class ScaffoldController extends ScaffoldFileController
+abstract class ScaffoldController extends AdminController
 {
     /** @var string Carpeta en views/_shared/scaffolds/ */
     public $scaffold = '';
@@ -21,146 +21,11 @@ abstract class ScaffoldController extends ScaffoldFileController
 
     private $method = 'POST';
 
-
-
-
-
-
-    /********************************* */
- 
-    public function rest_foreingKeyInfo($keyName, $fieldName)
-    {
-
-
-      // conseguir los campos con id del modelo indicado
-
-        try {
-            View::template(null);
-            View::select('json');
-
-            $metodo = $_SERVER['REQUEST_METHOD'];
-            $respuesta = false;
-            $s = '';
-
-            if (true) {
-                $datos =  json_decode(file_get_contents('php://input'), true);
-                $id = $datos['q'];
-                $texto = explode(',', $datos['texto']);
-                $dependeDe = $datos['dependeDe'];
-                $dependeInfo = $datos['dependeInfo'];
-                $parcial = $datos['ParcialBusqueda'];
-                $dataFilter = explode(',', $datos['dataFilter']);
-                $criteria = '';
-                $matches = [];
-                $limitar = $datos['limitado'];
-
-                //crear una cadena de busqueda
-                foreach ($dataFilter as $i => $filter) {
-                    if (!$parcial) {
-                        if ($texto[$i]) {
-                            $criteria .= " $filter  LIKE  '$texto[$i]'";
-                        }
-                    } else {
-                        if ($texto[$i]) {
-                            $criteria .= " INSTR( $filter, '$texto[$i]') = 1";
-                        }
-                    }
-                    if ($texto[$i+1]) {
-                        $criteria .= " AND ";
-                    }
-                }
-
-
-                $camposSelect  = (new $this->configuracion)->find_first("conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'");
-
-                if (!$camposSelect) {
-                    $camposSelect = (new $this->configuracion)->find_first("conditions: CampoForaneoValor LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'");
-                }
-
-                if (is_numeric($id)) {
-                    if (!$dependeDe) {
-                        $coincidenciasId     = (new $camposSelect->TablaForanea)->find("conditions: $keyName = $id");
-                    } else {
-                        $coincidenciasId     = (new $camposSelect->TablaForanea)->find("conditions: $keyName = $id AND $dependeDe = $dependeInfo ");
-                    }
-
-                    foreach ($coincidenciasId as $i => $cid) {
-                        $cidfix = [ 'id' => $cid->$keyName, 'text' => $cid->Nombre ];
-
-                        array_push($matches, $cidfix);
-                    }
-                }
-
-
-                $coinTexto = [];
-                if (!is_numeric($texto)) {
-                    if (!$dependeDe) {
-                        if(!$limitar)
-                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ");
-                        else{
-
-                            $s = "inner join {$camposSelect->TablaPropietaria} on {$camposSelect->TablaPropietaria}.{$camposSelect->CampoForaneoValor} = {$camposSelect->TablaForanea}.{$camposSelect->CampoForaneoValor}";
-                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria ", "columns: *", "join: $s");
-                        }
-
-                          
-                    } else {
-                        if( !$limitar  )
-                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo");
-                        else{
-                            $s = //"inner join $TablaForanea on {$camposSelect->TablaPropietaria}.{$camposSelect->CampoForaneoValor} = {$camposSelect->TablaForanea}.{$campoSelect->CampoForaneoValor}";
-
-                            $coinTexto = (new  $camposSelect->TablaForanea)->find("conditions: $criteria AND $dependeDe = $dependeInfo", 
-                            "join: $s");
-                        }
-
-                    }
-
-                    foreach ($coinTexto as $j => $cit) {
-                        $filterField = '';
-                        foreach ($dataFilter as $k => $filter) {
-                            $filterField .= $cit->$filter . ' ';
-                        }
-
-
-                        $citfix = ['id' => $cit->$keyName, 'text'=> $filterField ];
-                        array_push($matches, $citfix);
-                    }
-                }
-
-
-
-                //" INSTR( Nombre, 'javier') = 1  AND  INSTR( ApellidoPaterno, '') = 1  AND  INSTR( ApellidoMaterno, '') = 1 "
-            }
-
-
-            array_push($matches, ['id' =>'0' , 'text'=>'Ninguno' ]);
-
-
-            $this->data = [ 'sqs'=> $s, 'l'=>$limitar, 'pk'=>"conditions: Name LIKE '$keyName' AND  Type='select' AND  TablaPropietaria ='$this->controller_name'", 'cs'=>$coinTexto, 'c'=>$criteria, 'items'=> $matches , 'dependent'=>[$dependeDe, $dependeInfo]];
-        } catch (\Exception $e) {
-            $this->data = ['err OOO'=>$e->getMessage()];
-        }
-    }
-
-    /********************************* */
-
-
- 
- 
-
-
     public function masterdetail($page = 1)
     {
-        //View::select(null);
-        //View::template(null);
-        $objetoMaestro = (new $this->model);
-        $this->dataTablaConf = (new $this->configuracion)->find("TablaPropietaria LIKE '$this->model'");
+        $this->ctds = (new $this->configuracion)->find("TablaPropietaria LIKE '$this->model'");
         //   $this->dh = (new polizasheader)->find();
-        $this->tablaEsclavo = $this->dataTablaConf[0]->Esclavos;
-        $this->dataEsclavo = (new $this->configuracion)->find("TablaPropietaria LIKE '{$this->tablaEsclavo}'");
-        //echo var_dump($this->tablaEsclavo);
-        $this->data = $objetoMaestro->paginate("page: $page");
+        $this->data = (new $this->model)->paginate("page: $page");
     }
 
 
@@ -256,7 +121,7 @@ abstract class ScaffoldController extends ScaffoldFileController
     }
 
 
-      /**
+    /**
      * Crea un Registro
      */
     public function crear()
@@ -359,28 +224,17 @@ abstract class ScaffoldController extends ScaffoldFileController
     }
 
     /**
-     * Maestro-Detalle de un Registro (elemento que necesita mejorarse)
+     * Ver un Registro
      *
-     * @param int $id Identificador de registro
-     */
-    public function details($id)
-    {
-        $this->data = (new $this->model)->find_first((int) $id);
-    }
-
-    /**
-     * Ver
-     * 
      * @param int $id Identificador de registro
      */
     public function ver($id)
     {
-        # code...
         $this->data = (new $this->model)->find_first((int) $id);
-    } 
+    }
 
 
-      /**
+    /**
      * Maestro-Detalle de un Registro (elemento que necesita mejorarse)
      *
      * @param int $id Identificador de registro

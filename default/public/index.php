@@ -57,7 +57,7 @@ const PRODUCTION = false;
 define('APP_PATH', dirname(__DIR__).'/app/');
 //const APP_PATH = '/path/to/app/';
 
-define('NOMBRE_CAJA', 'caminostepeyac-marte');
+define('NOMBRE_CAJA', 'guadalupana-marte');
 
 
 
@@ -95,7 +95,7 @@ define('PUBLIC_PATH', substr($_SERVER['SCRIPT_NAME'], 0, -9)); // - index.php st
 //const PUBLIC_PATH = '/';
 
 /**
- * Obtiene la url usando PATH_INFO.
+ * Obtiene la url usando PATH_INFO
  */
 $url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
