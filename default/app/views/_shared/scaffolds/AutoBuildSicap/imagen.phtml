@@ -1,0 +1,93 @@
+<div class="card card-fluid">
+    <h6 class="card-header"> <?= ucfirst($controller_name) ?> </h6>
+    <?php View::content() ?>
+
+    <div class="card-body">
+        <!--<form method="post" enctype="multipart/form-data"
+            action='<?//$controller_name .'/image'. '/'.  Auth::get('IdUsuario') ?>'>-->
+
+        <?= Form::openMultipart("$controller_name/image/$id") ?>
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="user-avatar user-avatar-xl fileinput-button">
+                        <div class="fileinput-button-label"> Seleccina foto </div>
+                        <img id="output" src="<?= (new $controller_name)->getImage($id)?>" alt="">
+                        <input id="fileupload-avatar" type="file" name="image"
+                            onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">
+                    </div>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class="col-12 ">
+
+                    <div class="media-body pl-3">
+                        <div class="jumbotron">
+                            <h1 class="display-3">Recurso</h1>
+                            <p class="lead">
+                                En esta seccion se puede mostrar una coleccion de campos
+                                pertenecientes al recurso seleccionados que puedan ser
+                                editados o sean de solo lectura
+
+                            </p>
+                            <hr class="my-2">
+                            <p>Por definir</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <!-- form row
+            <div class="form-row">
+                <label for="input01" class="col-md-3">Cover image</label>
+                <div class="col-md-9 mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="input01" multiple> <label
+                            class="custom-file-label" for="input01">Choose cover</label>
+                    </div><small class="text-muted">Upload a new cover image, JPG 1200x300</small>
+                </div>
+            </div>
+            -->
+    <!-- form row
+            <div class="form-row">
+                <label for="input02" class="col-md-3">Company</label>
+                <div class="col-md-9 mb-3">
+                    <input type="text" class="form-control" id="input02" value="CreativeDivision">
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="input03" class="col-md-3">Profile Heading</label>
+                <div class="col-md-9 mb-3">
+                    <textarea class="form-control"
+                        id="input03">Huge fan of HTML, CSS and Javascript. Web design and open source lover.</textarea>
+                    <small class="text-muted">Appears on your profile page, 300 chars max.</small>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="input04" class="col-md-3">Available for hire?</label>
+                <div class="col-md-9 mb-3">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="input04" checked> <label
+                            class="custom-control-label" for="input04">Yes, hire me</label>
+                    </div>
+                </div>
+            </div>
+            <hr>
+           -->
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
+    </div>
+    <?= Form::close() ?>
+    </form>
+</div>
+</div>

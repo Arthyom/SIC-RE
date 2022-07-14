@@ -1,0 +1,270 @@
+<?php if ( isset($data) && isset($configuraciondata) && (count($configuraciondata) > 0)) : ?>
+
+<br>
+<?php if($linkAction ): ?>
+<h1 class="section-title m-0 p-0">
+    <?= ucfirst( $linkAction) ?> Relacionados(as)
+</h1>
+<?php endif ?>
+
+<table class="dtTableSec table table-striped table-hover dt-responsive  w-100">
+
+    <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+
+            <?php foreach($configuraciondata as $item) : ?>
+            <?php $nombreColumna = $item->Name ?>
+            <?php if( $item->VisibleEnTabla ): ?>
+            <th><?php echo($item->Label) ?>
+            </th>
+            <?php endif ?>
+            <?php endforeach?>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+        <?php foreach ($data as $i => $registro) : ?>
+        <?php $pk =  $registro->primary_key[0]  ?>
+
+        <tr>
+            <td>
+                <?= h( $i +1 ) ?>
+            </td>
+
+
+            <?php foreach ($configuraciondata as $campo) : ?>
+
+            <?php $propiedad = $campo->Name ?>
+
+            <?php $p = $campo->BusquedaSelect ?>
+
+            <?php  if($campo->VisibleEnTabla) :?>
+
+            <?php if( strlen( $campo->Sentencias ) > 0 ) :?>
+            <?php $s = h($registro->$propiedad) ?>
+            <?php
+           $name = $campo->Name;
+            if( $campo->IndexAliasNombreForanea )
+                if( strlen( $campo->IndexAliasNombreForanea) >= 2 )
+                    $name = $campo->IndexAliasNombreForanea;
+
+            if( $campo->Extras )
+                if( strlen( $campo->Extras ) >= 2 )
+                    if( strstr($campo->Extras, '_blank') !== false )
+                        $linkTarget = "target='_blank'"
+            ?>
+            <?php $sql = "SELECT $campo->BusquedaSelect FROM $campo->TablaForanea WHERE $name LIKE $s" ?>
+            <?php if($s) :?>
+            <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
+            <?php endif ?>
+
+            <td>
+                <?php if($s) : ?>
+                <?php if( strstr($campo->BusquedaSelect,',') ) : ?>
+                <?php $camposBusqueda = explode(',', $campo->BusquedaSelect )  ?>
+                <?php $camposBusqueda = str_replace(' ','', $camposBusqueda) ?>
+                <?php $cadenaRemplazo = '' ?>
+                <?php foreach ($camposBusqueda as $key => $campoBusqueda): ?>
+                <?php $cadenaRemplazo .= $valorForaneo->$campoBusqueda . ' '?>
+
+                <?php endforeach ?>
+                <?=  h($cadenaRemplazo) ?>
+                <?php else: ?>
+                <?= h($valorForaneo->$p)?>
+                <?php endif ?>
+                <?php else : ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+
+
+            </td>
+
+            <?php else:?>
+
+            <td>
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?php if($registro->$propiedad): ?>
+                <?= h($registro->$propiedad)?>
+                <?php else: ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+                <?php endif ?>
+                <?php else: ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
+                <?php endif ?>
+
+            </td>
+            <?php endif?>
+
+            <?php endif ?>
+            <?php endforeach?>
+            <td style="width:100px; min-width:100px;">
+                <?php if(  $linkAction  ): ?>
+                <?= Html::link("$linkAction/ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::link("$linkAction/editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::link("$linkAction/details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::link("$linkAction/borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                <?= Html::link("$linkAction/image/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-image"></i></button>') ?>
+
+
+
+
+                <?php else : ?>
+
+                <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                <?= Html::linkAction("image/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-image"></i></button>') ?>
+
+                <?php endif ?>
+            </td>
+        </tr>
+
+        <?php endforeach?>
+    </tbody>
+</table>
+
+<?php else : // Si no hay items?>
+
+
+<table class="dtTableHug table table-striped table-hover dt-responsive  w-100">
+
+    <thead class="thead-dark">
+        <tr>
+
+            <th>#</th>
+
+            <?php foreach($configuraciondata as $item) : ?>
+            <?php $nombreColumna = $item->Name ?>
+            <?php if( $item->VisibleEnTabla ): ?>
+            <th><?php echo($item->Label) ?>
+            </th>
+            <?php endif ?>
+            <?php endforeach?>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+
+        <?php foreach ($bigdata->items as $i => $registro) : ?>
+        <?php $pk =  $registro->primary_key[0]  ?>
+
+        <tr>
+            <td>
+                <?= h( $i +1 ) ?>
+            </td>
+
+
+            <?php foreach ($configuraciondata as $campo) : ?>
+
+            <?php $propiedad = $campo->Name ?>
+
+            <?php $p = $campo->BusquedaSelect ?>
+
+            <?php  if($campo->VisibleEnTabla) :?>
+
+            <?php if( strlen( $campo->Sentencias ) > 0 ) :?>
+            <?php $s = h($registro->$propiedad) ?>
+            <?php
+            $name = $campo->Name;
+            if( $campo->IndexAliasNombreForanea )
+                if( strlen( $campo->IndexAliasNombreForanea) >= 2 )
+                    $name = $campo->IndexAliasNombreForanea;
+
+            if( $campo->Extras )
+                if( strlen( $campo->Extras ) >= 2 )
+                    if( strstr($campo->Extras, '_blank') !== false )
+                        $linkTarget = "target='_blank'"
+            ?>
+            <?php $sql = "SELECT $campo->BusquedaSelect FROM $campo->TablaForanea WHERE $name LIKE $s" ?>
+            <?php if($s) :?>
+            <?php   $valorForaneo = (new $campo->TablaForanea)->find_by_sql($sql) ?>
+            <?php endif ?>
+
+            <td>
+                <?php if($s) : ?>
+                <?php if( strstr($campo->BusquedaSelect,',') ) : ?>
+                <?php $camposBusqueda = explode(',', $campo->BusquedaSelect )  ?>
+                <?php $camposBusqueda = str_replace(' ','', $camposBusqueda) ?>
+                <?php $cadenaRemplazo = '' ?>
+                <?php foreach ($camposBusqueda as $key => $campoBusqueda): ?>
+                <?php $cadenaRemplazo .= $valorForaneo->$campoBusqueda . ' '?>
+
+                <?php endforeach ?>
+                <?=  h($cadenaRemplazo) ?>
+                <?php else: ?>
+                <?= h($valorForaneo->$p)?>
+                <?php endif ?>
+                <?php else : ?>
+                <?= h('Vaciosss' . $propiedad )?>
+                <?php endif ?>
+
+
+            </td>
+
+            <?php else:?>
+
+            <td>
+                <?php if( lcfirst( $propiedad ) != 'fecha') :?>
+                <?php if($campo->Type == 'number' || $campo->Type == 'decimal') : ?>
+                <?= h( number_format( $registro->$propiedad, 2, '.', ',') )?>
+                <?php  else:?>
+                <?php if($registro->$propiedad): ?>
+                <?= h($registro->$propiedad)?>
+                <?php else: ?>
+                <?= h('Vacio')?>
+                <?php endif ?>
+                <?php endif ?>
+                <?php else: ?>
+                <?php if( $campo->DateFormat ): ?>
+                <?= h( (new DateTime( $registro->$propiedad ))->format( $campo->DateFormat ) ) ?>
+                <?php endif ?>
+                <?php endif ?>
+
+            </td>
+            <?php endif?>
+
+            <?php endif ?>
+            <?php endforeach?>
+            <td style="width:100px; min-width:100px;">
+                <?php if(  $linkAction  ): ?>
+                <?= Html::link("$linkAction/ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::link("$linkAction/editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::link("$linkAction/details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::link("$linkAction/borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                <?= Html::link("$linkAction/image/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-image"></i></button>') ?>
+
+
+
+                <?php else : ?>
+
+                <?= Html::linkAction("ver/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-eye"></i></button>') ?>
+                <?= Html::linkAction("editar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i></button>') ?>
+                <?= Html::linkAction("details/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-retweet"></i></button>') ?>
+                <?= Html::linkAction("borrar/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i></button>', 'onclick="return confirm(\'¿Está seguro?\')"') ?>
+                <?= Html::linkAction("image/".$registro->$pk, '<button class="btn btn-sm btn-icon btn-secondary"><i class="far fa-image"></i></button>') ?>
+
+
+                <?php endif ?>
+            </td>
+        </tr>
+
+        <?php endforeach?>
+    </tbody>
+</table>
+<?php View::partial('paginators/punbb', false, array('page' => $bigdata ,'url' => Router::get('controller_path').'/index')) ?>
+
+<?php endif?>

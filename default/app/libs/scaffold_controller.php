@@ -23,8 +23,9 @@ abstract class ScaffoldController extends AdminController
 
     public function masterdetail($page = 1)
     {
-        $this->ctds = (new $this->configuracion)->find("TablaPropietaria LIKE '$this->model'");
+        $this->dataTablaConf = (new $this->configuracion)->find("TablaPropietaria LIKE '$this->model'");
         //   $this->dh = (new polizasheader)->find();
+        $this->tablaEsclavo = $this->dataTablaConf[0]->Esclavos;
         $this->data = (new $this->model)->paginate("page: $page");
     }
 
@@ -77,6 +78,7 @@ abstract class ScaffoldController extends AdminController
 
         if (count($get_args) > 0) {
             $pky = (new $this->model)->primary_key[0];
+            $modelObject = (new $this->model)->$pky;
 
             View::select('index');
             $modelo = ( new $this->model);
@@ -85,16 +87,27 @@ abstract class ScaffoldController extends AdminController
             $i = 0;
 
             foreach ($get_args as $key => $value) {
-                if ($get_args[$key] != ''  && $this->primaryKey != $key) {
-                    $sql_builder = $sql_builder . "INSTR( $key , '$value' ) > 0  AND ";
+                if ($get_args[$key] != ''  && $this->primaryKey != $key && $value != '0') {
+                    $configPersonal = (new $this->configuracion)->find_first("conditions: TablaPropietaria = '$this->model' && Name = '$key'");
+                    if ($configPersonal->TablaForanea) {
+                        $foreigTableMatch = (new $configPersonal->TablaForanea)->find_first("conditions: $configPersonal->CampoForaneoValor = '$value'");
+                        $sql_builder = $sql_builder . "INSTR( $key , {$foreigTableMatch->$key} ) > 0  AND ";
+                    } else {
+                        $sql_builder = $sql_builder . "INSTR( $key , '$value' ) > 0  AND ";
+                    }
                 }
             }
+
 
             $len = strlen($sql_builder);
             $sql_builder = substr($sql_builder, 0, $len - 4);
 
-            if ($len > 0) {
-                $this->data = $modelo->find_all_by_sql('SELECT * FROM ' . $this->model . ' WHERE '. $sql_builder);
+            $this->objeto = (new $this->model)->count();
+
+            if ($this->objeto < $this->maximo) {
+                $this->data = (new $this->model)->find('conditions: '. $sql_builder);
+            } else {
+                $this->bigdata = (new $this->model)->paginate("per_page: 10", "page: 1", 'conditions: ' . $sql_builder);
             }
         }
     }

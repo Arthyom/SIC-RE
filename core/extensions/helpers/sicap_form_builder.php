@@ -474,6 +474,7 @@ class SicapFormBuilder
 
             foreach ($grouped_fields  as $grouped_field_key => $grouped_field) {
                 try {
+                    $grouped_field->Extras = str_replace('required', '', $grouped_field->Extras);
                     if ($grouped_field->VisibleEnBusqueda && $grouped_field->Name !== $model_primary_key) {
                         $required = '';
                         echo "<div class='col-6 pt-2 pb-2'>", PHP_EOL;
@@ -1041,16 +1042,18 @@ class SicapFormBuilder
 
     public static function FromConfigMasterDetail($tablaMaestro, $configuracion = 'configuracionTabla')
     {
-        $datosConfiguracionTabla = (new $configuracion)->find("TablaPropietaria LIKE '$tablaMaestro'");
-        $esclavos = $datosConfiguracionTabla[0]->Esclavos;
-        $dataEsclavo= (new $configuracion)->find("TablaPropietaria LIKE '$esclavos'");
-        $page = implode(Router::get('parameters')) ;
-        $data = (new $tablaMaestro)->paginate("page: $page");
+      $datosConfiguracionTabla = (new $configuracion)->find( "TablaPropietaria LIKE '$tablaMaestro'");
+      $esclavos = $datosConfiguracionTabla[0]->Esclavos;
+      $dataEsclavo= (new $configuracion)->find( "TablaPropietaria LIKE '$esclavos'");
+      $page = implode(Router::get('parameters')) ;
+      $data = (new $tablaMaestro)->paginate("page: $page" );
 
 
-        View::partial('sicap_form_builder/masterdetailform', false, array('tablamaestro'=>$tablaMaestro, 'dataEsclavo'=>$dataEsclavo, 'tablaesclavo'=>$esclavos, 'data'=>$data, 'ctd'=>$datosConfiguracionTabla ));
-        View::partial('paginators/punbb', false, array('page' => $data ,'url' => Router::get('controller_path').'/masterdetail'));
+      View::partial('sicap_form_builder/masterdetailform', false, array('tablamaestro'=>$tablaMaestro, 'dataEsclavo'=>$dataEsclavo, 'tablaesclavo'=>$esclavos, 'data'=>$data, 'ctd'=>$datosConfiguracionTabla ) );
+      View::partial('paginators/punbb', false, array('page' => $data ,'url' => Router::get('controller_path').'/masterdetail'));
+
     }
+
 
 
     public static function FromConfigDetails($tablaMaestro, $id, $configuracion = 'configuraciontabla')
