@@ -409,7 +409,7 @@ def inject_styles_marto_to_inherited( inherited_content ):
         '<button type=\\"submit\\"' : '<button type=\\"submit\\" class=\\"btn btn-block btn-primary\\"',
         '<input type=\\"button\\"': '<input type=\\"button\\" class=\\"btn btn-block btn-primary\\"',
         '"clases' : 'APP_PATH."views/clases',
-        'table': 'table class=\'table\'',
+        #'table': 'table class=\'table\'',
         '"clases': 'APP_PATH."/views/clases',
         '<select': '<select class=\'form-control\'',
         'action=\\"".$_SERVER[\'PHP_SELF\']."\\"' : 'action=\\"$controller_name\\"',
@@ -424,13 +424,25 @@ def inject_styles_marto_to_inherited( inherited_content ):
 
     return inherited_content
 
+def applyMigrationRules(contentText):
+    keys = (config.replacementRules.keys())
+    for key in keys:
+        contentText = contentText.replace(key, config.replacementRules.get(key))
+    return contentText
+
 def get_inherited_content( file_name ):
+
     if os.path.isfile(config.PATH_INHERITS + file_name +'.php'):
         content_text = open( config.PATH_INHERITS + file_name +'.php', 'r').read()
         content_text = inject_styles_marto_to_inherited(content_text)
-        return content_text
+        return applyMigrationRules(content_text)
     else:
-        return "<?php \t\t * "
+        if os.path.isfile( file_name):
+            content_text = open( file_name, 'r').read()
+            content_text = inject_styles_marto_to_inherited(content_text)
+            return applyMigrationRules(content_text)
+        else:
+            return "<?php \t\t * "
 
 def convert_inherited():
     ## get files from origin dir
@@ -443,18 +455,44 @@ def convert_inherited():
         dir_path = config.PATH_VIEWS + file_name
         ctrl_path = config.PATH_CONTROLLERS + file_name + '_controller.php'
 
-        if file_name not in ['clases','imprimir']:
-            if  os.path.isdir( dir_path ):
-                shutil.rmtree(dir_path)
-            try:
+        if file_name not in ['','']:
+            if  os.path.isfile( config.PATH_INHERITS + file_name + '.php' ):
+                if  os.path.isdir( dir_path ):
+                    if(os.path.isdir(dir_path)):
+                        shutil.rmtree(dir_path)
+
+                ##shutil.rmtree(dir_path)
                 os.mkdir( dir_path )
                 open( dir_path + '/index.phtml', 'w' ).write( get_inherited_content(file_name))
 
-                ##if not os.path.isfile(ctrl_path):
+            try:
+                if  os.path.isdir( config.PATH_INHERITS + file_name ):
+                    if(os.path.isdir(config.PATH_VIEWS +file_name)):
+                        shutil.rmtree(config.PATH_VIEWS +file_name)
+
+                    os.mkdir( config.PATH_VIEWS +file_name )
+                    subDirFiles = [file for file in os.listdir(config.PATH_INHERITS + file_name) ]
+                    for subFile in subDirFiles:
+                        destination = config.PATH_VIEWS +file_name + '/' + subFile
+                        if not os.path.isdir(config.PATH_INHERITS + '/' + subFile):
+                            if not '.txt'  in destination and  not '.gz'  in destination and not '~'  in destination and not '.xml'  in destination and not '.pdf' in destination and not '.xls'  in destination :
+                                open( destination, 'w' ).write( get_inherited_content(config.PATH_INHERITS + file_name +'/'+subFile))
+                        else:
+                            os.mkdir( destination )
+                            subSubFiles = [file for file in os.listdir(config.PATH_INHERITS + file_name +'/'+subFile) ]
+                            for subSubFile in subSubFiles:
+                                newDestination = destination + '/' + subSubFile
+                                if not '.php~'  in newDestination and not '.txt'  in newDestination and  not '.gz'  in newDestination and not '~'  in newDestination and not '.xml'  in newDestination and not '.pdf' in newDestination and not '.xls'  in newDestination :
+                                    open( newDestination, 'w' ).write( get_inherited_content(config.PATH_INHERITS + file_name +'/'+subFile+'/'+subSubFile))
+
+
+
+
+
+                #if not os.path.isfile(ctrl_path):
                 open( ctrl_path , 'w').write( get_controller_content(file_name) )
             except Exception as e:
                     print e
-
 
 
 
